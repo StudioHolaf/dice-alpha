@@ -2,8 +2,6 @@
  * Created by Thibaut on 07/05/2017.
  */
 
-//var anime = requirejs('animejs')
-
 function launchParticles(canvasEl, positionX, positionY, numberOfParticules, particlesType, datas, callback)
 {
     window.human = false;

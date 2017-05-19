@@ -109,4 +109,16 @@ class Face
 
         return arrayFinal;
     }
+
+    getFaceJSON()
+    {
+        var arrayJSON = {};
+            arrayJSON._id = this._id;
+        //console.log("Face ID : "+arrayJSON._id);
+            arrayJSON._name = this._name;
+        //console.log("Face _name : "+arrayJSON._name);
+             arrayJSON._sprite = this._sprite;
+        //console.log("Face _sprite : "+arrayJSON._sprite);
+        return arrayJSON;
+    }
 }

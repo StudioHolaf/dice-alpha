@@ -1,18 +1,19 @@
-//  OpenShift sample Node application
-var express = require('express'),
+var Express = require('express'),
     fs      = require('fs'),
-    app     = express(),
+    app     = module.exports.app = Express();
     eps     = require('ejs'),
-    morgan  = require('morgan');
+    morgan  = require('morgan'),
+    http    = require('http');
 
-Object.assign=require('object-assign')
+Object.assign=require('object-assign');
+
 
 app.engine('html', require('ejs').renderFile);
 app.use(morgan('combined'))
 
 //console.log(process.env);
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
     mongoURL = process.env.OPENSHIFT_MONGODB_DB_URL || process.env.MONGO_URL,
     mongoURLLabel = "";
@@ -20,9 +21,6 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
 console.log("mongoURL : " + mongoURL);
 console.log("process.env.DATABASE_SERVICE_NAME : " + process.env.DATABASE_SERVICE_NAME);
 
-//process.env.DATABASE_SERVICE_NAME = false;
-
-//mongoURL = "http://mongodb-dice-route-dice-dev.1d35.starter-us-east-1.openshiftapps.com";
 
 if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
   var mongoServiceName = process.env.DATABASE_SERVICE_NAME.toUpperCase();
@@ -71,6 +69,7 @@ var initDb = function(callback) {
   });
 };
 
+
 app.get('/', function (req, res) {
   // try to initialize the db on every request if it's not already
   // initialized.
@@ -82,7 +81,7 @@ app.get('/', function (req, res) {
     // Create a document with request IP and current time of request
     col.insert({ip: req.ip, date: Date.now()});
     col.count(function(err, count){
-      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails });
+      res.render('index.html', { pageCountMessage : count, dbInfo: dbDetails, io : io });
     });
   } else {
     res.render('index.html', { pageCountMessage : null});
@@ -130,13 +129,34 @@ initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
 });
 
-app.listen(port, ip);
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', function (socket) {
+
+  console.log("je suis connecté !");
+
+  socket.on('jsonState', function (state) {
+    console.log("server json State!");
+    socket.state = state;
+    socket.broadcast.emit('jsonState', state);
+  });
+  socket.on('jsonRoller', function (roller) {
+    console.log("server json Roller!");
+    socket.roller = roller;
+    socket.broadcast.emit('jsonRoller', roller);
+  });
+
+});
+
+//app.listen(port, ip);
+server.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
 
-app.use(express.static('public'));
+app.use(Express.static('public'));
 
-app.use('/vendors', express.static(__dirname + '/node_modules/noty/lib/'));
-app.use('/vendors', express.static(__dirname + '/node_modules/animejs//'));
-app.use('/vendors', express.static(__dirname + '/node_modules/sweetalert/dist/'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/noty/lib/'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/animejs//'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/sweetalert/dist/'));
 
 module.exports = app ;

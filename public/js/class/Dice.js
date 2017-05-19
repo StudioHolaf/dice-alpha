@@ -108,4 +108,36 @@ class Dice {
         return false;
     }
 
+
+    /*
+     this._id = id;
+     this._skin = skin;
+     this._faces = faces;
+
+     this._physicalModel = new PhysicalModel(idPM, body, castshadow, receiveshadow, geomety, material, visible, mass, inertia, scale);
+     this._turn_disabled = 0;
+     this._nbReroll = 0;
+    */
+
+    getDiceStateJSON()
+    {
+        var arrayJSON = {};
+            arrayJSON._id = this._id;
+        console.log(" Dice _id : "+ this._id);
+        arrayJSON._skin = this._skin;
+        arrayJSON._faces = [];
+        arrayJSON._turn_disabled = this._turn_disabled;
+        arrayJSON._nbReroll = this._nbReroll;
+        arrayJSON._selected = false;
+        arrayJSON._active = this.isActive();
+
+        for(var i = 0; i < 6; i++)
+        {
+            var tmp = [];
+            tmp[i] = this._faces[i].getFaceJSON();
+            arrayJSON._faces.push(tmp);
+        }
+        return (arrayJSON);
+    }
+
 }

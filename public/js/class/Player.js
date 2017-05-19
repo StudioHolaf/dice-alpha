@@ -76,4 +76,35 @@ class Player extends Challenger{
         this._gold = gold;
     }
 
+    getStateJSON() {
+
+        var arrayJSON = {};
+            arrayJSON.playerPosition = this._id;
+            arrayJSON._id = this._id;
+            arrayJSON._pv = this._pv;
+            arrayJSON._pvMax = this._pvMax;
+            arrayJSON._hero = this._hero;
+            arrayJSON._avatar = this._avatar;
+            arrayJSON._pseudo = this._pseudo;
+            arrayJSON._reroll = this._reroll;
+            arrayJSON._tourTime = this._tourTime;
+            arrayJSON._ownedFaces = this._ownedFaces;
+            arrayJSON._adventureProgress = this._adventureProgress;
+            arrayJSON._gold = this._gold;
+        return (JSON.stringify(arrayJSON));
+    }
+
+    getRollerJSON()
+    {
+        var arrayJSON = {};
+        arrayJSON._dices = [];
+        var tmp = [];
+        for(var i = 0; i < 5; i++)
+        {
+            tmp = this._deck[0][i].getDiceStateJSON();
+            arrayJSON._dices.push(tmp);
+        }
+        console.log("Roller JSON : %o",arrayJSON);
+        return (JSON.stringify(arrayJSON));
+    }
 }
