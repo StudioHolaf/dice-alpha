@@ -1,7 +1,7 @@
 {
-  "name": "Dice alpha",
+  "name": "dice-dev",
   "version": "0.0.1",
-  "description": "Dice Alpha",
+  "description": "Dice Development",
   "main": "server.js",
   "dependencies": {
     "animejs": "^2.0.2",
