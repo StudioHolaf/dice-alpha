@@ -1,0 +1,465 @@
+@import url('https://fonts.googleapis.com/css?family=Caesar+Dressing|Raleway:300,400,700');
+
+#game-container {
+    font-family: 'Caesar Dressing', cursive;
+}
+
+body {
+    font-family: 'Raleway';
+}
+
+img{
+    max-width: 100%;
+}
+
+div#interface {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+
+#game-canvas {
+    position: fixed;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    pointer-events: none;
+}
+
+div#sound-controller {
+    position: fixed;
+    top: -2px;
+    right: 36px;
+    z-index: 999;
+    width: 41px;
+    padding: 6px;
+    background: url(/assets/texture/ornament.jpg);
+    background-size: 180px;
+    box-sizing: border-box;
+}
+
+div#sound-controller img.volume_on {
+    display: block;
+}
+
+div#sound-controller img.volume_off {
+    display: none;
+}
+
+div#sound-controller.shutted img.volume_on {
+    display: none;
+}
+
+div#sound-controller.shutted img.volume_off {
+    display: block;
+}
+
+div#game-container {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/assets/texture/pavement.jpg');
+    background-size: 320px;
+    background-position: 51% 51%;
+}
+
+div.player-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 147px;
+    background-image: url("/assets/texture/stairs.png");
+    background-size: 350px;
+    background-position: 10% -8px;
+    box-shadow: 0px 0px 2px #000000, 0px 0px 36px rgba(0, 0, 0, 0.42);
+}
+
+div#player-2-section {
+    background-position: 10% 79px;
+}
+
+.player-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    position: absolute;
+    left: 50%;
+    margin-left: -60px;
+    z-index: 2;
+    border: 5px solid #dea00f;
+    box-shadow: 0px 0px 25px #000000;
+}
+
+.player-avatar:before {
+    content: "";
+    position: absolute;
+    background: radial-gradient(circle at 50% 120%, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    bottom: 2.5%;
+    left: 5%;
+    opacity: 0.5;
+    height: 100%;
+    width: 90%;
+    -webkit-filter: blur(5px);
+    z-index: 2;
+}
+.player-avatar:after {
+    width: 20%;
+    height: 40%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background: #FFFFFF;
+    -webkit-transform: translateX(-80px) translateY(-90px) skewX(-20deg);
+    -moz-transform: translateX(-80px) translateY(-90px) skewX(-20deg);
+    -ms-transform: translateX(-80px) translateY(-90px) skewX(-20deg);
+    -o-transform: translateX(-80px) translateY(-90px) skewX(-20deg);
+    transform: translateX(82px) translateY(-1px) skewX(35deg);
+    -webkit-filter: blur(6px);
+    opacity: 0.8;
+}
+
+div#player-1-section {
+    top: initial;
+    bottom: 0;
+}
+
+div#player-1-section .player-avatar {
+    top: -60px;
+}
+
+div#player-2-section .player-avatar {
+    bottom: -60px;
+}
+
+.player-HUD {
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 0 0 30px #000000, 0 0 10px #000000;
+    position: relative;
+    width: 500px;
+    height: 146px;
+    left: 50%;
+    margin-left: -250px;
+}
+
+.player-informations {
+    font-size: 20px;
+}
+
+.player-PV {
+    position: absolute;
+    left: 0;
+    line-height: 23px;
+    height: 23px;
+    width: calc(50% - 59px);
+    border: 3px solid #dea00f;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 14px 0 0 14px;
+}
+
+#player-2-section .player-PV {bottom: -4px;}
+
+#player-1-section .player-PV {top: 0;}
+
+.player-ultime {
+    position: absolute;
+    right: 0;
+    line-height: 23px;
+    height: 23px;
+    width: calc(50% - 59px);
+    border: 3px solid #dea00f;
+    z-index: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 0 14px 14px 0;
+}
+
+#player-2-section .player-ultime {bottom: -3px;}
+
+#player-1-section .player-ultime {top: 0;}
+
+
+.player-PV-bar {
+    height: 23px;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    background: rgba(233, 30, 30, 0.8);
+    border-radius: 10px 0 0 10px;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.player-ultime-bar {
+    height: 23px;
+    position: absolute;
+    left: 0;
+    top: 0px;
+    background: rgba(0, 149, 212, 0.8);
+    border-radius: 0 10px 10px 0;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.bar-glass {
+    background: linear-gradient( -178deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.6) 15%, rgba(255,255,255,0.1) 30%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.0) 100% );
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0px;
+    border-radius: 10px 10px 10px 10px;
+}
+
+.player-hero {
+    position: absolute;
+    left: 0;
+    width: calc(50% - 60px);
+    top: 38px;
+}
+
+.player-gold {
+    position: absolute;
+    right: 0;
+    width: calc(50% - 60px);
+    top: 38px;
+}
+
+.player-name {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    font-size: 30px;
+}
+
+#player-2-section .player-name {
+    top: 13px;
+}
+
+#player-1-section .player-name {
+    bottom: 31px;
+}
+
+#player-1-section .player-hero {
+    top: 74px;
+}
+
+#player-1-section .player-gold {
+    top: 74px;
+}
+.player-avatar-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: 50%;
+    border-radius: 100%;
+    box-shadow: inset 0 0 5px #000000;
+}
+
+div.player-roller {
+    position: absolute;
+    width: 100%;
+    height: 200px;
+}
+
+div#dice-roller {
+    position: fixed;
+    width: 1000px;
+    height: calc(100% - 400px);
+    top: 200px;
+    left: 50%;
+    margin-left: -500px;
+}
+
+div#player-2-roller {
+    top: 0;
+}
+
+div#player-1-roller {
+    bottom: 0;
+}
+
+.action-buttons {
+    width: 100%;
+    position: absolute;
+    top: 200px;
+    height: calc(100% - 400px);
+}
+
+.dices-viewer-container {
+    width: 100%;
+    height: 100%;
+}
+
+.dice-viewer {
+    width: 160px;
+    height: 160px;
+    padding: 20px;
+    float: left;
+    -webkit-transition: all 0.25s;
+    -moz-transition: all 0.25s;
+    -o-transition: all 0.25s;
+    transition: all 0.25s;
+    transform: scale(1);
+    cursor: pointer;
+}
+
+.dice-viewer:hover {
+    transform: scale(1.05);
+}
+
+.dice-viewer-inner {
+    width: 100%;
+    height: 100%;
+    /* border: 5px solid #dea00f; */
+    /* box-shadow: 0px 0px 55px #192538, 0px 0px 25px #101c2f, 0px 0px 15px #101c2f; */
+    /* background: rgba(0, 0, 0, 0.43); */
+    position: relative;
+}
+
+.dice-skin {
+    background-image: url(/assets/texture/fc_skin_rock_basic.png);
+    background-size: cover;
+    background-position: 18% 80%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+}
+
+.action-button-inner {top: 50%;position: absolute;left: 0;width: 100%;height: 100px;line-height: 100px;margin-top: -50px;display: table;text-align: center;}
+
+div.action-button {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    /* border: 1px solid #312f32; */
+    border-bottom: 5px solid #27231a;
+    padding: 17px 65px;
+    border-radius: 12px;
+    font-size: 25px;
+    margin: 0 20px;
+    box-shadow: 0px 0px 25px #000000;
+    cursor: pointer;
+    background-image: url(/assets/texture/fc_skin_rock_basic.png);
+    background-size: 134% 128%;
+    background-position: -31px 50%;
+    color: #332e22;
+}
+
+div.action-button:hover {
+    -webkit-transition: all 0.15s;
+    -moz-transition: all 0.15s;
+    -o-transition: all 0.15s;
+    transition: all 0.15s;
+    border-bottom-width: 1px;
+    margin-top: 5px;
+}
+
+
+.face-spell {
+    width: 100%;
+    height: 100%;
+    background-size: 50%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.player-PV-state {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
+    box-shadow: inset 0 0 5px #000000;
+    border-radius: 10px 0 0 10px;
+}
+
+.player-ultime-state {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
+    box-shadow: inset 0 0 5px #000000;
+    border-radius: 0 10px 10px 0;
+}
+
+.player-state-legend {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    z-index: 3;
+    font-size: 13px;
+}
+
+.player-ultime-state .player-state-legend {
+    left: 22px;
+}
+
+#roller-button {
+    -webkit-animation-delay: 1.5s;
+    -moz-animation-delay: 1.5s;
+    animation-delay: 1.5s;
+}
+
+#solve-button {
+    -webkit-animation-delay: 1.75s;
+    -moz-animation-delay: 1.75s;
+    animation-delay: 1.75s;
+}
+
+div#match-data-container {
+    position: fixed;
+    top: 10px;
+    left: 40px;
+    z-index: 99;
+    color: #FFFFFF;
+    font-size: 22px;
+}
+
+div#time-count, div#time-total {
+    display: inline-block;
+}
+
+.dice-viewer .dice-viewer-inner:after {
+    content:'';
+    left: 15px;
+    top: 15px;
+    width: 130px;
+    height: 131px;
+    background: rgba(154, 0, 232, 0.0);
+    position: absolute;
+    z-index: -1;
+    border-radius: 10px;
+    filter: blur(10px);
+    -webkit-transition: all 0.15s;
+    -moz-transition: all 0.15s;
+    -o-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+.dice-viewer.selected .dice-viewer-inner:after {
+    background: rgba(154, 0, 232, 0.51);
+}
+
+
+
+.dice-viewer.disabled .dice-viewer-inner:after {
+    background: rgba(232, 0, 8, 0.81);
+}
