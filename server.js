@@ -158,5 +158,6 @@ app.use(Express.static('public'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/noty/lib/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/animejs//'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/sweetalert/dist/'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/rivets/dist/'));
 
 module.exports = app ;

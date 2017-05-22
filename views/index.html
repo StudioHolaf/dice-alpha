@@ -33,35 +33,35 @@
     <div id="player-1-section" class="player-section animated fadeInUp" player-id="1">
         <div class="player-HUD">
             <div class="player-avatar">
-                <div class="player-avatar-image" style="background-image: url('/assets/img/avatar-1.jpg')"></div>
+                <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
             </div>
             <div class="player-informations">
-                <div class="player-name"></div>
-                <div class="player-hero"></div>
-                <div class="player-gold"></div>
+                <div class="player-name">{_pseudo}</div>
+                <div class="player-hero">{_hero}</div>
+                <div class="player-gold">{_gold}</div>
             </div>
             <div class="player-PV">
-                <div class="player-PV-bar" current-value="100" max-value="100" style="width: 100%;"></div>
+                <div class="player-PV-bar" rv-pv="_pv" rv-pv-max="_pvMax" rv-pv-bar="_pv"></div>
                 <div class="bar-glass"></div>
                 <div class="player-state-legend">
                     PV :
                 </div>
                 <div class="player-PV-state">
-                    <span class="player-PV-current"></span>
+                    <span class="player-PV-current">{_pv}</span>
                     /
-                    <span class="player-PV-initial"></span>
+                    <span class="player-PV-initial">{_pvMax}</span>
                 </div>
             </div>
             <div class="player-ultime">
-                <div class="player-ultime-bar" current-value="0" max-value="100" style="width:0%;"></div>
+                <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
                 <div class="bar-glass"></div>
                 <div class="player-ultime-state">
                     <div class="player-state-legend">
                         UP :
                     </div>
-                    <span class="player-ultime-current"></span>
+                    <span class="player-ultime-current">{_ultime}</span>
                     /
-                    <span class="player-ultime-initial"></span>
+                    <span class="player-ultime-initial">{_ultimeMax}</span>
                 </div>
             </div>
         </div>
@@ -70,35 +70,35 @@
     <div id="player-2-section" class="player-section animated fadeInDown" player-id="2">
         <div class="player-HUD">
             <div class="player-avatar">
-                <div class="player-avatar-image" style="background-image: url('/assets/img/avatar-2.jpg')"></div>
+                <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
             </div>
             <div class="player-informations">
-                <div class="player-name"></div>
-                <div class="player-hero"></div>
-                <div class="player-gold"></div>
+                <div class="player-name">{_pseudo}</div>
+                <div class="player-hero">{_hero}</div>
+                <div class="player-gold">{_gold}</div>
             </div>
             <div class="player-PV">
-                <div class="player-PV-bar" current-value="100" max-value="100" style="width: 100%;"></div>
+                <div class="player-PV-bar" rv-pv="_pv" rv-pv-max="_pvMax" rv-pv-bar="_pv"></div>
                 <div class="bar-glass"></div>
                 <div class="player-state-legend">
                     PV :
                 </div>
                 <div class="player-PV-state">
-                    <span class="player-PV-current"></span>
+                    <span class="player-PV-current">{_pv}</span>
                     /
-                    <span class="player-PV-initial"></span>
+                    <span class="player-PV-initial">{_pvMax}</span>
                 </div>
             </div>
             <div class="player-ultime">
-                <div class="player-ultime-bar" current-value="0" max-value="100" style="width:0%;"></div>
+                <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
                 <div class="bar-glass"></div>
                 <div class="player-ultime-state">
                     <div class="player-state-legend">
                         UP :
                     </div>
-                    <span class="player-ultime-current"></span>
+                    <span class="player-ultime-current">{_ultime}</span>
                     /
-                    <span class="player-ultime-initial"></span>
+                    <span class="player-ultime-initial">{_ultimeMax}</span>
                 </div>
             </div>
         </div>
@@ -192,6 +192,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/vendors/anime.min.js"></script>
+<script src="/vendors/rivets.bundled.min.js"></script>
 <script src="/vendors/noty.min.js"></script>
 <script src="/vendors/sweetalert.min.js"></script>
 <script src="/js/particuler.js"></script>

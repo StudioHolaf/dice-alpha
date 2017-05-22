@@ -4,11 +4,13 @@
 
 class Challenger
 {
-    constructor(id, pv, pvMax, deck ,hero, avatar, pseudo)
+    constructor(id, pv, pvMax, ultime, ultimeMax, deck ,hero, avatar, pseudo)
     {
         this._id = id;
         this._pv = pv;
         this._pvMax = pvMax;
+        this._ultime = ultime;
+        this._ultimeMax = ultimeMax;
         this._deck = deck;
         this._hero = hero;
         this._avatar = avatar;
