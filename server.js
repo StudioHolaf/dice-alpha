@@ -41,7 +41,8 @@ var sockets = require('./game_sockets');
 
 io.sockets.on('connection', function (socket) {
     console.log("user connect");
-    sockets.initGameSockets(io, socket);
+    var addedUser = false;
+    sockets.initGameSockets(io, socket, addedUser);
 });
 
 var routes = require( './routes/' );

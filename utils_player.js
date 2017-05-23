@@ -4,6 +4,7 @@ module.exports = {
 
     construct_player : function(player, callback)
     {
+        console.log("construct player");
         var face_ids = [];
         player._deck.forEach(function (deck, deck_id) {
             deck.forEach(function (dice, dice_id) {

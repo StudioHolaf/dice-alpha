@@ -106,7 +106,7 @@ socket.emit('connection',roomid);
 
 socket.on('ask_for_login',function()
 {
-    console.log("connection to the room "+roomid);
+    console.log("ask_for_login in room "+roomid);
     swal({
             title: "Welcome to dice!",
             text: "Enter user id",
@@ -129,58 +129,45 @@ socket.on('ask_for_login',function()
         });
 })
 
-socket.on('jsonState', function (data) {
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("On nous a envoyé un message :"+data),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-});
-
-socket.on('jsonRoller', function (data) {
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("On nous a envoyé un message :"+data),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-});
-
 var match1 = [];
 var player_1;
 socket.on('player_init', function (player_1_datas) {
-    console.log("socket received :",player_1_datas);
+    console.log("player_init :",player_1_datas);
     player_1 = Object.assign(new Player, player_1_datas.datas);
     player_1._deck = constructDeckFromJSON(player_1);
     var player1View = rivets.bind($('#player-1-section'), player_1);
 });
 
-socket.on('player_count', function(couynt)
-{
-    console.log("count = "+couynt);
-})
 
 socket.on('match_init',function(players_datas)
 {
-    console.log("match init dats : ",players_datas);
-    players_datas.datas.forEach(function(player)
-    {
-        console.log("match player = ",player);
-        console.log()
-        if(player._id != player_1.id)
-        {
-            var player_2 = Object.assign(new Player, player);
-            player_2._deck = constructDeckFromJSON(player_2);
+    console.log("match init datas : ",players_datas);
+    var player_2 = Object.assign(new Player, players_datas.datas);
+    player_2._deck = constructDeckFromJSON(player_2);
 
-            match1 = new Match(5000, player_1, player_2, level);
-            match1.clearValues();
-            match1.reincrementValues();
-            var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
-        }
-    });
+    match1 = new Match(5000, player_1, player_2, level);
+    match1.clearValues();
+    match1.reincrementValues();
+    var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
+});
+
+socket.on('spectator_init',function(players_datas)
+{
+    console.log("spectator init datas : ",players_datas);
+    var player_1 = Object.assign(new Player, players_datas.datas[0]);
+    player_1._deck = constructDeckFromJSON(player_1);
+    var player_2 = Object.assign(new Player, players_datas.datas[1]);
+    player_2._deck = constructDeckFromJSON(player_2);
+
+    match1 = new Match(5000, player_1, player_2, level);
+    match1.clearValues();
+    match1.reincrementValues();
+    var player2View = rivets.bind($('#player-1-section'), match1._players[0]);
+    var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
+});
+
+socket.on('disconnect', function () {
+    log('you have been disconnected');
 });
 
 matchTime = 60;

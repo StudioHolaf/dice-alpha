@@ -1,5 +1,4 @@
 var io;
-var gameSocket;
 var numUsers = 0;
 var players_datas = [];
 
@@ -11,39 +10,61 @@ var utils_player = require( './utils_player' );
  * @param sio The Socket.IO library
  * @param socket The socket object for the connected client.
  */
-exports.initGameSockets = function (sio, socket) {
+exports.initGameSockets = function (sio, socket, addedUser) {
     io = sio;
-    gameSocket = socket;
 
     var roomid = '1234';
+    socket.join(roomid);
+    socket.emit('ask_for_login');
 
-    var addedUser = false;
-    console.log("user connect");
-    gameSocket.join(roomid);
-    gameSocket.emit('ask_for_login');
-    console.log('askForLogin ' + roomid);
+    // Host Events
 
-    gameSocket.on("player_connection", function (data) {
-        if (addedUser) return;
-        gameSocket.username = data;
-        ++numUsers;
-        addedUser = true;
 
-        console.log("received player id = " + data);
-        gameSocket.emit('player_count', io.engine.clientsCount);
-        console.log("numUsers = ", numUsers);
-        console.log("received player id = " + data);
-        db.collection("player").findOne({_id: parseInt(data)}, function (err, player) {
+    // Player Events
+    socket.on('player_connection', function(datas){playerJoinGame(socket, datas, addedUser)});
+    socket.on('player_disconnect', function(datas){playerLeftGame(socket, datas, addedUser)});
+
+}
+
+function playerJoinGame(socket, id, addedUser)
+{
+    if (addedUser) return;
+    ++numUsers;
+    console.log("numUsers : "+numUsers);
+    socket.userid = id;
+    if (numUsers <= 2) {
+        db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
             if (err) throw err;
-            console.log("Construct Player " + data + " and send");
             utils_player.construct_player(player, function (player) {
                 players_datas.push(player);
-                gameSocket.emit('player_init', { datas: player });
-                if (numUsers > 1) {
-                    console.log("players_datas sended = ", players_datas);
-                    gameSocket.broadcast.emit('match_init', {datas: players_datas});
+                socket.emit('player_init', {datas: player});
+                if (numUsers == 2) {
+                    socket.broadcast.emit('match_init', {datas: players_datas[1]});
+                    socket.emit('match_init', {datas: players_datas[0]});
                 }
             });
         });
-    })
+    }
+    else if(players_datas.length == 2)
+    {
+        --numUsers;
+        socket.emit('spectator_init', {datas: players_datas});
+        // echo globally that this client has left
+        socket.broadcast.emit('user left', {
+            username: socket.userid
+        });
+    }
+}
+
+function playerLeftGame(socket, data, addedUser)
+{
+    if (addedUser) {
+        --numUsers;
+
+        // echo globally that this client has left
+        socket.broadcast.emit('user left', {
+            username: socket.username,
+            numUsers: numUsers
+        });
+    }
 }
