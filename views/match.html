@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DICE 2D</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/vendors/sweetalert.css">
+    <link rel="stylesheet" type="text/css" href="/vendors/noty.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom-animations.css">
+    <link rel="stylesheet" type="text/css" href="/css/dice-2D.css">
+</head>
+
+<body>
+
+<div id="interface">
+    <div id="sound-controller">
+        <img src="/assets/img/ic_volume_max.png" alt="" class="volume_on">
+        <img src="/assets/img/ic_volume_shutted.png" alt="" class="volume_off">
+    </div>
+</div>
+
+<canvas id="game-canvas"></canvas>
+
+<div id="game-container">
+
+    <div id="match-data-container">
+        <div id="timer">
+            <div id="time-count">60</div>/<div id="time-total">60</div>
+        </div>
+
+    </div>
+
+    <div id="player-1-section" class="player-section animated fadeInUp" player-id="1">
+        <div class="player-HUD">
+            <div class="player-avatar">
+                <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
+            </div>
+            <div class="player-informations">
+                <div class="player-name">{_pseudo}</div>
+                <div class="player-hero">{_hero}</div>
+                <div class="player-gold">{_gold}</div>
+            </div>
+            <div class="player-PV">
+                <div class="player-PV-bar" rv-pv="_pv" rv-pv-max="_pvMax" rv-pv-bar="_pv"></div>
+                <div class="bar-glass"></div>
+                <div class="player-state-legend">
+                    PV :
+                </div>
+                <div class="player-PV-state">
+                    <span class="player-PV-current">{_pv}</span>
+                    /
+                    <span class="player-PV-initial">{_pvMax}</span>
+                </div>
+            </div>
+            <div class="player-ultime">
+                <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
+                <div class="bar-glass"></div>
+                <div class="player-ultime-state">
+                    <div class="player-state-legend">
+                        UP :
+                    </div>
+                    <span class="player-ultime-current">{_ultime}</span>
+                    /
+                    <span class="player-ultime-initial">{_ultimeMax}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="player-2-section" class="player-section animated fadeInDown" player-id="2">
+        <div class="player-HUD">
+            <div class="player-avatar">
+                <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
+            </div>
+            <div class="player-informations">
+                <div class="player-name">{_pseudo}</div>
+                <div class="player-hero">{_hero}</div>
+                <div class="player-gold">{_gold}</div>
+            </div>
+            <div class="player-PV">
+                <div class="player-PV-bar" rv-pv="_pv" rv-pv-max="_pvMax" rv-pv-bar="_pv"></div>
+                <div class="bar-glass"></div>
+                <div class="player-state-legend">
+                    PV :
+                </div>
+                <div class="player-PV-state">
+                    <span class="player-PV-current">{_pv}</span>
+                    /
+                    <span class="player-PV-initial">{_pvMax}</span>
+                </div>
+            </div>
+            <div class="player-ultime">
+                <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
+                <div class="bar-glass"></div>
+                <div class="player-ultime-state">
+                    <div class="player-state-legend">
+                        UP :
+                    </div>
+                    <span class="player-ultime-current">{_ultime}</span>
+                    /
+                    <span class="player-ultime-initial">{_ultimeMax}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dice-roller">
+
+        <div id="player-1-roller" class="player-roller" player-id="1">
+            <div class="dices-viewer-container">
+                <div class="dice-viewer" dice-id="0">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="1">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="2">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="3">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="4">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <div class="action-button-inner">
+                <div id="roller-button" class="action-button animated pulse">ROLL</div>
+                <div id="solve-button" class="action-button animated pulse">SOLVE</div>
+                <div id="json-button" class="action-button animated pulse">JSON</div>
+            </div>
+        </div>
+
+        <div id="player-2-roller" class="player-roller" player-id="2">
+            <div class="dices-viewer-container">
+                <div class="dice-viewer" dice-id="0">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="1">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="2">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="3">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+                <div class="dice-viewer" dice-id="4">
+                    <div class="dice-viewer-inner">
+                        <div class="dice-skin"></div>
+                        <div class="face-spell"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/vendors/anime.min.js"></script>
+<script src="/vendors/rivets.bundled.min.js"></script>
+<script src="/vendors/noty.min.js"></script>
+<script src="/vendors/sweetalert.min.js"></script>
+<script src="/js/particuler.js"></script>
+<script src="/js/class/Match.js"></script>
+<script src="/js/class/Face.js"></script>
+<script src="/js/class/watch.js"></script>
+<script src="/js/class/spellUtils.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/class/SpellEffect.js"></script>
+<script src="/js/class/NeutralEffect.js"></script>
+<script src="/js/class/ElementEffect.js"></script>
+<script src="/js/class/Spell.js"></script>
+<script src="/js/class/Hero.js"></script>
+<script src="/js/class/Challenger.js"></script>
+<script src="/js/class/Bot.js"></script>
+<script src="/js/class/Stage.js"></script>
+<script src="/js/class/Player.js"></script>
+<script src="/js/class/PhysicalModel.js"></script>
+<script src="/js/class/Dice.js"></script>
+<script src="http://0.0.0.0:8000/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+</html>

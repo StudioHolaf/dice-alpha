@@ -2,245 +2,70 @@
 
 //FACES
 
-    //MANA
-        var mana_fire = new Face(1, "Mana Feu", "./img/fc_fire_mana.png");
-        var spell = new Spell();
-        spell.setFireEffectsFromDatas(1,0,0,0,0,0);
-        mana_fire.pushSpellOnMe(spell);
+function constructDeckFromJSON(player)
+{
+    console.log("player player",player);
 
-        var mana_vent = new Face(2, "Mana Vent", "/assets/img/fc_wind_mana.png");
-        var spell = new Spell();
-        spell.setWindEffectsFromDatas(1,0,0,0,0,0);
-        mana_vent.pushSpellOnMe(spell);
+    var decks = [];
 
-        var mana_eau = new Face(3, "Mana Eau", "/assets/img/fc_water_mana.png");
-        var spell = new Spell();
-        spell.setWaterEffectsFromDatas(1,0,0,0,0,0);
-        mana_eau.pushSpellOnMe(spell);
+    player._deck.forEach(function (deck) {
+        var current_deck = [];
+        deck.forEach(function (dice) {
+            var current_dice = Object.assign(new Dice(), dice);
+            current_dice._faces = [];
+            dice.forEach(function (face) {
+                var current_face = Object.assign(new Face(), face);
+                current_face._spellOnMe = [];
+                current_face._spellOpponent = [];
+                face._spellOnMe.forEach(function (spellOnMe) {
 
-        var mana_terre = new Face(4, "Mana Terre", "/assets/img/fc_mountain_mana.png");
-        var spell = new Spell();
-        spell.setMountainEffectsFromDatas(1,0,0,0,0,0);
-        mana_terre.pushSpellOnMe(spell);
+                    var current_spellOnMe = new Spell();
 
-    //FEU
-        var f_brulure = new Face(5, "Brulure", "/assets/img/fc_fire_brulure.png"); // A VOIR PLUTOT JAMAIS !
-        var spellCost = new Spell();
-        var spellDot = new Spell();
-        spellCost.setFireEffectsFromDatas(0,-1,0,0,0,0);
-        f_brulure.pushSpellOnMe(spellCost);
-        spellDot.setFireEffectsFromDatas(0,0,2,0,0,0);
-        spellDot.fireEffects.nbTour = 2;
-        spellDot.fireEffects.turnCountDown = 1;
-        f_brulure.pushSpellOpponent(spellDot);
+                    var current_fireEffects = Object.assign(new ElementEffect(), spellOnMe._fireEffects);
+                    var current_waterEffects = Object.assign(new ElementEffect(), spellOnMe._waterEffects);
+                    var current_mountainEffects = Object.assign(new ElementEffect(), spellOnMe._mountainEffects);
+                    var current_windEffects = Object.assign(new ElementEffect(), spellOnMe._windEffects);
+                    var current_arcaneEffects = Object.assign(new ElementEffect(), spellOnMe._arcaneEffects);
+                    var current_neutralEffects = Object.assign(new NeutralEffect(), spellOnMe._neutralEffects);
 
-        var f_flamme = new Face(6, "Flamme", "/assets/img/fc_fire_brulure.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setFireEffectsFromDatas(0,2,6,0,0,0);
-        f_flamme.pushSpellOpponent(spellOpponent);
-        spellCost.setFireEffectsFromDatas(0,-2,0,0,0,0);
-        f_flamme.pushSpellOnMe(spellCost);
+                    current_spellOnMe._fireEffects = current_fireEffects;
+                    current_spellOnMe._waterEffects = current_waterEffects;
+                    current_spellOnMe._mountainEffects = current_mountainEffects;
+                    current_spellOnMe._windEffects = current_windEffects;
+                    current_spellOnMe._arcaneEffects = current_arcaneEffects;
+                    current_spellOnMe._neutralEffects = current_neutralEffects;
 
-        var f_combustion = new Face(7, "Combustion", "/assets/img/fc_fire_brulure.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setFireEffectsFromDatas(0,3,6,0,0,0); // SI ON A LA BRULURE ON A LA COMBUSTION
-        f_combustion.pushSpellOpponent(spellOpponent);
-        spellCost.setFireEffectsFromDatas(0,-3,0,0,0,0);
-        f_combustion.pushSpellOnMe(spellCost);
+                    current_face._spellOnMe.push(current_spellOnMe);
 
-        var f_fournaise = new Face(8, "Fournaise", "/assets/img/fc_fire_brulure.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setFireEffectsFromDatas(0,4,25,0,0,0);
-        f_fournaise.pushSpellOpponent(spellOpponent);
-        spellCost.setFireEffectsFromDatas(0,-4,0,0,0,0);
-        f_fournaise.pushSpellOnMe(spellCost);
+                });
+                face._spellOpponent.forEach(function (spellOpponent) {
+                    var current_spellOpponent = new Spell();
 
-    //VENT
-        var f_bourasque = new Face(9, "Bourasque", "/assets/img/fc_wind_bourasque.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setWindEffectsFromDatas(0,1,3,0,0,0);
-        f_bourasque.pushSpellOpponent(spellOpponent);
-        spellCost.setWindEffectsFromDatas(0,-1,0,0,0,0);
-        f_bourasque.pushSpellOnMe(spellCost);
+                    var current_fireEffects = Object.assign(new ElementEffect(), spellOpponent._fireEffects);
+                    var current_waterEffects = Object.assign(new ElementEffect(), spellOpponent._waterEffects);
+                    var current_mountainEffects = Object.assign(new ElementEffect(), spellOpponent._mountainEffects);
+                    var current_windEffects = Object.assign(new ElementEffect(), spellOpponent._windEffects);
+                    var current_arcaneEffects = Object.assign(new ElementEffect(), spellOpponent._arcaneEffects);
+                    var current_neutralEffects = Object.assign(new NeutralEffect(), spellOpponent._neutralEffects);
 
-        var f_lameDeVent = new Face(10, "Lame De Vent", "/assets/img/fc_wind_bourasque.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setWindEffectsFromDatas(0,2,6,0,0,0);
-        f_lameDeVent.pushSpellOpponent(spellOpponent);
-        spellCost.setWindEffectsFromDatas(0,-2,0,0,0,0);
-        f_lameDeVent.pushSpellOnMe(spellCost);
+                    current_spellOpponent._fireEffects = current_fireEffects;
+                    current_spellOpponent._waterEffects = current_waterEffects;
+                    current_spellOpponent._mountainEffects = current_mountainEffects;
+                    current_spellOpponent._windEffects = current_windEffects;
+                    current_spellOpponent._arcaneEffects = current_arcaneEffects;
+                    current_spellOpponent._neutralEffects = current_neutralEffects;
 
-        var f_zephyr = new Face(11, "Zephyr", "/assets/img/fc_wind_bourasque.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        var spellNeutral = new Spell();
-        spellOpponent.setWindEffectsFromDatas(0,3,8,0,0,0);
-        f_zephyr.pushSpellOpponent(spellOpponent);
-        spellCost.setWindEffectsFromDatas(0,-3,0,0,0,0);
-        f_zephyr.pushSpellOnMe(spellCost);
-        spellNeutral.setNeutralEffectsFromDatas(1, 0, 0, 0);//1 REROLL EN PLUS !
-        f_zephyr.pushSpellOnMe(spellNeutral);
+                    current_face._spellOpponent.push(current_spellOpponent);
+                });
+                current_dice._faces.push(current_face);
+            });
+            current_deck.push(current_dice)
+        });
+        decks.push(current_deck);
+    });
 
-        var f_tornade = new Face(12, "Tornade", "/assets/img/fc_wind_bourasque.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setWindEffectsFromDatas(0,4,25,0,0,0);
-        f_tornade.pushSpellOpponent(spellOpponent);
-        spellCost.setWindEffectsFromDatas(0,-4,0,0,0,0);
-        f_tornade.pushSpellOnMe(spellCost);
-
-    //EAU
-        var f_deluge = new Face(13, "Deluge", "/assets/img/fc_water_deluge.png");
-        var spellCost = new Spell();
-        var spellDeluge = new Spell();
-        spellDeluge.setWaterEffectsFromDatas(0,0,1,0,0,0);
-        spellDeluge.waterEffects.nbTour = 9999;
-        f_deluge.pushSpellOpponent(spellDeluge);
-        spellCost.setWaterEffectsFromDatas(0,-1,0,0,0,0);
-        f_deluge.pushSpellOnMe(spellCost);
-
-        var f_cure = new Face(14, "Cure", "/assets/img/fc_water_deluge.png");
-        var spellOnMe = new Spell();
-        var spellCost = new Spell();
-        spellCost.setWaterEffectsFromDatas(0,-2,0,0,0,0);
-        f_cure.pushSpellOnMe(spellCost);
-        spellOnMe.setNeutralEffectsFromDatas(0,5,0,0); //HEAL
-        f_cure.pushSpellOnMe(spellOnMe);
-
-        var f_torrent = new Face(15, "Torrent", "/assets/img/fc_water_deluge.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setWaterEffectsFromDatas(0,3,11,0,0,0);
-        f_torrent.pushSpellOpponent(spellOpponent);
-        spellCost.setWaterEffectsFromDatas(0,-3,0,0,0,0);
-        f_torrent.pushSpellOnMe(spellCost);
-
-        var f_cascade = new Face(16, "Cascade", "/assets/img/fc_water_deluge.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setWaterEffectsFromDatas(0,4,25,0,0,0);
-        f_cascade.pushSpellOpponent(spellOpponent);
-        spellCost.setWaterEffectsFromDatas(0,-4,0,0,0,0);
-        f_cascade.pushSpellOnMe(spellCost);
-
-    //MONTAGNE
-        var f_tremblement = new Face(17, "Tremblement", "/assets/img/fc_mountain_tremblement.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setMountainEffectsFromDatas(0,1,3,0,0,0);
-        f_tremblement.pushSpellOpponent(spellOpponent);
-        spellCost.setMountainEffectsFromDatas(0,-1,0,0,0,0);
-        f_tremblement.pushSpellOnMe(spellCost);
-
-        var f_eboulement = new Face(18, "Eboulement", "/assets/img/fc_mountain_tremblement.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setMountainEffectsFromDatas(0,2,6,0,0,0);
-        f_eboulement.pushSpellOpponent(spellOpponent);
-        spellCost.setMountainEffectsFromDatas(0,-2,0,0,0,0);
-        f_eboulement.pushSpellOnMe(spellCost);
-
-        var f_sableMouvant = new Face(19, "Sable Mouvants", "/assets/img/fc_mountain_tremblement.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        var spellNeutral = new Spell();
-        spellOpponent.setMountainEffectsFromDatas(0,3,9,0,0,0);
-        f_sableMouvant.pushSpellOpponent(spellOpponent);
-        spellNeutral.setNeutralEffectsFromDatas(-1,0,0,0); // 1 REROLL EN MOINS !!
-        f_sableMouvant.pushSpellOpponent(spellNeutral);
-        spellCost.setMountainEffectsFromDatas(0,-3,0,0,0,0);
-        f_sableMouvant.pushSpellOnMe(spellCost);
-
-        var f_faille = new Face(20, "Faille", "/assets/img/fc_mountain_tremblement.png");
-        var spellCost = new Spell();
-        var spellOpponent = new Spell();
-        var spellNeutral = new Spell();
-        spellOpponent.setMountainEffectsFromDatas(0,4,20,0,0,0);
-        f_faille.pushSpellOnMe(spellCost);
-        spellCost.setMountainEffectsFromDatas(0,-4,0,0,0,0);
-        f_faille.pushSpellOpponent(spellOpponent);
-        spellNeutral.setNeutralEffectsFromDatas(0,0,0,1);
-        f_faille.pushSpellOpponent(spellNeutral);
-
-    //SHIELD
-        var f_shieldFire = new Face(22, "Bouclier Feu", "/assets/img/fc_fire_shield.png");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOnMe.setFireEffectsFromDatas(0,0,0,5,0,0);
-        f_shieldFire.pushSpellOnMe(spellOnMe);
-
-        var f_shieldWind = new Face(23, "Bouclier Vent", "/assets/img/fc_wind_shield.png");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOnMe.setWindEffectsFromDatas(0,0,0,5,0,0);
-        f_shieldWind.pushSpellOnMe(spellOnMe);
-
-        var f_shieldWater = new Face(24, "Bouclier Eau", "/assets/img/fc_water_shield.png");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOnMe.setWaterEffectsFromDatas(0,0,0,5,0,0);
-        f_shieldWater.pushSpellOnMe(spellOnMe);
-
-        var f_shieldMountain = new Face(25, "Bouclier Terre", "/assets/img/fc_mountain_shield.png");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOnMe.setMountainEffectsFromDatas(0,0,0,5,0,0);
-        f_shieldMountain.pushSpellOnMe(spellOnMe);
-
-    //ARCANE
-        var f_arcane = new Face(26, "Arcane", "/assets/img/fc_arcane.png");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOpponent.setArcaneEffectsFromDatas(0,0,1,0,0,0);
-        f_arcane.pushSpellOpponent(spellOpponent);
-
-    //REFLECT
-        var f_reflect = new Face(27, "Reflect Fire", "/assets/img/fc_hypercube.jpg");
-        var spellOnMe = new Spell();
-        var spellOpponent = new Spell();
-        spellOnMe.setFireEffectsFromDatas(0,0,0,2,0,2);
-        f_reflect.pushSpellOnMe(spellOnMe);
-
-
-// TABLEAU DE FACE DE DES - JOUEUR 1
-var j1_d1_f = [f_arcane, mana_terre, mana_terre, mana_terre, f_arcane, mana_terre];
-var j1_d2_f = [f_torrent, f_torrent, mana_terre, mana_terre, mana_eau, mana_eau];
-var j1_d3_f = [mana_terre, mana_terre, mana_terre, mana_eau, mana_terre, f_arcane];
-var j1_d4_f = [f_arcane, mana_terre, mana_terre, mana_terre, mana_terre, f_arcane];
-var j1_d5_f = [f_sableMouvant, f_sableMouvant, f_sableMouvant, f_arcane, f_sableMouvant, f_shieldFire];
-
-// TABLEAU DE FACE DE DES - BOT
-var bot_d1_f = [f_cure, f_cure, mana_eau, mana_eau, mana_eau, mana_vent];
-var bot_d2_f = [f_cure, f_zephyr, mana_vent, mana_eau, mana_eau, mana_vent];
-var bot_d3_f = [f_cure, f_zephyr, mana_vent, mana_eau, mana_eau, mana_vent];
-var bot_d4_f = [f_cure, f_zephyr, mana_vent, mana_eau, mana_eau, mana_vent];
-var bot_d5_f = [f_zephyr, f_zephyr, mana_vent, mana_vent, mana_vent, mana_eau];
-
-//  DES DU JOUEUR 1
-var j1_dice1 = new Dice(30, "./img/vibranium.png", j1_d1_f, 1, 1, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var j1_dice2 = new Dice(31, "./img/vibranium.png", j1_d2_f, 2, 1, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var j1_dice3 = new Dice(32, "./img/vibranium.png", j1_d3_f, 3, 1, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var j1_dice4 = new Dice(33, "./img/vibranium.png", j1_d4_f, 4, 1, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var j1_dice5 = new Dice(34, "./img/vibranium.png", j1_d5_f, 5, 1, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-
-//  DES DU BOT
-var bot_dice1 = new Dice(35, "./img/vibranium.png", bot_d1_f, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var bot_dice2 = new Dice(36, "./img/vibranium.png", bot_d2_f, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var bot_dice3 = new Dice(37, "./img/vibranium.png", bot_d3_f, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var bot_dice4 = new Dice(38, "./img/vibranium.png", bot_d4_f, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-var bot_dice5 = new Dice(39, "./img/vibranium.png", bot_d5_f, 41, "//", true, true, 555, 123, true, 45, 50, 800);
-
-
-// DECK j1
-var j1_deck = [[j1_dice1, j1_dice2, j1_dice3, j1_dice4, j1_dice5]];
-
-// DECK bot
-var bot_deck = [[bot_dice1, bot_dice2, bot_dice3, bot_dice4, bot_dice5]];
+    return decks;
+}
 
 // Stage
 var level = new Stage(4000, "bg1", 1000, 800);
@@ -263,19 +88,46 @@ rivets.binders['player-avatar'] = function(el, value){
     el.style.backgroundImage = "url('"+value+"')";
 };
 
-// JOUEURS
-var j1 = new Player(1, 100, 100, 0, 100, j1_deck, "Ares", "/assets/img/avatar-1.jpg", "Aktos", [], "DeGaulle, Resonnance", 10001);
+var socket = io.connect('0.0.0.0:8000');
 
-var player1View = rivets.bind($('#player-1-section'), j1);
+socket.on('jsonState', function (data) {
+    new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: ("On nous a envoyé un message :"+data),
+        timeout: 5000,
+        progressBar: true,
+    }).show();
+});
 
-var bot1 = new Bot(2, 100, 100, 0, 100, bot_deck, "Medusa", "/assets/img/avatar-2.jpg", "Myree", [], "Portal 1, Portal 2", 1010);
+socket.on('jsonRoller', function (data) {
+    new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: ("On nous a envoyé un message :"+data),
+        timeout: 5000,
+        progressBar: true,
+    }).show();
+});
 
-var player2View = rivets.bind($('#player-2-section'), bot1);
+var match1 = [];
+var players = [];
+socket.on('player_init', function (player_data) {
+    console.log("socket received :",player_data);
 
-// Match
-var match1 = new Match(5000, j1, bot1, level);
-match1.clearValues();
-match1.reincrementValues();
+    var player = Object.assign(new Player, player_data.datas);
+    player._deck = constructDeckFromJSON(player);
+    players.push(player);
+
+    if(players.length == 2)
+    {
+        match1 = new Match(5000, players[0], players[1], level);
+        match1.clearValues();
+        match1.reincrementValues();
+        var player1View = rivets.bind($('#player-1-section'), match1._players[0]);
+        var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
+    }
+});
 
 //console.log(JSON.stringify(match1));
 
@@ -488,28 +340,6 @@ $("#solve-button").click(function()
     }
 });
 
-var socket = io.connect('0.0.0.0:8000');
-
-socket.on('jsonState', function (data) {
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("On nous a envoyé un message :"+data),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-});
-
-socket.on('jsonRoller', function (data) {
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("On nous a envoyé un message :"+data),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-});
-
 $("#json-button").click(function()
 {
     var player1StateJson = j1.getStateJSON();
@@ -625,7 +455,7 @@ function roll()
 
 
 
-bg_music = new Audio('./music/dice_theme_1.mp3');
+bg_music = new Audio('/assets/music/dice_theme_1.mp3');
 bg_music.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
