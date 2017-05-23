@@ -7,12 +7,14 @@ var Express = require('express'),
 
 Object.assign=require('object-assign');
 app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+//app.use(morgan('combined'))
+
+app.set('views', __dirname + '/views');
 
 /* ------------------------------------------------------------ OPENSHIFT CONFIGURATION ------------------------------------------------------------ */
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || process.env.LOCAL_IP;
 
 
 /* ------------------------------------------------------------ ERROR HANDLING ------------------------------------------------------------ */
@@ -25,40 +27,35 @@ app.use(function(err, req, res, next){
 /* ------------------------------------------------------------ SOCKET ------------------------------------------------------------ */
 
 var server = http.createServer(app);
-io = require('socket.io').listen(server);
-io.sockets.on('connection', function (socket) {
+var io = require('socket.io')(server);
 
-  console.log("je suis connecté !");
-
-  socket.on('jsonState', function (state) {
-    console.log("server json State!");
-    socket.state = state;
-    socket.broadcast.emit('jsonState', state);
-  });
-  socket.on('jsonRoller', function (roller) {
-    console.log("server json Roller!");
-    socket.roller = roller;
-    socket.broadcast.emit('jsonRoller', roller);
-  });
-
+server.listen(port, function () {
+    console.log('Server listening at port %d', port);
 });
 
 /* ------------------------------------------------------------ ROUTES ------------------------------------------------------------ */
 
 var routes = require( './db' );
 
+var sockets = require('./game_sockets');
+
+io.sockets.on('connection', function (socket) {
+    console.log("user connect");
+    sockets.initGameSockets(io, socket);
+});
+
 var routes = require( './routes/' );
 app.get('/', routes.index);
-app.get('/match/:idj1:idj2', routes.match);
+app.get('/match/:roomid', routes.match);
 app.get('/pagecount', routes.pagecount);
 
 //app.listen(port, ip);
-server.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
 
 /* ------------------------------------------------------------ ASSETS ------------------------------------------------------------ */
 
-app.use(Express.static('public'));
+app.use(Express.static(__dirname + '/public'));
+
 app.use('/vendors', Express.static(__dirname + '/node_modules/noty/lib/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/animejs//'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/sweetalert/dist/'));

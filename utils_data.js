@@ -11,5 +11,4 @@ module.exports = {
             array[index] = replacement;
         }
     }
-
 };

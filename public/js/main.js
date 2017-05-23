@@ -88,7 +88,46 @@ rivets.binders['player-avatar'] = function(el, value){
     el.style.backgroundImage = "url('"+value+"')";
 };
 
-var socket = io.connect('0.0.0.0:8000');
+function getMatchIDByUrl(url)
+{
+
+}
+
+var locationGetted = window.location.pathname;
+var locationSplitted = locationGetted.split("/");
+var roomid = locationSplitted[locationSplitted.length-1];
+var player_1_id;
+
+console.log("roomid ",roomid);
+
+var socket = io.connect();
+
+socket.emit('connection',roomid);
+
+socket.on('ask_for_login',function()
+{
+    console.log("connection to the room "+roomid);
+    swal({
+            title: "Welcome to dice!",
+            text: "Enter user id",
+            type: "input",
+            showCancelButton: true,
+            closeOnConfirm: true,
+            animation: "slide-from-top",
+            inputPlaceholder: "User id"
+        },
+        function(inputValue){
+            if (inputValue === false) return false;
+
+            if (inputValue === "") {
+                swal.showInputError("You need to write something!");
+                return false
+            }
+            console.log("user id : ",inputValue);
+            player_1_id = parseInt(inputValue);
+            socket.emit('player_connection', inputValue);
+        });
+})
 
 socket.on('jsonState', function (data) {
     new Noty({
@@ -111,26 +150,38 @@ socket.on('jsonRoller', function (data) {
 });
 
 var match1 = [];
-var players = [];
-socket.on('player_init', function (player_data) {
-    console.log("socket received :",player_data);
-
-    var player = Object.assign(new Player, player_data.datas);
-    player._deck = constructDeckFromJSON(player);
-    players.push(player);
-
-    if(players.length == 2)
-    {
-        match1 = new Match(5000, players[0], players[1], level);
-        match1.clearValues();
-        match1.reincrementValues();
-        var player1View = rivets.bind($('#player-1-section'), match1._players[0]);
-        var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
-    }
+var player_1;
+socket.on('player_init', function (player_1_datas) {
+    console.log("socket received :",player_1_datas);
+    player_1 = Object.assign(new Player, player_1_datas.datas);
+    player_1._deck = constructDeckFromJSON(player_1);
+    var player1View = rivets.bind($('#player-1-section'), player_1);
 });
 
-//console.log(JSON.stringify(match1));
+socket.on('player_count', function(couynt)
+{
+    console.log("count = "+couynt);
+})
 
+socket.on('match_init',function(players_datas)
+{
+    console.log("match init dats : ",players_datas);
+    players_datas.datas.forEach(function(player)
+    {
+        console.log("match player = ",player);
+        console.log()
+        if(player._id != player_1.id)
+        {
+            var player_2 = Object.assign(new Player, player);
+            player_2._deck = constructDeckFromJSON(player_2);
+
+            match1 = new Match(5000, player_1, player_2, level);
+            match1.clearValues();
+            match1.reincrementValues();
+            var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
+        }
+    });
+});
 
 matchTime = 60;
 var timeout;
@@ -365,7 +416,7 @@ $("#json-button").click(function()
 });
 
 
-$(".dice-viewer").click(function () {
+$("#player-1-roller .dice-viewer").click(function () {
     var dice_id = $(this).attr("dice-id");
     var player_id = $(this).parent().parent().attr("player-id");
     var dice = match1.players[player_id-1].getDiceOnDeck(0, dice_id);
@@ -387,7 +438,7 @@ function roll()
 
     if ($(".selected").length <= 0)
     {
-        $(".dice-viewer").each(function () {
+        $("#player-1-roller .dice-viewer").each(function () {
 
             var dice_id = $(this).attr("dice-id");
             var player_id = $(this).parent().parent().attr("player-id");
