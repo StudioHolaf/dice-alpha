@@ -88,11 +88,6 @@ rivets.binders['player-avatar'] = function(el, value){
     el.style.backgroundImage = "url('"+value+"')";
 };
 
-function getMatchIDByUrl(url)
-{
-
-}
-
 var locationGetted = window.location.pathname;
 var locationSplitted = locationGetted.split("/");
 var roomid = locationSplitted[locationSplitted.length-1];
@@ -167,7 +162,7 @@ socket.on('spectator_init',function(players_datas)
 });
 
 socket.on('disconnect', function () {
-    log('you have been disconnected');
+    console.log('you have been disconnected');
 });
 
 matchTime = 60;
@@ -206,7 +201,7 @@ function reInitTimer()
     matchTime = 60;
 }
 
-function changePlayerData(player_number, data_name, number)
+/*function changePlayerData(player_number, data_name, number)
 {
     console.log("change player "+player_number+" "+data_name+" by "+number)
     var max_number = parseInt($("#player-"+player_number+"-section .player-"+data_name+"-bar").attr("max-value"));
@@ -218,9 +213,9 @@ function changePlayerData(player_number, data_name, number)
     $("#player-"+player_number+"-section .player-"+data_name+"-current").html(new_number);
     if(data_name == "PV")
         $("#player-"+player_number+"-section .player-avatar").animateCss("shakeMini");
-}
+}*/
 
-function changePlayerDataTo(player_number, data_name, newPV)
+/*function changePlayerDataTo(player_number, data_name, newPV)
 {
     console.log("change player "+player_number+" "+data_name+" to "+newPV)
     if(player_number == "1")
@@ -251,7 +246,7 @@ function changePlayerDataTo(player_number, data_name, newPV)
             });
     }
 
-}
+}*/
 
 function initInterface()
 {
@@ -363,43 +358,13 @@ var tab_tirage_random = [];
 
 $("#roller-button").click(function()
 {
-    roll();
+    //roll();
+    prepareRoll();
 });
 
 $("#solve-button").click(function()
 {
-    stopTimer();
-    changePlayerData(1,"ultime",10);
-    changePlayerData(2,"ultime",10);
-    $(".dice-viewer").removeClass("selected");
-    if(tab_tirage_random.length > 0) {
-        match1.solve(tab_tirage_random,callbackRefreshInterface);
-        tab_tirage_random = [];
-    }
-});
-
-$("#json-button").click(function()
-{
-    var player1StateJson = j1.getStateJSON();
-    console.log("player1StateJson  %o",player1StateJson);
-    socket.emit('jsonState', player1StateJson);
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("J'envoie un state : "+player1StateJson),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-    var player1RollerJson = j1.getRollerJSON();
-    console.log("player1StateJson  %o",player1RollerJson);
-    socket.emit('jsonRoller', player1RollerJson);
-    new Noty({
-        type: 'error',
-        layout: 'topRight',
-        text: ("J'envoie un roller : "+player1RollerJson),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
+    socket.emit('player_launch_solve');
 });
 
 
@@ -411,6 +376,90 @@ $("#player-1-roller .dice-viewer").click(function () {
     if (dice.reroll > 0 && dice.isActive())
         $(this).toggleClass("selected");
 });
+
+function prepareRoll()
+{
+    var rnd_j1 = [null,null,null,null,null];
+    $("#player-1-roller .dice-viewer.selected").each(function () {
+        var dice_id = $(this).attr("dice-id");
+        var dice = match1.players[0].getDiceOnDeck(0, dice_id);
+        var rnd =  Math.floor(Math.random() * 6) + 0;
+
+        if (dice.reroll > 0 && dice.isActive()) {
+            rnd_j1[dice_id] = rnd;
+        }
+    });
+    socket.emit('my_roll_ready',rnd_j1);
+}
+
+socket.on('launch_solve',function(players_datas)
+{
+    stopTimer();
+    $(".dice-viewer").removeClass("selected");
+    if(tab_tirage_random.length > 0) {
+        match1.solve(tab_tirage_random,callbackRefreshInterface);
+        tab_tirage_random = [];
+    }
+});
+
+socket.on('opponent_roll_ready',function(players_datas)
+{
+    new Noty({
+        type: 'success',
+        layout: 'topRight',
+        text: ("Opponent roll is ready"),
+        timeout: 5000,
+        progressBar: true,
+    }).show();
+    socket.emit('opponent_roll_ready',players_datas);
+});
+
+socket.on('everyone_rolls_ready',function(players_datas)
+{
+    console.log("players rolls %o",players_datas);
+    var rolls = JSON.parse(players_datas.datas);
+    autoRoll(rolls)
+});
+
+function autoRoll(rolls)
+{
+    if(tab_tirage_random.length <= 0)
+    {
+        reInitTimer();
+        var rnd_res_j1 = [0,0,0,0,0];
+        var rnd_res_bot1 = [0,0,0,0,0];
+        tab_tirage_random = [rnd_res_j1, rnd_res_bot1];
+        startTimer();
+    }
+
+    $(".dice-viewer").each(function () {
+
+        var dice_id = $(this).attr("dice-id");
+        var player_id = $(this).parent().parent().attr("player-id");
+        var player = match1.players[player_id-1];
+        var dice = player.getDiceOnDeck(0, dice_id);
+
+        if (dice.reroll > 0 && dice.isActive()) {
+
+            console.log("player ID: " + player_id);
+            //player -= 1;
+            if(rolls["player_"+player.id][dice_id] != null) {
+                if ((player_id - 1) == 0) {
+                    tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_"+player.id][dice_id];
+                    setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
+                }
+                if ((player_id - 1) == 1) {
+                    tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_"+player.id][dice_id];
+                    setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
+                }
+            }
+        }
+    });
+    match1.players[0].decreaseAllDiceReroll();
+    match1.players[1].decreaseAllDiceReroll();
+
+    $(".dice-viewer").removeClass("selected");
+}
 
 function roll()
 {
@@ -498,7 +547,6 @@ bg_music.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
 }, false);
-bg_music.play();
 
 $("#sound-controller").click(function()
 {

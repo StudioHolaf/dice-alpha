@@ -1,8 +1,10 @@
 var io;
 var numUsers = 0;
 var players_datas = [];
+var players_rolls = {};
 
 var utils_player = require( './utils_player' );
+var utils_data = require( './utils_data' );
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -23,6 +25,8 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     // Player Events
     socket.on('player_connection', function(datas){playerJoinGame(socket, datas, addedUser)});
     socket.on('player_disconnect', function(datas){playerLeftGame(socket, datas, addedUser)});
+    socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
+    socket.on('player_launch_solve', function(){launchSolve(socket)});
 
 }
 
@@ -31,7 +35,8 @@ function playerJoinGame(socket, id, addedUser)
     if (addedUser) return;
     ++numUsers;
     console.log("numUsers : "+numUsers);
-    socket.userid = id;
+    socket.userID = id;
+    socket.userNumber = numUsers;
     if (numUsers <= 2) {
         db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
             if (err) throw err;
@@ -51,20 +56,38 @@ function playerJoinGame(socket, id, addedUser)
         socket.emit('spectator_init', {datas: players_datas});
         // echo globally that this client has left
         socket.broadcast.emit('user left', {
-            username: socket.userid
+            username: socket.userID
         });
     }
 }
 
-function playerLeftGame(socket, data, addedUser)
+function playerLeftGame(socket, datas, addedUser)
 {
     if (addedUser) {
         --numUsers;
 
         // echo globally that this client has left
         socket.broadcast.emit('user left', {
-            username: socket.username,
-            numUsers: numUsers
+            username: socket.username
         });
     }
+}
+
+function myRollReady(socket, datas)
+{
+    players_rolls["player_"+socket.userID] = datas;
+    socket.broadcast.emit('opponent_roll_ready');
+    if(Object.keys(players_rolls).length == 2)
+    {
+        var encoded_rolls = JSON.stringify(players_rolls);
+        socket.broadcast.emit('everyone_rolls_ready', {datas: encoded_rolls});
+        socket.emit('everyone_rolls_ready', {datas: encoded_rolls});
+        players_rolls = {};
+    }
+}
+
+function launchSolve(socket)
+{
+    socket.broadcast.emit('launch_solve');
+    socket.emit('launch_solve');
 }

@@ -161,6 +161,7 @@ class Match
 
     applyNeutral(tab_player, callback)
     {
+        console.log("apply neutral");
         var classScope = this;
         var dice = 0;
         var toDeleteEffectIndexes = initNeutralTab();
@@ -333,6 +334,7 @@ class Match
 
     applyAttackArcane(tab_player, callback)
     {
+        console.log("apply arcane");
         var classScope = this;
         var dgts = 0;
         var dgt_expo = 0;
@@ -395,6 +397,7 @@ class Match
     }
     
     applyAttack(tab_player, elemFlag, callback) {
+        console.log("apply attack");
         var classScope = this;
         var dgts = 0;
         var dgts_current = 0;
