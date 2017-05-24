@@ -142,7 +142,7 @@ socket.on('match_init', function (players_datas) {
     match1.clearValues();
     match1.reincrementValues();
     var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
-    setTimeout(function(){
+    /*setTimeout(function(){
         new swal ({
                 title: "Êtes-vous prêt ?",
                 type: "success",
@@ -154,14 +154,14 @@ socket.on('match_init', function (players_datas) {
             function () {
                 socket.emit('player_ready_for_match');
             });
-    },2000);
+    },2000);*/
 
 });
 
-socket.on('everyone_ready_for_match', function () {
-    reInitTimer();
-    initialRoll();
-    startTimer();
+socket.on('everyone_ready_for_match', function (players_datas) {
+    console.log("players rolls %o", players_datas);
+    var rolls = JSON.parse(players_datas.datas);
+    autoRoll(rolls);
 });
 
 socket.on('spectator_init', function (players_datas) {
@@ -357,12 +357,18 @@ socket.on('opponent_roll_ready', function (players_datas) {
 socket.on('everyone_rolls_ready', function (players_datas) {
     console.log("players rolls %o", players_datas);
     var rolls = JSON.parse(players_datas.datas);
-    autoRoll(rolls)
+    autoRoll(rolls);
 });
 
 socket.on('iam_ready', function (players_datas) {
     console.log("players rolls %o", players_datas);
 });
+
+socket.on("user_left",function()
+{
+    console.log("user left reload page");
+    location.reload();
+})
 
 function solve() {
     stopTimer();
@@ -371,44 +377,6 @@ function solve() {
         match1.solve(tab_tirage_random, callbackRefreshInterface);
         tab_tirage_random = [];
     }
-}
-
-function initialRoll()
-{
-    if (tab_tirage_random.length <= 0) {
-        var rnd_res_j1 = [0, 0, 0, 0, 0];
-        var rnd_res_bot1 = [0, 0, 0, 0, 0];
-        tab_tirage_random = [rnd_res_j1, rnd_res_bot1];
-    }
-
-    $(".dice-viewer").each(function () {
-
-        var dice_id = $(this).attr("dice-id");
-        var player_id = $(this).parent().parent().attr("player-id");
-        var player = match1.players[player_id-1];
-        var dice = player.getDiceOnDeck(0, dice_id);
-        var rnd =  Math.floor(Math.random() * 6) + 0;
-        if(player_id == "1")
-            j1Rolled = true;
-        if(player_id == "2")
-            j2Rolled = true;
-        console.log("player ID: "+player_id);
-        //player -= 1;
-        if (dice.reroll > 0) {
-            if ((player_id - 1) == 0) {
-                tab_tirage_random[(player_id - 1)][dice_id] = rnd;
-                setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
-            }
-            if ((player_id - 1) == 1) {
-                tab_tirage_random[(player_id - 1)][dice_id] = rnd;
-                setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
-            }
-        }
-    });
-    if(j1Rolled)
-        match1.players[0].decreaseAllDiceReroll();
-    if(j2Rolled)
-        match1.players[1].decreaseAllDiceReroll();
 }
 
 function autoRoll(rolls) {

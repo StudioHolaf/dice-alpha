@@ -3,8 +3,6 @@ var numUsers = 0;
 var players_datas = [];
 var players_rolls = {};
 
-var players_status = {};
-
 var utils_player = require( './utils_player' );
 var utils_data = require( './utils_data' );
 
@@ -19,13 +17,19 @@ exports.initGameSockets = function (sio, socket, addedUser) {
 
     var roomid = '1234';
     socket.join(roomid);
-    socket.emit('ask_for_login');
+    if(numUsers >= 2)
+    {
+        spectatorJoinGame(socket);
+    }
+    else
+        socket.emit('ask_for_login');
 
     // Host Events
+    socket.on("disconnect", function(datas){playerDisconnect(socket, datas, addedUser)});
 
     // Player Events
     socket.on('player_connection', function(datas){playerJoinGame(socket, datas, addedUser)});
-    socket.on('player_disconnect', function(datas){playerLeftGame(socket, datas, addedUser)});
+    socket.on('player_disconnect', function(datas){playerLeftGame(socket)});
     socket.on('player_ready_for_match', function(datas){playerReadyForMatch(socket)});
     socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
     socket.on('player_launch_solve', function(){launchSolve(socket)});
@@ -51,20 +55,31 @@ function playerJoinGame(socket, id, addedUser)
             });
         });
     }
-    else if(players_datas.length == 2)
-    {
-        --numUsers;
-        socket.emit('spectator_init', {datas: players_datas});
-    }
+}
+
+function spectatorJoinGame(socket)
+{
+    socket.broadcast.emit('spectator_init', {datas: players_datas});
+    socket.emit('spectator_init', {datas: players_datas});
+}
+
+function playerDisconnect(socket)
+{
+    console.log("player-disconnect");
+    numUsers = 0;
+    players_datas = [];
+    // echo globally that this client has left
+    socket.broadcast.emit('user_left');
+    socket.emit('user_left');
 }
 
 function playerLeftGame(socket, datas, addedUser)
 {
     if (addedUser) {
         --numUsers;
-
+        players_datas = [];
         // echo globally that this client has left
-        socket.broadcast.emit('user left', {
+        socket.broadcast.emit('user_left', {
             username: socket.username
         });
     }
@@ -87,11 +102,17 @@ function playerReadyForMatch(socket)
 {
     console.log("dans playerIsReady");
 
-    players_status["player_"+socket.userID] = true;
-    if(Object.keys(players_status).length == 2)
+    var rnd1 = Math.floor(Math.random() * 6) + 0;
+    var rnd2 = Math.floor(Math.random() * 6) + 0;
+    var rnd3 = Math.floor(Math.random() * 6) + 0;
+    var rnd4 = Math.floor(Math.random() * 6) + 0;
+    var rnd5 = Math.floor(Math.random() * 6) + 0;
+    players_rolls["player_"+socket.userID] = [rnd1,rnd2,rnd3,rnd4,rnd5];
+    if(Object.keys(players_rolls).length == 2)
     {
-        socket.broadcast.emit('everyone_ready_for_match');
-        socket.emit('everyone_ready_for_match');
+        var encoded_rolls = JSON.stringify(players_rolls);
+        socket.broadcast.emit('everyone_ready_for_match',{datas: encoded_rolls});
+        socket.emit('everyone_ready_for_match',{datas: encoded_rolls});
     }
 }
 
