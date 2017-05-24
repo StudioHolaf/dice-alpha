@@ -6,10 +6,14 @@ module.exports = {
     
     replace_in_array : function(array, toReplace, replacement)
     {
-        var index = array.indexOf(toReplace);
-        if (index !== -1) {
-            array[index] = replacement;
+        var indexes = [], i = -1;
+        while ((i = array.indexOf(toReplace, i+1)) != -1){
+            indexes.push(i);
         }
+        indexes.forEach(function(id)
+        {
+            array[id] = replacement;
+        });
     },
 
     objectSize : function(obj) {

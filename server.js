@@ -35,7 +35,7 @@ server.listen(port, function () {
 
 /* ------------------------------------------------------------ ROUTES ------------------------------------------------------------ */
 
-var routes = require( './db' );
+var dbs = require( './db' );
 
 var sockets = require('./game_sockets');
 

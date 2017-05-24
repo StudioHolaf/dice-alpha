@@ -16,7 +16,7 @@ class Challenger
         this._avatar = avatar;
         this._pseudo = pseudo;
         this._reroll = 3;
-        this._tourTime = 60;
+        this._tourTime = 15;
     }
 
     get id(){
@@ -73,17 +73,6 @@ class Challenger
     set tourTime(tourTime)
     {
         this._tourTime = tourTime;
-    }
-
-    getDiceByFace(face)
-    {
-        for (var i = 0; i != _deck.lenght; i++)
-        {
-            for (var j = 0; j != _deck[i]; j++)
-            {
-
-            }
-        }
     }
 
     getDiceOnDeck(deck, dice)
