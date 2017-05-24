@@ -37,6 +37,8 @@ initDb = function(callback) {
     var mongodb = require('mongodb');
     if (mongodb == null) return;
 
+    mongoURL = "mongodb://dicemaster:hmermbxk@ds151431.mlab.com:51431/dice-dev";
+
     mongodb.connect(mongoURL, function(err, conn) {
         if (err) {
             callback(err);
