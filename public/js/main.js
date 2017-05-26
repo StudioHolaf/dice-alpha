@@ -175,7 +175,7 @@ socket.on('match_init', function (players_datas) {
 socket.on('everyone_ready_for_match', function (players_datas) {
     console.log("players rolls %o", players_datas);
     var rolls = JSON.parse(players_datas.datas);
-    autoRoll(rolls);
+    //autoRoll(rolls);
 });
 
 socket.on('spectator_init', function (players_datas) {
@@ -423,14 +423,15 @@ function autoRoll(rolls) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
-                    $("#player-1-roller .dive-viewer[dice-id='"+dice_id+"']").attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
-                    $("#player-2-roller .dive-viewer[dice-id='"+dice_id+"']").attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
+
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
             }
