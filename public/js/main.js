@@ -88,6 +88,10 @@ rivets.binders['player-avatar'] = function (el, value) {
     el.style.backgroundImage = "url('" + value + "')";
 };
 
+rivets.binders['face-spell'] = function (el, value) {
+    el.style.backgroundImage = "url('" + value + "')";
+};
+
 var locationGetted = window.location.pathname;
 var locationSplitted = locationGetted.split("/");
 var roomid = locationSplitted[locationSplitted.length - 1];
@@ -130,6 +134,11 @@ socket.on('player_init', function (player_1_datas) {
     player_1 = Object.assign(new Player, player_1_datas.datas);
     player_1._deck = constructDeckFromJSON(player_1);
     var player1View = rivets.bind($('#player-1-section'), player_1);
+    var player1Dice1 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="0"]'), player_1.getDiceOnDeck(0,0));
+    var player1Dice2 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="1"]'), player_1.getDiceOnDeck(0,1));
+    var player1Dice3 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="2"]'), player_1.getDiceOnDeck(0,2));
+    var player1Dice4 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="3"]'), player_1.getDiceOnDeck(0,3));
+    var player1Dice5 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="4"]'), player_1.getDiceOnDeck(0,4));
 });
 
 
@@ -142,6 +151,11 @@ socket.on('match_init', function (players_datas) {
     match1.clearValues();
     match1.reincrementValues();
     var player2View = rivets.bind($('#player-2-section'), match1._players[1]);
+    var player2Dice1 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="0"]'), player_2.getDiceOnDeck(0,0));
+    var player2Dice2 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="1"]'), player_2.getDiceOnDeck(0,1));
+    var player2Dice3 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="2"]'), player_2.getDiceOnDeck(0,2));
+    var player2Dice4 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="3"]'), player_2.getDiceOnDeck(0,3));
+    var player2Dice5 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="4"]'), player_2.getDiceOnDeck(0,4));
     /*setTimeout(function(){
         new swal ({
                 title: "Êtes-vous prêt ?",
@@ -271,9 +285,9 @@ function initInterface() {
 
 function callbackRefreshInterface() {
     console.log("callbackRefreshInterface");
-    $(".face-spell").css("background-image", "none");
 
     $(".dice-viewer").removeClass("disabled");
+    $(".dice-viewer").attr("roll-val",-1);
 
     var player_id = 1;
     match1.players.forEach(function (player) {
@@ -386,6 +400,15 @@ function autoRoll(rolls) {
         tab_tirage_random = [rnd_res_j1, rnd_res_bot1];
     }
 
+    console.log("rolling dices");
+    new Noty({
+        type: 'success',
+        layout: 'topRight',
+        text: ("Launching the dices"),
+        timeout: 5000,
+        progressBar: true,
+    }).show();
+
     $(".dice-viewer").each(function () {
 
         var dice_id = $(this).attr("dice-id");
@@ -394,17 +417,21 @@ function autoRoll(rolls) {
         var dice = player.getDiceOnDeck(0, dice_id);
 
         if (dice.reroll > 0 && dice.isActive()) {
-
-            console.log("player ID: " + player_id);
             //player -= 1;
             if (rolls["player_" + player.id][dice_id] != null) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
-                    setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
+                    console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    $("#player-1-roller .dive-viewer[dice-id='"+dice_id+"']").attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
-                    setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
+                    console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    $("#player-2-roller .dive-viewer[dice-id='"+dice_id+"']").attr("roll-val",rolls["player_" + player.id][dice_id]);
+                    //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
             }
         }

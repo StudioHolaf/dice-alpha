@@ -305,9 +305,9 @@ div#player-1-roller {
 }
 
 .dice-viewer {
-    width: 160px;
-    height: 160px;
-    padding: 20px;
+    width: 140px;
+    height: 140px;
+    padding: 20px 30px;
     float: left;
     -webkit-transition: all 0.25s;
     -moz-transition: all 0.25s;
@@ -325,7 +325,7 @@ div#player-1-roller {
     width: 100%;
     height: 100%;
     /* border: 5px solid #dea00f; */
-    /* box-shadow: 0px 0px 55px #192538, 0px 0px 25px #101c2f, 0px 0px 15px #101c2f; */
+    /*box-shadow: 0px 0px 55px #000000, 0px 0px 25px #000000, 0px 0px 15px #000000;*/
     /* background: rgba(0, 0, 0, 0.43); */
     position: relative;
 }
@@ -340,6 +340,112 @@ div#player-1-roller {
     top: 0;
     left: 0;
     z-index: 0;
+}
+
+.dice-viewer {
+    -webkit-perspective: 400px;
+    perspective: 400px;
+}
+
+.cube {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translateZ(-50px) rotateX(0) rotateY(0);
+    transform: translateZ(-50px) rotateX(0) rotateY(0);
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.dice-face {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    overflow: hidden;
+    background-size: cover;
+    background-image: url(/assets/img/fc_skin_rock_basic_cube3.png);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.top {
+    -webkit-transform: translateZ(-70px) rotateX(180deg);
+    transform: translateZ(-70px) rotateX(180deg);
+}
+
+.front {
+    -webkit-transform: translateY(-70px) rotateX(90deg);
+    transform: translateY(-70px) rotateX(90deg);
+}
+
+.right {
+    -webkit-transform: translateX(70px) rotateY(90deg);
+    transform: translateX(70px) rotateY(90deg);
+}
+
+.left {
+    -webkit-transform: translateX(-70px) rotateY(270deg);
+    transform: translateX(-70px) rotateY(270deg);
+}
+
+.back {
+    -webkit-transform: translateY(70px) rotateX(270deg);
+    transform: translateY(70px) rotateX(270deg);
+}
+
+.bottom {
+    -webkit-transform: translateZ(70px);
+    transform: translateZ(70px);
+}
+
+.dice-viewer[roll-val="1"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(180deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(180deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="2"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(-90deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(-90deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="3"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(-90deg);
+    transform: translateZ(-70px) rotateX(0deg) rotateY(-90deg);
+}
+
+.dice-viewer[roll-val="4"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(90deg);
+    transform: translateZ(-70px) rotateX(0deg) rotateY(90deg);
+}
+
+.dice-viewer[roll-val="5"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(90deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(90deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="0"] .cube {
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19), -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.dice-viewer[roll-val="-1"] .cube {
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19), -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.dice-viewer[roll-val="-1"] .cube .face-spell {
+    opacity: 0;
 }
 
 .action-button-inner {top: 50%;position: absolute;left: 0;width: 100%;height: 100px;line-height: 100px;margin-top: -50px;display: table;text-align: center;}
@@ -382,6 +488,10 @@ div.action-button:hover {
     top: 0;
     left: 0;
     z-index: 1;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
 }
 
 .player-PV-state {
@@ -439,10 +549,10 @@ div#time-count, div#time-total {
 
 .dice-viewer .dice-viewer-inner:after {
     content:'';
-    left: 15px;
-    top: 15px;
-    width: 130px;
-    height: 131px;
+    left: -2px;
+    top: -2px;
+    width: 144px;
+    height: 144px;
     background: rgba(154, 0, 232, 0.0);
     position: absolute;
     z-index: -1;
@@ -458,8 +568,23 @@ div#time-count, div#time-total {
     background: rgba(154, 0, 232, 0.51);
 }
 
-
-
 .dice-viewer.disabled .dice-viewer-inner:after {
     background: rgba(232, 0, 8, 0.81);
+}
+
+.dice-viewer .dice-viewer-inner:before {
+    content:'';
+    left: 0px;
+    top: 0px;
+    width: 151px;
+    height: 151px;
+    background: rgba(0, 0, 0, 0.89);
+    position: absolute;
+    z-index: -1;
+    border-radius: 10px;
+    filter: blur(10px);
+    -webkit-transition: all 0.15s;
+    -moz-transition: all 0.15s;
+    -o-transition: all 0.15s;
+    transition: all 0.15s;
 }
