@@ -157,7 +157,7 @@ div#player-2-section .player-avatar {
 
 .player-PV {
     position: absolute;
-    left: 0;
+    left: -2px;
     line-height: 23px;
     height: 23px;
     width: calc(50% - 59px);
@@ -173,7 +173,7 @@ div#player-2-section .player-avatar {
 
 .player-ultime {
     position: absolute;
-    right: 0;
+    right: -12px;
     line-height: 23px;
     height: 23px;
     width: calc(50% - 59px);
@@ -222,6 +222,14 @@ div#player-2-section .player-avatar {
     top: 0;
     left: 0px;
     border-radius: 10px 10px 10px 10px;
+}
+
+.player-PV .bar-glass {
+    border-radius: 10px 0 0 10px;
+}
+
+.player-ultime .bar-glass {
+    border-radius: 0 10px 10px 0;
 }
 
 .player-hero {
