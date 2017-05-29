@@ -156,7 +156,7 @@ socket.on('match_init', function (players_datas) {
     var player2Dice3 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="2"]'), player_2.getDiceOnDeck(0,2));
     var player2Dice4 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="3"]'), player_2.getDiceOnDeck(0,3));
     var player2Dice5 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="4"]'), player_2.getDiceOnDeck(0,4));
-    /*setTimeout(function(){
+    setTimeout(function(){
         new swal ({
                 title: "Êtes-vous prêt ?",
                 type: "success",
@@ -168,14 +168,16 @@ socket.on('match_init', function (players_datas) {
             function () {
                 socket.emit('player_ready_for_match');
             });
-    },2000);*/
+    },1000);
+    //FAIRE UN ROLL
+    console.log("contenu de res roll :", res_roll);
 
 });
 
 socket.on('everyone_ready_for_match', function (players_datas) {
     console.log("players rolls %o", players_datas);
     var rolls = JSON.parse(players_datas.datas);
-    //autoRoll(rolls);
+    autoRoll(rolls);
 });
 
 socket.on('spectator_init', function (players_datas) {
@@ -214,7 +216,7 @@ function isStillReroll() {
     console.log("avant de quitter isStillReroll");
 }
 
-var matchTime =15;
+var matchTime = 15;
 var timeout;
 function startTimer() {
     document.getElementById('time-count').innerHTML = matchTime;
@@ -289,6 +291,10 @@ function callbackRefreshInterface() {
     $(".dice-viewer").removeClass("disabled");
     $(".dice-viewer").attr("roll-val",-1);
 
+
+
+
+
     var player_id = 1;
     match1.players.forEach(function (player) {
         var dice_id = 0;
@@ -318,7 +324,7 @@ $("#roller-button").click(function () {
 });
 
 $("#solve-button").click(function () {
-    socket.emit('player_launch_solve');
+    socket.emit('player_ready_for_solve');
 });
 
 

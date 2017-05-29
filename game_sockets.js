@@ -1,5 +1,6 @@
 var io;
 var numUsers = 0;
+var rdyUsers = 0;
 var players_datas = [];
 var players_rolls = {};
 
@@ -33,6 +34,7 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     socket.on('player_ready_for_match', function(datas){playerReadyForMatch(socket)});
     socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
     socket.on('player_launch_solve', function(){launchSolve(socket)});
+    //socket.on('player_ready_for_solve', function(datas){playerReadyForSolve(socket, id, userRdy)});
 }
 
 function playerJoinGame(socket, id, addedUser)
@@ -113,6 +115,7 @@ function playerReadyForMatch(socket)
         var encoded_rolls = JSON.stringify(players_rolls);
         socket.broadcast.emit('everyone_ready_for_match',{datas: encoded_rolls});
         socket.emit('everyone_ready_for_match',{datas: encoded_rolls});
+        players_rolls = {};
     }
 }
 
@@ -121,3 +124,43 @@ function launchSolve(socket)
     socket.broadcast.emit('launch_solve');
     socket.emit('launch_solve');
 }
+
+/*function playerReadyForSolve(socket, id, userRdy)
+{
+    if (userRdy) return;
+    ++rdyUsers;
+    socket.userID = id;
+    socket.userReady = rdyUsers;
+    if (userRdy <= 2) {
+
+    }
+
+    if (userRdy == 2) {
+        socket.broadcast.emit('player_ready_for_solve');
+        socket.emit('player_ready_for_solve');
+    }
+}*/
+
+/*
+
+     if (addedUser) return;
+     ++numUsers;
+     console.log("numUsers : "+numUsers);
+     socket.userID = id;
+     socket.userNumber = numUsers;
+     if (numUsers <= 2) {
+     db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
+     if (err) throw err;
+     utils_player.construct_player(player, function (player) {
+     players_datas.push(player);
+     socket.emit('player_init', {datas: player});
+     if (numUsers == 2) {
+     socket.broadcast.emit('match_init', {datas: players_datas[1]});
+     socket.emit('match_init', {datas: players_datas[0]});
+     }
+     });
+     });
+     }
+
+
+ */
