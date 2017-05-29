@@ -4,8 +4,6 @@
 var tab_tirage_random = [];
 
 function constructDeckFromJSON(player) {
-    console.log("player player", player);
-
     var decks = [];
 
     player._deck.forEach(function (deck) {
@@ -193,17 +191,15 @@ socket.on('spectator_init', function (players_datas) {
 });
 
 socket.on('disconnect', function () {
-    console.log('you have been disconnected');
+    console.log('you have been disconnected : ' + player_1.id);
 });
 
 function isStillReroll() {
     var isStillReroll = false;
     match1.players.forEach(function (player) {
-        console.log("dans le for each");
         for (var diceIndex = 0; diceIndex < 5; diceIndex++) {
             var dice = player.getDiceOnDeck(0, diceIndex);
             if (dice.reroll > 0) {
-                console.log("reroll : " + dice.reroll);
                 if (isStillReroll == false)
                     isStillReroll = true;
                 break;
@@ -211,7 +207,6 @@ function isStillReroll() {
         }
     });
     return isStillReroll;
-    console.log("avant de quitter isStillReroll");
 }
 
 var matchTime =15;
@@ -219,11 +214,8 @@ var timeout;
 function startTimer() {
     document.getElementById('time-count').innerHTML = matchTime;
     matchTime--;
-    console.log("matchtime : " + matchTime);
     if (matchTime <= 0) {
-        console.log("valeur de isStillReroll : ", isStillReroll());
         if (isStillReroll()) {
-            console.log("before le swal");
             new Noty({
                 type: 'warning',
                 layout: 'topRight',
@@ -284,8 +276,7 @@ function initInterface() {
 }
 
 function callbackRefreshInterface() {
-    console.log("callbackRefreshInterface");
-
+    console.log("Refresh interface");
     $(".dice-viewer").removeClass("disabled");
     $(".dice-viewer").attr("roll-val",-1);
 
@@ -313,8 +304,8 @@ function setDiceFace(player_number, dice_id, face_img, animationTime) {
 }
 
 $("#roller-button").click(function () {
-    //roll();
     prepareRoll();
+    console.log("Prepare roll : "+player_1.id);
 });
 
 $("#solve-button").click(function () {
@@ -332,7 +323,6 @@ $("#player-1-roller .dice-viewer").click(function () {
 });
 
 function prepareRoll() {
-    console.log("DANS PREPARE ROLL");
     var rnd_j1 = [null, null, null, null, null];
     $("#player-1-roller .dice-viewer.selected").each(function () {
         var dice_id = $(this).attr("dice-id");
@@ -380,7 +370,7 @@ socket.on('iam_ready', function (players_datas) {
 
 socket.on("user_left",function()
 {
-    console.log("user left reload page");
+    console.log("user "+player_1.id+" left reload page");
     location.reload();
 })
 
@@ -421,14 +411,12 @@ function autoRoll(rolls) {
             if (rolls["player_" + player.id][dice_id] != null) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
-                    console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
-                    console.log("setting value to dice : "+rolls["player_" + player.id][dice_id])
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
