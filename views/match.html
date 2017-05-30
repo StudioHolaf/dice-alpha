@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>DICE 2D</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/vendors/sweetalert.css">
     <link rel="stylesheet" type="text/css" href="/vendors/noty.css">
@@ -33,6 +34,7 @@
     <div id="player-1-section" class="player-section animated fadeInUp" player-id="1">
         <div class="player-HUD">
             <div class="player-avatar">
+                <div class="player-avatar-front"></div>
                 <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
             </div>
             <div class="player-informations">
@@ -52,6 +54,7 @@
                     <span class="player-PV-initial">{_pvMax}</span>
                 </div>
             </div>
+            <div class="player-PV-front"></div>
             <div class="player-ultime">
                 <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
                 <div class="bar-glass"></div>
@@ -64,6 +67,7 @@
                     <span class="player-ultime-initial">{_ultimeMax}</span>
                 </div>
             </div>
+            <div class="player-ultime-front"></div>
         </div>
     </div>
 
@@ -72,6 +76,7 @@
             <div class="player-avatar">
                 <div class="player-avatar-image" rv-player-avatar="_avatar"></div>
             </div>
+            <div class="player-avatar-front"></div>
             <div class="player-informations">
                 <div class="player-name">{_pseudo}</div>
                 <div class="player-hero">{_hero}</div>
@@ -89,6 +94,7 @@
                     <span class="player-PV-initial">{_pvMax}</span>
                 </div>
             </div>
+            <div class="player-PV-front"></div>
             <div class="player-ultime">
                 <div class="player-ultime-bar" rv-ultime="_ultime" rv-ultime-max="_ultimeMax" rv-ultime-bar="_ultime"></div>
                 <div class="bar-glass"></div>
@@ -101,6 +107,7 @@
                     <span class="player-ultime-initial">{_ultimeMax}</span>
                 </div>
             </div>
+            <div class="player-ultime-front"></div>
         </div>
     </div>
 
@@ -108,7 +115,7 @@
 
         <div id="player-1-roller" class="player-roller" player-id="1">
             <div class="dices-viewer-container">
-                <div class="dice-viewer" dice-id="0" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="0" roll-val="1">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -121,7 +128,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="1" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="1" roll-val="2">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -134,7 +141,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="2" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="2" roll-val="3">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -147,7 +154,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="3" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="3" roll-val="4">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -160,7 +167,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="4" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="4" roll-val="5">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -178,15 +185,14 @@
 
         <div class="action-buttons">
             <div class="action-button-inner">
-                <div id="roller-button" class="action-button animated pulse">ROLL</div>
-                <div id="solve-button" class="action-button animated pulse">SOLVE</div>
-                <div id="json-button" class="action-button animated pulse">JSON</div>
+                <div id="roller-button" class="action-button"><span class="inset-text">ROLL</span></div>
+                <div id="solve-button" class="action-button"><span class="inset-text">SOLVE</span></div>
             </div>
         </div>
 
         <div id="player-2-roller" class="player-roller" player-id="2">
             <div class="dices-viewer-container">
-                <div class="dice-viewer" dice-id="0" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="0" roll-val="1">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -199,7 +205,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="1" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="1" roll-val="2">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -212,7 +218,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="2" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="2" roll-val="3">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -225,7 +231,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="3" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="3" roll-val="4">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>
@@ -238,7 +244,7 @@
                     </div>
                     <div class="face-name"></div>
                 </div>
-                <div class="dice-viewer" dice-id="4" roll-val="-1">
+                <div class="dice-viewer spell-hidden" dice-id="4" roll-val="5">
                     <div class="dice-viewer-inner">
                         <div class="cube" rv-dice-skin="_skin">
                             <div class="front dice-face"><div class="face-spell" rv-face-spell="_faces.0._sprite"></div></div>

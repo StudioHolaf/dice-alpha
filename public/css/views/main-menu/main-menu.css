@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css?family=Glass+Antiqua');
+
+body {
+    font-family: 'Glass Antiqua', cursive;
+    letter-spacing: 1px;
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+
+img{
+    max-width: 100%;
+}
+
+div#main {
+    width: 100%;
+    height: 100%;
+    background: url(/assets/img/main-menu.jpg);
+    background-size: cover;
+    background-position: 50%;
+}
+
+h1.game-title {
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 100px;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.32), 0 0 10px rgba(0, 0, 0, 0.49);
+    margin-top: 5%;
+    /* text-shadow: 0 0 22px #bb9b3e; */
+}
+
+span.inset-text {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+.main-menu-container {
+    max-width: 320px;
+    margin: auto;
+    text-align: center;
+    margin-top: 7%;
+}
+
+.main-menu-item:hover {
+    text-decoration: none;
+}
+
+.main-menu-item:focus {
+    text-decoration: none;
+}
+
+.main-menu-button:hover {
+    transform: scale(1.03);
+    text-decoration: none;
+}
+
+.main-menu-button {
+    height: 80px;
+    margin: 30px 0;
+    background-color: #ffffff;
+    background-image: url("/assets/texture/marble-texture-1.jpg");
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url("/assets/img/button-pattern-5.png");
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    border-radius: 0;
+    line-height: 22px;
+    text-transform: uppercase;
+    color: #c59d2e;
+    font-size: 24px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 1px 6px 32px #000000;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    transform: scale(1);
+    cursor: pointer;
+}

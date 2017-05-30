@@ -270,6 +270,12 @@ function initInterface() {
                     $(".dices-viewer-container .dice-viewer:nth-child(4)").animateCss("pulse");
                     setTimeout(function () {
                         $(".dices-viewer-container .dice-viewer:nth-child(5)").animateCss("pulse");
+                        setTimeout(function () {
+                            $("#roller-button").animateCss("pulse");
+                            setTimeout(function () {
+                                $("#ready-button").animateCss("pulse");
+                            }, 250);
+                        }, 250);
                     }, 250);
                 }, 250);
             }, 250);
@@ -280,12 +286,8 @@ function initInterface() {
 function callbackRefreshInterface() {
     console.log("Refresh interface");
     $(".dice-viewer").removeClass("disabled");
-    $(".dice-viewer").attr("roll-val",-1);
-
-
-
-
-
+    $(".dice-viewer").addClass("spell-hidden");
+    
     var player_id = 1;
     match1.players.forEach(function (player) {
         var dice_id = 0;
@@ -419,13 +421,14 @@ function autoRoll(rolls) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').removeClass("spell-hidden");
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
-
+                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').removeClass("spell-hidden");
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
             }

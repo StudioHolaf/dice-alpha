@@ -6,6 +6,10 @@
 
 body {
     font-family: 'Raleway';
+    transform: rotateX(12deg);
+    width: 100%;
+    height: 100%;
+    position: fixed;
 }
 
 img{
@@ -63,19 +67,19 @@ div#game-container {
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/assets/texture/pavement.jpg');
+    background-image: url('/assets/texture/pavement-grey.png');
     background-size: 320px;
     background-position: 51% 51%;
 }
 
 div.player-section {
     position: fixed;
-    top: 0;
+    top: -9px;
     left: 0;
     width: 100%;
     height: 147px;
-    background-image: url("/assets/texture/stairs.png");
-    background-size: 350px;
+    background-image: url("/assets/texture/stairs-grey.png");
+    background-size: 445px;
     background-position: 10% -8px;
     box-shadow: 0px 0px 2px #000000, 0px 0px 36px rgba(0, 0, 0, 0.42);
 }
@@ -93,7 +97,6 @@ div#player-2-section {
     margin-left: -60px;
     z-index: 2;
     border: 5px solid #dea00f;
-    box-shadow: 0px 0px 25px #000000;
 }
 
 .player-avatar:before {
@@ -129,7 +132,7 @@ div#player-2-section {
 
 div#player-1-section {
     top: initial;
-    bottom: 0;
+    bottom: -9px;
 }
 
 div#player-1-section .player-avatar {
@@ -157,12 +160,12 @@ div#player-2-section .player-avatar {
 
 .player-PV {
     position: absolute;
-    left: -2px;
-    line-height: 23px;
-    height: 23px;
+    left: 7px;
+    line-height: 18px;
+    height: 29px;
     width: calc(50% - 59px);
     border: 3px solid #dea00f;
-    z-index: 0;
+    z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 14px 0 0 14px;
 }
@@ -173,12 +176,12 @@ div#player-2-section .player-avatar {
 
 .player-ultime {
     position: absolute;
-    right: -12px;
-    line-height: 23px;
-    height: 23px;
+    right: 7px;
+    line-height: 17px;
+    height: 29px;
     width: calc(50% - 59px);
     border: 3px solid #dea00f;
-    z-index: 0;
+    z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 0 14px 14px 0;
 }
@@ -286,10 +289,11 @@ div.player-roller {
 div#dice-roller {
     position: fixed;
     width: 1000px;
-    height: calc(100% - 400px);
-    top: 200px;
+    height: calc(100% - 450px);
+    top: 225px;
     left: 50%;
     margin-left: -500px;
+    z-index: 0;
 }
 
 div#player-2-roller {
@@ -310,19 +314,23 @@ div#player-1-roller {
 .dices-viewer-container {
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .dice-viewer {
     width: 140px;
     height: 140px;
-    padding: 20px 30px;
+    /* padding: 20px 30px; */
     float: left;
+    margin: calc((20% - 140px)/2);
     -webkit-transition: all 0.25s;
     -moz-transition: all 0.25s;
     -o-transition: all 0.25s;
     transition: all 0.25s;
     transform: scale(1);
     cursor: pointer;
+    position: relative;
+    z-index: 999;
 }
 
 .dice-viewer:hover {
@@ -377,8 +385,8 @@ div#player-1-roller {
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 2px;
     overflow: hidden;
-    background-size: cover;
-    background-image: url(/assets/img/fc_skin_rock_basic_cube3.png);
+    background-size: 1000px;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
@@ -415,76 +423,133 @@ div#player-1-roller {
 
 .dice-viewer[roll-val="3"] .cube {
     -webkit-transform: translateZ(-70px) rotateX(180deg) rotateY(0deg);
-    transform: translateZ(-70px) rotateX(180deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(192deg) rotateY(0deg);
 }
 
 .dice-viewer[roll-val="0"] .cube {
     -webkit-transform: translateZ(-70px) rotateX(-90deg) rotateY(0deg);
-    transform: translateZ(-70px) rotateX(-90deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(-78deg) rotateY(0deg);
 }
 
 .dice-viewer[roll-val="1"] .cube {
     -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(-90deg);
-    transform: translateZ(-70px) rotateX(0deg) rotateY(-90deg);
+    transform: translateZ(-70px) rotateX(12deg) rotateY(-90deg);
 }
 
 .dice-viewer[roll-val="4"] .cube {
     -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(90deg);
-    transform: translateZ(-70px) rotateX(0deg) rotateY(90deg);
+    transform: translateZ(-70px) rotateX(12deg) rotateY(90deg);
 }
 
 .dice-viewer[roll-val="5"] .cube {
     -webkit-transform: translateZ(-70px) rotateX(90deg) rotateY(0deg);
-    transform: translateZ(-70px) rotateX(90deg) rotateY(0deg);
-}
-
-.dice-viewer[roll-val="0"] .cube {
-    -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19), -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transform: translateZ(-70px) rotateX(102deg) rotateY(0deg);
 }
 
 .dice-viewer[roll-val="2"] .cube {
+    transform: rotateX(12deg) translateZ(-50px) translateY(-10px);
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19), -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
-.dice-viewer[roll-val="-1"] .cube .face-spell {
+.dice-viewer.spell-hidden .cube .face-spell {
     opacity: 0;
 }
 
-.action-button-inner {top: 50%;position: absolute;left: 0;width: 100%;height: 100px;line-height: 100px;margin-top: -50px;display: table;text-align: center;}
+div#player-1-roller .front.dice-face {background-position: 1200px;}
+
+div#player-1-roller .right.dice-face {background-position: 0px;}
+
+div#player-1-roller .bottom.dice-face {background-position: 292px;}
+
+div#player-1-roller .top.dice-face {background-position: 520px;}
+
+div#player-1-roller .left.dice-face {background-position: 700px;}
+
+div#player-1-roller .back.dice-face {background-position: 1000px;}
+
+
+
+div#player-2-roller .front.dice-face {background-position: 280px;}
+
+div#player-2-roller .right.dice-face {background-position: 560px;}
+
+div#player-2-roller .bottom.dice-face {background-position: 900px;}
+
+div#player-2-roller .top.dice-face {background-position: 190px;}
+
+div#player-2-roller .left.dice-face {background-position: 420px;}
+
+div#player-2-roller .back.dice-face {background-position: 900px;}
+
+.action-button-inner {top: 50%;position: absolute;left: 0;width: 100%;height: 100px;line-height: 100px;margin-top: -66px;display: table;text-align: center;vertical-align: top;}
 
 div.action-button {
     display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-    /* border: 1px solid #312f32; */
-    border-bottom: 5px solid #27231a;
-    padding: 17px 65px;
-    border-radius: 12px;
-    font-size: 25px;
-    margin: 0 20px;
-    box-shadow: 0px 0px 25px #000000;
-    cursor: pointer;
-    background-image: url(/assets/texture/fc_skin_rock_basic.png);
-    background-size: 134% 128%;
-    background-position: -31px 50%;
-    color: #332e22;
-}
-
-div.action-button:hover {
+    height: 80px;
+    margin: 30px 20px;
+    padding: 0 40px;
+    background-color: #ffffff;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    border-radius: 0;
+    line-height: 22px;
+    text-transform: uppercase;
+    color: #c59d2e;
+    font-size: 24px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 1px 6px 32px #000000;
     -webkit-transition: all 0.15s;
     -moz-transition: all 0.15s;
     -o-transition: all 0.15s;
     transition: all 0.15s;
-    border-bottom-width: 1px;
-    margin-top: 5px;
+    transform: scale(1);
+    cursor: pointer;
+    position: relative;
+    top: 0;
 }
 
+div.action-button:after {
+    content:"";
+    display:block;
+    height: 8px;
+    width: calc(100% + 58px);
+    background: #cccccc;
+    position: absolute;
+    bottom: -37px;
+    left: -29px;
+    -webkit-transition: all 0.15s;
+    -moz-transition: all 0.15s;
+    -o-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+div.action-button:hover {
+    top: 5px;
+}
+
+div.action-button:hover:after {
+    height: 3px;
+    bottom: -31px;
+}
+
+span.inset-text {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
 
 .face-spell {
     width: 100%;
@@ -508,6 +573,7 @@ div.action-button:hover {
     font-size: 13px;
     box-shadow: inset 0 0 5px #000000;
     border-radius: 10px 0 0 10px;
+    line-height: 23px;
 }
 
 .player-ultime-state {
@@ -516,6 +582,7 @@ div.action-button:hover {
     font-size: 13px;
     box-shadow: inset 0 0 5px #000000;
     border-radius: 0 10px 10px 0;
+    line-height: 23px;
 }
 
 .player-state-legend {
@@ -528,18 +595,6 @@ div.action-button:hover {
 
 .player-ultime-state .player-state-legend {
     left: 22px;
-}
-
-#roller-button {
-    -webkit-animation-delay: 1.5s;
-    -moz-animation-delay: 1.5s;
-    animation-delay: 1.5s;
-}
-
-#solve-button {
-    -webkit-animation-delay: 1.75s;
-    -moz-animation-delay: 1.75s;
-    animation-delay: 1.75s;
 }
 
 div#match-data-container {
@@ -606,16 +661,25 @@ div#time-count, div#time-total {
     transition: all 0.5s;
     background: rgba(255, 255, 255, 0.74);
     text-align: center;
-    padding: 20px 0;
+    padding: 0px 0 30px 0;
     position: absolute;
     width: 140px;
+    line-height: 16px;
     color: #000000;
     height: 20px;
     letter-spacing: 1px;
+    height: 60px;
+    border-width: 22px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    border-radius: 0;
+    z-index: 99999;
 }
 
 .dice-viewer:hover .face-name {
-    top: -60px;
+    top: -105px;
     opacity: 1;
 }
 
@@ -634,11 +698,69 @@ div#time-count, div#time-total {
     display: block;
     position: absolute;
     margin-left: -15px;
-    top: 60px;
+    top: 52px;
     left: 50%;
     content: "";
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
     border-top: 20px solid rgba(255, 255, 255, 0.74);
     z-index: 999;
+}
+
+div#player-2-section .player-avatar-front {
+    bottom: -67px;
+    z-index: 1;
+}
+
+div#player-1-section .player-avatar-front {
+    bottom: -12px;
+    z-index: 1;
+}
+
+.player-avatar-front {
+    width: 120px;
+    height: 130px;
+    border-radius: 100%;
+    position: absolute;
+    left: 50%;
+    margin-left: -60px;
+    z-index: 2;
+    border-bottom: 8px solid #7f6420;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.59);
+}
+
+
+
+.player-PV-front {
+    border-bottom: 7px solid #80631d;
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -8px;
+    left: 12px;
+    width: calc(50% - 64px);
+    height: 8px;
+    z-index: 0;
+    border-radius: 0 0 0 34px;
+}
+
+.player-ultime-front {
+    border-bottom: 5px solid #806522;
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: -7px;
+    right: 13px;
+    width: calc(50% - 64px);
+    height: 8px;
+    z-index: 0;
+    border-radius: 0 0 10px 0;
+}
+
+div#player-1-section .player-PV-front {
+    top: 25px;
+}
+
+div#player-1-section .player-ultime-front {
+    top: 25px;
 }

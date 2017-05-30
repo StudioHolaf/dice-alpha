@@ -15,10 +15,10 @@ exports.index = function (req, res) {
         // Create a document with request IP and current time of request
         col.insert({ip: req.ip, date: Date.now()});
         col.count(function(err, count){
-            res.render('index.html', { pageCountMessage : count});
+            res.render('main-menu.html', { pageCountMessage : count});
         });
     } else {
-        res.render('index.html', { pageCountMessage : null});
+        res.render('main-menu.html', { pageCountMessage : null});
     }
 };
 
