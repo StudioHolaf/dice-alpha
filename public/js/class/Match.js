@@ -523,14 +523,14 @@ class Match
             var diceJ1 = this._players[0].getDiceOnDeck(0, i);
             var diceJ2 = this._players[1].getDiceOnDeck(0, i);
 
-            if(diceJ1.isActive() == true)
+            if(diceJ1.isActive() == true && res_j1[i] >= 0)
             {
                 var current_faceJ1 = diceJ1.getFaceByPosition(res_j1[i]);
                 var manaSpellCurrentJ1 = current_faceJ1.getFaceManas(); //on rÃ©cupÃ¨re un tablau de nos manas
                 manaJ1 = additionnateElementsProperty(manaJ1, manaSpellCurrentJ1); //lÃ  on concatÃ¨ne avec notre tableau iniatilisÃ© avant
             }
 
-            if(diceJ2.isActive() == true)
+            if(diceJ2.isActive() == true && res_j1[i] >= 0)
             {
                 var current_faceJ2 = diceJ2.getFaceByPosition(res_j2[i]);
                 var manaSpellCurrentJ2 = current_faceJ2.getFaceManas();
@@ -551,7 +551,7 @@ class Match
             var current_faceJ2 = diceJ2.getFaceByPosition(res_j2[diceIndex]);
 
             //JOUEUR 1
-            if(diceJ1.isActive())
+            if(diceJ1.isActive() && res_j1[diceIndex] >= 0)
             {
                 if (isEnoughElementsCost(current_faceJ1.getFaceCosts(), manaJ1)) { //si on peut payez la face du sort
                     manaJ1 = this.consummateMana(current_faceJ1.getFaceCosts(), manaJ1); //on fait la soustraction et met Ã  jour le nombre de mana
@@ -562,7 +562,7 @@ class Match
             }
 
             //JOUEUR 2
-            if(diceJ2.isActive())
+            if(diceJ2.isActive() && res_j1[diceIndex] >= 0)
             {
                 if (isEnoughElementsCost(current_faceJ2.getFaceCosts(), manaJ2)) {
                     manaJ2 = this.consummateMana(current_faceJ2.getFaceCosts(), manaJ2);
@@ -595,7 +595,6 @@ class Match
                                                                     scope.applyNeutral(scope._final_tab.j2, function () {
                                                                         scope.reincrementValues();
                                                                         callback();
-                                                                        // //CONDITION DE VICTOIRE
                                                                     });
                                                                 });
                                                             });
