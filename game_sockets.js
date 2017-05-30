@@ -1,8 +1,9 @@
 var io;
 var numUsers = 0;
-var rdyUsers = 0;
 var players_datas = [];
 var players_rolls = {};
+var timerPlayers = {};
+var tourTime;
 
 var utils_player = require( './utils_player' );
 var utils_data = require( './utils_data' );
@@ -31,8 +32,9 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     // Player Events
     socket.on('player_connection', function(datas){playerJoinGame(socket, datas, addedUser)});
     socket.on('player_disconnect', function(datas){playerLeftGame(socket)});
-    socket.on('player_ready_for_match', function(datas){playerReadyForMatch(socket)});
+    socket.on('player_ready_for_match', function(datas){playerReadyForMatch(socket, datas)});
     socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
+    socket.on('player_ready_for_next_reroll', function(datas){playerReadyForNextReroll(socket, datas)});
     socket.on('player_launch_solve', function(){launchSolve(socket)});
     //socket.on('player_ready_for_solve', function(datas){playerReadyForSolve(socket, id, userRdy)});
 }
@@ -57,6 +59,33 @@ function playerJoinGame(socket, id, addedUser)
             });
         });
     }
+}
+
+function startTimer(socket)
+{
+    var isStillTime = false;
+    for (key in timerPlayers) {
+        if(timerPlayers[key] >= 1) {
+            timerPlayers[key] -= 1;
+            if(timerPlayers[key] >= 1) {
+                isStillTime = true;
+            }
+        }
+    }
+    clearTimeout(tourTime);
+    if (isStillTime)
+    {
+        console.log ("Tourtime : "+tourTime);
+        tourTime = setTimeout(function(){startTimer(socket);}, 1000);
+        console.log("encore du temps");
+    }
+    else
+    {
+        clearTimeout(tourTime);
+    }
+    var encodeTimers = JSON.stringify(timerPlayers);
+    socket.broadcast.emit('update_timer', {timers:encodeTimers});
+    socket.emit('update_timer', {timers:encodeTimers});
 }
 
 function spectatorJoinGame(socket)
@@ -89,26 +118,30 @@ function playerLeftGame(socket, datas, addedUser)
 
 function myRollReady(socket, datas)
 {
-    players_rolls["player_"+socket.userID] = datas;
+    //timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime);
+    players_rolls["player_"+socket.userID] = datas.roll;
     socket.broadcast.emit('opponent_roll_ready');
-    if(Object.keys(players_rolls).length == 2)
+
+    if (Object.keys(players_rolls).length == 2)
     {
         var encoded_rolls = JSON.stringify(players_rolls);
         socket.broadcast.emit('everyone_rolls_ready', {datas: encoded_rolls});
         socket.emit('everyone_rolls_ready', {datas: encoded_rolls});
         players_rolls = {};
+        timerPlayers = {};
     }
 }
 
-function playerReadyForMatch(socket)
+function playerReadyForMatch(socket, datas)
 {
-    console.log("dans playerIsReady");
+    console.log("playerReadyForMatch");
 
     var rnd1 = Math.floor(Math.random() * 6) + 0;
     var rnd2 = Math.floor(Math.random() * 6) + 0;
     var rnd3 = Math.floor(Math.random() * 6) + 0;
     var rnd4 = Math.floor(Math.random() * 6) + 0;
     var rnd5 = Math.floor(Math.random() * 6) + 0;
+    timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime);
     players_rolls["player_"+socket.userID] = [rnd1,rnd2,rnd3,rnd4,rnd5];
     if(Object.keys(players_rolls).length == 2)
     {
@@ -116,6 +149,22 @@ function playerReadyForMatch(socket)
         socket.broadcast.emit('everyone_ready_for_match',{datas: encoded_rolls});
         socket.emit('everyone_ready_for_match',{datas: encoded_rolls});
         players_rolls = {};
+        timerPlayers = {};
+    }
+}
+
+function playerReadyForNextReroll(socket, datas)
+{
+    console.log("playerReadyForNextReroll");
+
+    timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime);
+    if(Object.keys(timerPlayers).length == 2)
+    {
+        socket.broadcast.emit('everyone_ready_for_next_reroll');
+        socket.emit('everyone_ready_for_next_reroll');
+        setTimeout(function(){
+            startTimer(socket);
+        },1000);
     }
 }
 
@@ -141,26 +190,3 @@ function launchSolve(socket)
     }
 }*/
 
-/*
-
-     if (addedUser) return;
-     ++numUsers;
-     console.log("numUsers : "+numUsers);
-     socket.userID = id;
-     socket.userNumber = numUsers;
-     if (numUsers <= 2) {
-     db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
-     if (err) throw err;
-     utils_player.construct_player(player, function (player) {
-     players_datas.push(player);
-     socket.emit('player_init', {datas: player});
-     if (numUsers == 2) {
-     socket.broadcast.emit('match_init', {datas: players_datas[1]});
-     socket.emit('match_init', {datas: players_datas[0]});
-     }
-     });
-     });
-     }
-
-
- */
