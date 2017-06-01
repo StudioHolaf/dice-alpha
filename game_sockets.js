@@ -36,7 +36,6 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
     socket.on('player_ready_for_next_reroll', function(datas){playerReadyForNextReroll(socket, datas)});
     socket.on('player_launch_solve', function(){launchSolve(socket)});
-    //socket.on('player_ready_for_solve', function(datas){playerReadyForSolve(socket, id, userRdy)});
 }
 
 function playerJoinGame(socket, id, addedUser)
@@ -75,9 +74,7 @@ function startTimer(socket)
     clearTimeout(tourTime);
     if (isStillTime)
     {
-        console.log ("Tourtime : "+tourTime);
         tourTime = setTimeout(function(){startTimer(socket);}, 1000);
-        console.log("encore du temps");
     }
     else
     {
@@ -141,7 +138,7 @@ function playerReadyForMatch(socket, datas)
     var rnd3 = Math.floor(Math.random() * 6) + 0;
     var rnd4 = Math.floor(Math.random() * 6) + 0;
     var rnd5 = Math.floor(Math.random() * 6) + 0;
-    timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime);
+    //timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime) + 1;
     players_rolls["player_"+socket.userID] = [rnd1,rnd2,rnd3,rnd4,rnd5];
     if(Object.keys(players_rolls).length == 2)
     {
@@ -157,7 +154,7 @@ function playerReadyForNextReroll(socket, datas)
 {
     console.log("playerReadyForNextReroll");
 
-    timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime);
+    timerPlayers["player_"+socket.userID] = parseInt(datas.playerTime) + 1; //pour partir de 15 et pas 14
     if(Object.keys(timerPlayers).length == 2)
     {
         socket.broadcast.emit('everyone_ready_for_next_reroll');

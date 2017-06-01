@@ -3,6 +3,8 @@
 //FACES
 var tab_tirage_random = [];
 var rollSend = false;
+var flag_end_turn = false;
+var nbTotalTurn = 1;
 
 function constructDeckFromJSON(player) {
     var decks = [];
@@ -95,6 +97,7 @@ var locationGetted = window.location.pathname;
 var locationSplitted = locationGetted.split("/");
 var roomid = locationSplitted[locationSplitted.length - 1];
 var player_1_id;
+var timeDuration = 0;
 
 console.log("roomid ", roomid);
 
@@ -166,6 +169,7 @@ socket.on('match_init', function (players_datas) {
             },
             function () {
                 socket.emit('player_ready_for_match', {playerTime : match1.players[0].tourTime});
+                timeDuration = match1.players[0].tourTime;
             });
     },1000);
 
@@ -180,7 +184,7 @@ socket.on('everyone_ready_for_match', function (players_datas) {
 socket.on('everyone_ready_for_next_reroll', function () {
     rollSend = false;
     if (isPlayerHasReroll(0) == false)
-         prepareRoll();
+         prepareRollForSelectedDices();
 });
 
 socket.on('spectator_init', function (players_datas) {
@@ -233,12 +237,16 @@ function isPlayerHasReroll(player_id) {
 socket.on('update_timer', function(datas) {
     var timerParsed = JSON.parse(datas.timers);
     console.log("update timer to ",timerParsed);
-    document.getElementById('time-count').innerHTML = timerParsed["player_"+match1.players[0].id];
+    if (timerParsed["player_"+match1.players[0].id] <= 0 || timerParsed["player_"+match1.players[0].id] == null)
+        document.getElementById('time-count').innerHTML = '0';
+    else
+        document.getElementById('time-count').innerHTML = timerParsed["player_"+match1.players[0].id];
+    document.getElementById('time-total').innerHTML = timeDuration;
     if(timerParsed["player_"+match1.players[0].id] == 0)
     {
         //disable roll button
         if(!rollSend)
-            prepareRoll();
+            prepareRollForSelectedDices();
     }
 })
 
@@ -262,8 +270,9 @@ function initInterface() {
 
 function callbackRefreshInterface() {
     console.log("Refresh interface");
+    console.log("TEMPS DU JOUEUR : "+match1.players[0].tourTime);
     $(".dice-viewer").removeClass("disabled");
-    $(".dice-viewer").addClass("spell-hidden");
+    //$(".dice-viewer").addClass("spell-hidden");
     
     var player_id = 1;
     match1.players.forEach(function (player) {
@@ -278,8 +287,34 @@ function callbackRefreshInterface() {
     });
     setTimeout(function()
     {
-        socket.emit('player_ready_for_next_reroll', {playerTime : match1.players[0].tourTime});
+        if (flag_end_turn == false) {
+            socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
+            prepareRollAllDices();
+        }
     },10000);
+}
+
+$("#end-turn-button").click(function () {
+    flag_end_turn = true;
+    swalDisplayTotalTurn();
+});
+
+function swalDisplayTotalTurn ()
+{
+    $(".dice-viewer").removeClass("disabled");
+    $(".dice-viewer").addClass("spell-hidden");
+    nbTotalTurn += 1;
+    new swal ({
+        title: "Êtes-vous prêt pour le tour "+nbTotalTurn+" ?",
+        type: "success",
+        confirmButtonColor: "#3F8F4E",
+        confirmButtonText: "Oui je le suis",
+        closeOnConfirm: true
+    }, function () {
+        socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
+        nbTotalTurn++;
+        prepareRollAllDices();
+    });
 }
 
 initInterface();
@@ -293,7 +328,7 @@ function setDiceFace(player_number, dice_id, face_img, animationTime) {
 }
 
 $("#roller-button").click(function () {
-    prepareRoll();
+    prepareRollForSelectedDices();
     console.log("Prepare roll : "+player_1.id);
 });
 
@@ -320,7 +355,7 @@ $("#ready-button").click(function () {
 
                 dice.reroll = 0;
                 if (!rollSend)
-                    prepareRoll();
+                    prepareRollForSelectedDices();
             });
         })
 , 1000;
@@ -336,7 +371,7 @@ $("#player-1-roller .dice-viewer").click(function () {
         $(this).toggleClass("selected");
 });
 
-function prepareRoll() {
+function prepareRollForSelectedDices() {
     rollSend = true;
     var rnd_j1 = [-1, -1, -1, -1, -1];
     $("#player-1-roller .dice-viewer.selected").each(function () {
@@ -357,6 +392,29 @@ function prepareRoll() {
         progressBar: true,
     }).show();
 }
+
+function prepareRollAllDices() {
+    rollSend = true;
+    var rnd_j1 = [-1, -1, -1, -1, -1];
+    $("#player-1-roller .dice-viewer").each(function () {
+        var dice_id = $(this).attr("dice-id");
+        var dice = match1.players[0].getDiceOnDeck(0, dice_id);
+        var rnd = Math.floor(Math.random() * 6) + 0;
+
+        if (dice.reroll > 0 && dice.isActive()) {
+            rnd_j1[dice_id] = rnd;
+        }
+    });
+    socket.emit('my_roll_ready', {roll: rnd_j1});
+    new Noty({
+        type: 'success',
+        layout: 'topRight',
+        text: ("Your reroll is ready"),
+        timeout: 5000,
+        progressBar: true,
+    }).show();
+}
+
 
 socket.on('launch_solve', function () {
     solve();
