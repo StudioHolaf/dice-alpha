@@ -8,7 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/vendors/sweetalert.css">
     <link rel="stylesheet" type="text/css" href="/vendors/noty.css">
     <link rel="stylesheet" type="text/css" href="/css/custom-animations.css">
-    <link rel="stylesheet" type="text/css" href="/css/views/main-menu/main-menu.css">
+    <link rel="stylesheet" type="text/css" href="/vendors/assets/owl.carousel.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/views/forge/forge.css">
 </head>
 
 <body>
@@ -17,22 +18,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="game-title">DICE OF OLYMPUS</h1>
+                <h1 class="game-title">FORGE</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <div class="main-menu-container">
-                    <a class="main-menu-item" href="/match/1">
-                        <div class="main-menu-button"><span class="inset-text">Start a match</span></div>
-                    </a>
-                    <a class="main-menu-item" href="/forge">
-                        <div class="main-menu-button"><span class="inset-text">Forge</span></div>
-                    </a>
-                    <a class="main-menu-item" href="/credit">
-                        <div class="main-menu-button"><span class="inset-text">Credits</span></div>
-                    </a>
-                </div>
+                <div id="forge-dices" class="enluminures-skined-1"></div>
+                <div id="forge-faces-available" class="enluminures-skined-1">
             </div>
         </div>
     </div>
@@ -47,5 +38,6 @@
 <script src="/vendors/noty.min.js"></script>
 <script src="/vendors/sweetalert.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/views/main-menu/main-menu-controller.js"></script>
+<script src="/vendors/owl.carousel.min.js"></script>
+<script src="/js/views/forge/forge-controller.js"></script>
 </html>

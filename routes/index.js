@@ -37,6 +37,21 @@ exports.match = function (req, res) {
     }
 }
 
+/* ------------------------------------------------------------ FORGE PAGE ------------------------------------------------------------ */
+
+exports.forge = function (req, res) {
+    if (!db) {
+        initDb(function(err){});
+    }
+    if (db) {
+
+        res.render('forge.html');
+
+    } else {
+        res.render('forge.html');
+    }
+}
+
 /* ------------------------------------------------------------ PAGECOUNT ------------------------------------------------------------ */
 
 exports.pagecount = function (req, res) {

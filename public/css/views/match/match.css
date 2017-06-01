@@ -1,15 +1,17 @@
-@import url('https://fonts.googleapis.com/css?family=Caesar+Dressing|Raleway:300,400,700');
-
+@import url('https://fonts.googleapis.com/css?family=Raleway:300,400,700');
+@import url('https://fonts.googleapis.com/css?family=Glass+Antiqua');
 #game-container {
-    font-family: 'Caesar Dressing', cursive;
+    font-family: 'Glass Antiqua', cursive;
 }
 
 body {
     font-family: 'Raleway';
-    transform: rotateX(12deg);
     width: 100%;
     height: 100%;
     position: fixed;
+    -webkit-perspective: 600px;
+    -moz-perspective: 600px;
+    perspective: 600px;
 }
 
 img{
@@ -35,12 +37,12 @@ div#interface {
 
 div#sound-controller {
     position: fixed;
-    top: -2px;
-    right: 36px;
+    top: 0;
+    right: 0;
     z-index: 999;
-    width: 41px;
-    padding: 6px;
-    background: url(/assets/texture/ornament.jpg);
+    width: 50px;
+    padding: 12px;
+    background: url(/assets/texture/marble-texture-1.jpg);
     background-size: 180px;
     box-sizing: border-box;
 }
@@ -74,7 +76,7 @@ div#game-container {
 
 div.player-section {
     position: fixed;
-    top: -9px;
+    top: 0;
     left: 0;
     width: 100%;
     height: 147px;
@@ -132,26 +134,74 @@ div#player-2-section {
 
 div#player-1-section {
     top: initial;
-    bottom: -9px;
+    bottom: 0;
 }
 
 div#player-1-section .player-avatar {
-    top: -60px;
+    top: -82px;
 }
 
 div#player-2-section .player-avatar {
-    bottom: -60px;
+    bottom: -77px;
 }
 
 .player-HUD {
     color: #ffffff;
     text-align: center;
-    text-shadow: 0 0 30px #000000, 0 0 10px #000000;
+    /* text-shadow: 0 0 30px #000000, 0 0 10px #000000; */
     position: relative;
     width: 500px;
     height: 146px;
     left: 50%;
     margin-left: -250px;
+}
+
+.player-HUD {
+    display: inline-block;
+    /* height: 80px; */
+    /* margin: 30px 20px; */
+    padding: 0 0px;
+    background-color: #ffffff;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    border-radius: 0;
+    line-height: 22px;
+    text-transform: uppercase;
+    color: #c59d2e;
+    font-size: 24px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 1px 10px 22px rgba(0, 0, 0, 0.69);
+    -webkit-transition: all 0.15s;
+    -moz-transition: all 0.15s;
+    -o-transition: all 0.15s;
+    transition: all 0.15s;
+    transform: scale(1);
+    cursor: pointer;
+    position: relative;
+    /* top: 0; */
+}
+
+.player-HUD:after {
+    position: absolute;
+    bottom: -36px;
+    width: calc(100% + 58px);
+    content: "";
+    height: 7px;
+    left: -29px;
+    background: #bbbbbb;
+    box-shadow: 1px 13px 22px #000000;
+}
+
+div#player-1-section .player-HUD {
+    bottom: 5px;
+    border-radius: 20px 20px 0 0;
 }
 
 .player-informations {
@@ -160,35 +210,35 @@ div#player-2-section .player-avatar {
 
 .player-PV {
     position: absolute;
-    left: 7px;
+    left: -30px;
     line-height: 18px;
     height: 29px;
-    width: calc(50% - 59px);
+    width: calc(50% - 20px);
     border: 3px solid #dea00f;
     z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 14px 0 0 14px;
 }
 
-#player-2-section .player-PV {bottom: -4px;}
+#player-2-section .player-PV {bottom: -25px;}
 
-#player-1-section .player-PV {top: 0;}
+#player-1-section .player-PV {top: -29px;}
 
 .player-ultime {
     position: absolute;
-    right: 7px;
+    right: -29px;
     line-height: 17px;
     height: 29px;
-    width: calc(50% - 59px);
+    width: calc(50% - 22px);
     border: 3px solid #dea00f;
     z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     border-radius: 0 14px 14px 0;
 }
 
-#player-2-section .player-ultime {bottom: -3px;}
+#player-2-section .player-ultime {bottom: -25px;}
 
-#player-1-section .player-ultime {top: 0;}
+#player-1-section .player-ultime {top: -29px;}
 
 
 .player-PV-bar {
@@ -229,6 +279,7 @@ div#player-2-section .player-avatar {
 
 .player-PV .bar-glass {
     border-radius: 10px 0 0 10px;
+    color: #FFFFFF;
 }
 
 .player-ultime .bar-glass {
@@ -239,7 +290,14 @@ div#player-2-section .player-avatar {
     position: absolute;
     left: 0;
     width: calc(50% - 60px);
-    top: 38px;
+    top: 35px;
+    font-size: 26px;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
 }
 
 .player-gold {
@@ -247,29 +305,43 @@ div#player-2-section .player-avatar {
     right: 0;
     width: calc(50% - 60px);
     top: 38px;
+    font-size: 26px;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
 }
 
 .player-name {
     position: absolute;
     left: 0;
     width: 100%;
-    font-size: 30px;
+    font-size: 39px;
+    line-height: 39px;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
 }
 
 #player-2-section .player-name {
-    top: 13px;
+    top: -10px;
 }
 
 #player-1-section .player-name {
-    bottom: 31px;
+    bottom: -10px;
 }
 
 #player-1-section .player-hero {
-    top: 74px;
+    top: 35px;
 }
 
 #player-1-section .player-gold {
-    top: 74px;
+    top: 35px;
 }
 .player-avatar-image {
     width: 100%;
@@ -389,6 +461,13 @@ div#player-1-roller {
     background-image: url(/assets/texture/marble-texture-1.jpg);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    border-width: 10px;
+    border-image: url(/assets/img/dice-skin-border.png);
+    border-image-repeat: repeat;
+    border-image-width: 19px;
+    border-image-slice: 37;
+    border-style: solid;
+    border-radius: 0;
 }
 
 .top {
@@ -447,11 +526,13 @@ div#player-1-roller {
 }
 
 .dice-viewer[roll-val="2"] .cube {
-    transform: rotateX(12deg) translateZ(-50px) translateY(-10px);
+    transform: rotateX(12deg) translateZ(-60px) translateY(-10px);
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19), -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition:
+            -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19)
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+    -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 .dice-viewer.spell-hidden .cube .face-spell {
@@ -460,7 +541,7 @@ div#player-1-roller {
 
 div#player-1-roller .front.dice-face {background-position: 1200px;}
 
-div#player-1-roller .right.dice-face {background-position: 0px;}
+div#player-1-roller .right.dice-face {background-position: 330px;}
 
 div#player-1-roller .bottom.dice-face {background-position: 292px;}
 
@@ -468,7 +549,7 @@ div#player-1-roller .top.dice-face {background-position: 520px;}
 
 div#player-1-roller .left.dice-face {background-position: 700px;}
 
-div#player-1-roller .back.dice-face {background-position: 1000px;}
+div#player-1-roller .back.dice-face {background-position: 955px;}
 
 
 
@@ -507,7 +588,7 @@ div.action-button {
     font-size: 24px;
     position: relative;
     z-index: 1;
-    box-shadow: 1px 6px 32px #000000;
+    box-shadow: 1px 1px 22px #000000;
     -webkit-transition: all 0.15s;
     -moz-transition: all 0.15s;
     -o-transition: all 0.15s;
@@ -531,6 +612,7 @@ div.action-button:after {
     -moz-transition: all 0.15s;
     -o-transition: all 0.15s;
     transition: all 0.15s;
+    box-shadow: 1px 8px 22px #000000;
 }
 
 div.action-button:hover {
@@ -574,6 +656,7 @@ span.inset-text {
     box-shadow: inset 0 0 5px #000000;
     border-radius: 10px 0 0 10px;
     line-height: 23px;
+    color: #FFFFFF;
 }
 
 .player-ultime-state {
@@ -583,14 +666,16 @@ span.inset-text {
     box-shadow: inset 0 0 5px #000000;
     border-radius: 0 10px 10px 0;
     line-height: 23px;
+    color: #FFFFFF;
 }
 
 .player-state-legend {
     position: absolute;
     left: 10px;
-    top: 0;
+    top: 0px;
     z-index: 3;
     font-size: 13px;
+    color: #FFFFFF;
 }
 
 .player-ultime-state .player-state-legend {
@@ -599,15 +684,47 @@ span.inset-text {
 
 div#match-data-container {
     position: fixed;
-    top: 10px;
-    left: 40px;
+    top: 0;
+    left: 0;
     z-index: 99;
+    width: 300px;
     color: #FFFFFF;
     font-size: 22px;
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    box-shadow: 1px 10px 22px rgba(0, 0, 0, 0.42);
+}
+
+div#match-data-container:after {
+    position: absolute;
+    bottom: -36px;
+    width: calc(100% + 58px);
+    content: "";
+    height: 7px;
+    left: -29px;
+    background: #bbbbbb;
+    box-shadow: 1px 13px 22px #000000;
+}
+
+div#timer {
+    text-align: center;
 }
 
 div#time-count, div#time-total {
     display: inline-block;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    padding: 0 5px;
 }
 
 .dice-viewer .dice-viewer-inner:after {
@@ -628,7 +745,7 @@ div#time-count, div#time-total {
 }
 
 .dice-viewer.selected .dice-viewer-inner:after {
-    background: rgba(154, 0, 232, 0.51);
+    background: rgba(117, 157, 255, 0.74);
 }
 
 .dice-viewer.disabled .dice-viewer-inner:after {
@@ -641,7 +758,7 @@ div#time-count, div#time-total {
     top: 0px;
     width: 151px;
     height: 151px;
-    background: rgba(0, 0, 0, 0.89);
+    background: rgba(0, 0, 0, 0.72);
     position: absolute;
     z-index: -1;
     border-radius: 10px;
@@ -708,13 +825,13 @@ div#time-count, div#time-total {
 }
 
 div#player-2-section .player-avatar-front {
-    bottom: -67px;
+    bottom: -84px;
     z-index: 1;
 }
 
 div#player-1-section .player-avatar-front {
     bottom: -12px;
-    z-index: 1;
+    z-index: -1;
 }
 
 .player-avatar-front {
@@ -732,13 +849,13 @@ div#player-1-section .player-avatar-front {
 
 
 .player-PV-front {
-    border-bottom: 7px solid #80631d;
+    border-bottom: 5px solid #80631d;
     content: "";
     display: block;
     position: absolute;
-    bottom: -8px;
-    left: 12px;
-    width: calc(50% - 64px);
+    bottom: -29px;
+    left: -23px;
+    width: calc(50% - 28px);
     height: 8px;
     z-index: 0;
     border-radius: 0 0 0 34px;
@@ -749,18 +866,18 @@ div#player-1-section .player-avatar-front {
     content: "";
     display: block;
     position: absolute;
-    bottom: -7px;
-    right: 13px;
-    width: calc(50% - 64px);
+    bottom: -29px;
+    right: -24px;
+    width: calc(50% - 26px);
     height: 8px;
     z-index: 0;
     border-radius: 0 0 10px 0;
 }
 
 div#player-1-section .player-PV-front {
-    top: 25px;
+    top: -4px;
 }
 
 div#player-1-section .player-ultime-front {
-    top: 25px;
+    top: -4px;
 }

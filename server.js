@@ -48,6 +48,7 @@ io.sockets.on('connection', function (socket) {
 var routes = require( './routes/' );
 app.get('/', routes.index);
 app.get('/match/:roomid', routes.match);
+app.get('/forge', routes.forge);
 app.get('/pagecount', routes.pagecount);
 
 //app.listen(port, ip);
@@ -61,6 +62,6 @@ app.use('/vendors', Express.static(__dirname + '/node_modules/noty/lib/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/animejs//'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/sweetalert/dist/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/rivets/dist/'));
-app.use('/vendors', Express.static(__dirname + '/node_modules/debugout.js/'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/owl.carousel/dist/'));
 
 module.exports = app ;
