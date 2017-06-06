@@ -43,11 +43,23 @@ span.inset-text {
     background-clip: text;
 }
 
-div.enluminures-skined-1 {
+div#forge-dices {
+    float: left;
     width: calc(50% - 20px);
-    min-height: 400px;
+    min-height: calc(100vh - 200px);
+    margin: 0 10px;
+}
+
+div#forge-faces-available {
+    float: left;
+    width: calc(50% - 20px);
+    min-height: calc(100vh - 200px);
+    margin: 0 10px;
+}
+
+div.enluminures-skined-1 {
     color: #FFFFFF;
-    font-size: 22px;
+    font-size: 20px;
     background-size: 1400px;
     background-position: 50%;
     border-width: 29px;
@@ -57,10 +69,404 @@ div.enluminures-skined-1 {
     border-style: solid;
     background-image: url(/assets/texture/marble-texture-1.jpg);
     box-shadow: 1px 10px 22px rgba(0, 0, 0, 0.42);
-    float: left;
-    margin: 0 10px;
+    position: relative;
 }
 
 div.enluminures-skined-1:nth-child(1) {
     background-position: 93% 67%;
+}
+
+
+.dice-viewer {
+    -webkit-perspective: 400px;
+    perspective: 400px;
+}
+
+.dice-viewer-inner {
+    width: 140px;
+    margin: 50px auto;
+    -webkit-transition: opacity 1.5s;
+    -moz-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+    opacity: 1;
+}
+
+
+.cube {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: translateZ(-50px) rotateX(0) rotateY(0);
+    transform: translateZ(-40px) rotateX(0) rotateY(0);
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: transform 1s cubic-bezier(0.215, 0.61, 0.355, 1), -webkit-transform 1s cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform-origin: 50% 50%;
+}
+
+.dice-face {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    overflow: hidden;
+    background-size: 1000px;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-width: 10px;
+    border-image: url(/assets/img/dice-skin-border.png);
+    border-image-repeat: repeat;
+    border-image-width: 19px;
+    border-image-slice: 37;
+    border-style: solid;
+    border-radius: 0;
+}
+
+.top {
+    -webkit-transform: translateZ(-70px) rotateX(180deg);
+    transform: translateZ(-70px) rotateX(180deg);
+}
+
+.front {
+    -webkit-transform: translateY(-70px) rotateX(90deg);
+    transform: translateY(-70px) rotateX(90deg);
+}
+
+.right {
+    -webkit-transform: translateX(70px) rotateY(90deg);
+    transform: translateX(70px) rotateY(90deg);
+}
+
+.left {
+    -webkit-transform: translateX(-70px) rotateY(270deg);
+    transform: translateX(-70px) rotateY(270deg);
+}
+
+.back {
+    -webkit-transform: translateY(70px) rotateX(270deg);
+    transform: translateY(70px) rotateX(270deg);
+}
+
+.bottom {
+    -webkit-transform: translateZ(70px);
+    transform: translateZ(70px);
+}
+
+.dice-viewer[roll-val="3"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(180deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(192deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="0"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(-90deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(-78deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="1"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(-90deg);
+    transform: translateZ(-70px) rotateX(12deg) rotateY(-90deg);
+}
+
+.dice-viewer[roll-val="4"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(0deg) rotateY(90deg);
+    transform: translateZ(-70px) rotateX(12deg) rotateY(90deg);
+}
+
+.dice-viewer[roll-val="5"] .cube {
+    -webkit-transform: translateZ(-70px) rotateX(90deg) rotateY(0deg);
+    transform: translateZ(-70px) rotateX(102deg) rotateY(0deg);
+}
+
+.dice-viewer[roll-val="2"] .cube {
+    transform: rotateX(12deg) translateZ(-60px) translateY(-10px);
+    -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19)
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+    -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.dice-viewer.spell-hidden .cube .face-spell {
+    opacity: 0;
+}
+
+.front.dice-face {background-position: 1200px;}
+
+.right.dice-face {background-position: 330px;}
+
+.bottom.dice-face {background-position: 292px;}
+
+.top.dice-face {background-position: 520px;}
+
+.left.dice-face {background-position: 700px;}
+
+.back.dice-face {background-position: 955px;}
+
+
+.dice-item {
+    margin: auto;
+    text-align: center;
+}
+
+.dice-item .cube {
+    animation-name: dice_presentation;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.cube-container {
+    position: relative;
+    padding-bottom: 81px;
+}
+
+.dice-viewer-inner .dice-viewer-inner-shadow {
+    width: 170px;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.75);
+    content: "";
+    display: block;
+    border-radius: 1000%;
+    filter: blur(10px);
+    z-index: -1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -85px;
+    bottom: 0;
+    top: inherit;
+}
+
+@keyframes dice_presentation {
+    0%   {transform:rotateY(0deg) rotateX(45deg);}
+    100% {transform:rotateY(359deg) rotateX(45deg);}
+}
+
+.dice-description {
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 35px!important;
+}
+
+.dices-slider-container {
+    padding: 0px 0;
+    min-height: calc(100vh - 300px);
+}
+
+.dices-slider .owl-nav img {
+    height: 70px;
+}
+
+.dices-slider.owl-theme .owl-nav [class*='owl-'], .owl-theme .owl-nav [class*='owl-']:hover {
+    background: none;
+}
+
+.dices-slider.owl-theme .owl-nav {
+    top: 70px;
+    position: absolute;
+    width: 100%;
+    z-index: 0;
+    pointer-events: none;
+    -webkit-transition: opacity 1.5s;
+    -moz-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+}
+
+.dices-slider.owl-theme .owl-nav .owl-prev {
+    float: left;
+}
+
+.dices-slider.owl-theme .owl-nav .owl-next {
+    float: right;
+}
+
+.dices-slider.owl-theme .owl-nav .disabled {
+    opacity: 0;
+}
+
+.owl-theme .owl-dots {
+    margin-top: 5px;
+    -webkit-transition: opacity 1.5s;
+    -moz-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+}
+
+.owl-carousel .owl-dot, .owl-carousel .owl-nav .owl-next, .owl-carousel .owl-nav .owl-prev {
+    pointer-events: all;
+}
+
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+    background: #c2a653;
+}
+.owl-theme .owl-dots .owl-dot span {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.dice-informations {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+    -webkit-transition: opacity 1.5s;
+    -moz-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+    opacity: 1;
+}
+
+.open-dice-button {
+    display: inline-block;
+    background: rgb(0, 0, 0);
+    border-bottom: 5px solid #000000;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 19px;
+    padding: 10px 45px;
+    line-height: 19px;
+    margin-top: 0;
+    cursor: pointer;
+    background-image: url(/assets/texture/dice-marble-black.png);
+    background-size: 220px;
+}
+
+.open-dice-button .inset-text {
+    background-color: #FFFFFF;
+    text-shadow: 0px 2px 3px rgba(97, 97, 97, 0.23);
+}
+
+.open-dice-button:hover {
+    border-bottom: 2px solid rgb(119, 119, 119);
+    margin-top: 3px;
+}
+
+div.dice-face-list {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    border-top: 2px solid #d1ba79;
+    border-bottom: 2px solid #d1ba79;
+    padding-top: 10px;
+}
+
+.dice-face-list ul {
+    padding-left: 0;
+    display: block;
+}
+
+.dice-face-list ul li {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    font-size: 18px;
+}
+
+
+.dice-open {
+    opacity: 0;
+    -webkit-transition: opacity 1.5s;
+    -moz-transition: opacity 1.5s;
+    -o-transition: opacity 1.5s;
+    transition: opacity 1.5s;
+    overflow: hidden;
+    margin-top: 25px;
+    display: none;
+}
+
+/*.resume-hidden .dice-open {
+    display: block;
+}*/
+
+.unwrap-display .dice-open {
+    display: block;
+}
+
+.unwrap-visible .dice-open {
+    opacity: 1;
+}
+
+.wrap-invisible .dice-viewer-inner, .wrap-invisible .dice-informations {
+    opacity: 0;
+}
+
+.wrap-hidden .dice-viewer-inner, .wrap-hidden .dice-informations {
+    display: none;
+}
+
+.slider-controls-invisible .owl-nav, .slider-controls-invisible .owl-dots {
+    opacity: 0;
+}
+
+.slider-controls-hidden .owl-nav, .slider-controls-hidden .owl-dots {
+    display: none;
+}
+
+.dice-open .dice-face {
+    width: 140px;
+    display: block;
+    height: 140px;
+    position: inherit;
+    transform: none;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.44);
+}
+
+.dice-open .front.dice-face {
+    margin: auto;
+    margin-bottom: 7px;
+}
+
+.dice-open  .right.dice-face {
+    display: inline-block;
+}
+
+.dice-open  .bottom.dice-face {
+    display: inline-block;
+}
+
+.dice-open  .top.dice-face {
+    display: inline-block;
+}
+
+.dice-open .left.dice-face {
+    margin: auto;
+    margin-bottom: 7px;
+}
+
+.dice-open  .back.dice-face {
+    margin: auto;
+}
+
+.dice-open-exit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    cursor: pointer;
+}
+
+.dice-open-exit img {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    transform: rotate(0deg);
+}
+
+.dice-open-exit:hover img {
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    transform: rotate(90deg);
 }

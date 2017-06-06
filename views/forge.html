@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/vendors/noty.css">
     <link rel="stylesheet" type="text/css" href="/css/custom-animations.css">
     <link rel="stylesheet" type="text/css" href="/vendors/assets/owl.carousel.min.css">
+    <link rel="stylesheet" type="text/css" href="/vendors/assets/owl.theme.default.css">
     <link rel="stylesheet" type="text/css" href="/css/views/forge/forge.css">
 </head>
 
@@ -17,14 +18,232 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1 class="game-title">FORGE</h1>
-            </div>
+            <div class="vertical-spacer" style="height: 100px"></div>
         </div>
         <div class="row">
-                <div id="forge-dices" class="enluminures-skined-1"></div>
-                <div id="forge-faces-available" class="enluminures-skined-1">
+
+            <div id="forge-dices">
+                <div class="dice-description enluminures-skined-1">
+                    <span class="inset-text">DICE <span id="dice-number">1</span></span>
+                </div>
+                <div class="dices-slider-container enluminures-skined-1">
+                    <div class="dices-slider owl-carousel owl-theme">
+
+                        <div class="dice-item">
+                            <div class="dice-viewer-inner">
+                                <div class="cube-container">
+                                    <div class="cube" rv-dice-skin="_skin">
+                                        <div class="front dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                        </div>
+                                        <div class="right dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                        </div>
+                                        <div class="bottom dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                        </div>
+                                        <div class="top dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                        </div>
+                                        <div class="left dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                        </div>
+                                        <div class="back dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                        </div>
+                                    </div>
+                                    <div class="dice-viewer-inner-shadow"></div>
+                                </div>
+                            </div>
+                            <div class="dice-informations">
+                                <div class="open-dice-button"><span class="inset-text">OPEN</span></div>
+                                <div class="dice-face-list">
+                                    <ul>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 1 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Mana Fire</span>
+                                        </li>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 2 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Mana Fire</span>
+                                        </li>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 3 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Mana Wind</span>
+                                        </li>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 4 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Mana Mountain</span>
+                                        </li>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 5 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Arcane</span>
+                                        </li>
+                                        <li>
+                                            <span class="dice-face-name">Face n° 6 : </span>
+                                            <span class="dice-face-spell-sprite"></span>
+                                            <span class="dice-face-spell-name">Arcane</span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="dice-open">
+                                <div class="dice-open-exit"><img src="/assets/img/cross.png" alt=""></div>
+                                <div class="front dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                </div>
+                                <div class="right dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                </div>
+                                <div class="bottom dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                </div>
+                                <div class="top dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                </div>
+                                <div class="left dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                </div>
+                                <div class="back dice-face">
+                                    <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dice-item">
+                            <div class="dice-viewer-inner">
+                                <div class="cube-container">
+                                    <div class="cube" rv-dice-skin="_skin">
+                                        <div class="front dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                        </div>
+                                        <div class="right dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                        </div>
+                                        <div class="bottom dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                        </div>
+                                        <div class="top dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                        </div>
+                                        <div class="left dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                        </div>
+                                        <div class="back dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice-informations">
+                                <div class="open-dice-button"><span class="inset-text">OPEN</span></div>
+                            </div>
+                        </div>
+
+                        <div class="dice-item">
+                            <div class="dice-viewer-inner">
+                                <div class="cube-container">
+                                    <div class="cube" rv-dice-skin="_skin">
+                                        <div class="front dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                        </div>
+                                        <div class="right dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                        </div>
+                                        <div class="bottom dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                        </div>
+                                        <div class="top dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                        </div>
+                                        <div class="left dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                        </div>
+                                        <div class="back dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice-informations">
+                                <div class="open-dice-button"><span class="inset-text">OPEN</span></div>
+                            </div>
+                        </div>
+
+                        <div class="dice-item">
+                            <div class="dice-viewer-inner">
+                                <div class="cube-container">
+                                    <div class="cube" rv-dice-skin="_skin">
+                                        <div class="front dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                        </div>
+                                        <div class="right dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                        </div>
+                                        <div class="bottom dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                        </div>
+                                        <div class="top dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                        </div>
+                                        <div class="left dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                        </div>
+                                        <div class="back dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice-informations">
+                                <div class="open-dice-button"><span class="inset-text">OPEN</span></div>
+                            </div>
+                        </div>
+
+                        <div class="dice-item">
+                            <div class="dice-viewer-inner">
+                                <div class="cube-container">
+                                    <div class="cube" rv-dice-skin="_skin">
+                                        <div class="front dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
+                                        </div>
+                                        <div class="right dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.1._sprite"></div>
+                                        </div>
+                                        <div class="bottom dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.2._sprite"></div>
+                                        </div>
+                                        <div class="top dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.3._sprite"></div>
+                                        </div>
+                                        <div class="left dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.4._sprite"></div>
+                                        </div>
+                                        <div class="back dice-face">
+                                            <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dice-informations">
+                                <div class="open-dice-button"><span class="inset-text">OPEN</span></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+
+            <div id="forge-faces-available" class="enluminures-skined-1">
+
+            </div>
+
         </div>
     </div>
 </div>

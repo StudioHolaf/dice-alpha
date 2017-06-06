@@ -530,7 +530,7 @@ div#player-1-roller {
     -webkit-transition: -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     transition:
             -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
-    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19)
+    transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     transition: transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19),
     -webkit-transform 1s cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }

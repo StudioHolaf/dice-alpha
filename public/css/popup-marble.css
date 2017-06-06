@@ -1,0 +1,66 @@
+.sweet-alert {
+    background-color: #ffffff;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    border-radius: 0;
+    font-family: 'Glass Antiqua', cursive;
+}
+
+.sweet-alert .sa-icon.sa-success::before, .sweet-alert .sa-icon.sa-success::after {
+    background: 0;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-fix {
+    background: none;
+}
+
+.sweet-alert .sa-icon.sa-success .sa-line {
+    background-color: #3f8f4e;
+}
+
+.sweet-alert .sa-icon.sa-success {
+    border-color: #3f8f4e;
+}
+
+.sweet-alert input {
+    background: rgba(243, 243, 243, 0.77);
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.28);
+    color: #000000;
+}
+
+.sweet-alert input:focus {
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.28);
+    border: 1px solid #c2ab66;
+}
+
+.sweet-alert h2 {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 35px;
+}
+
+.sweet-alert button {
+    border-radius: 0;
+    letter-spacing: 1px;
+}
+
+.sweet-alert p {
+    font-size: 20px;
+}
+
+.sweet-alert button {
+    background-color: #C1C1C1;
+    border-bottom: 5px solid #afafaf;
+}
