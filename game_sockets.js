@@ -36,6 +36,9 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     socket.on('my_roll_ready', function(datas){myRollReady(socket, datas)});
     socket.on('player_ready_for_next_reroll', function(datas){playerReadyForNextReroll(socket, datas)});
     socket.on('player_launch_solve', function(){launchSolve(socket)});
+
+    //forge
+    socket.on('player_connection_forge', function(datas){playerJoinForge(socket, datas, addedUser)});
 }
 
 function playerJoinGame(socket, id, addedUser)
@@ -48,13 +51,13 @@ function playerJoinGame(socket, id, addedUser)
     if (numUsers <= 2) {
         db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
             if (err) throw err;
-            utils_player.construct_player(player, function (player) {
-                players_datas.push(player);
-                socket.emit('player_init', {datas: player});
-                if (numUsers == 2) {
-                    socket.broadcast.emit('match_init', {datas: players_datas[1]});
-                    socket.emit('match_init', {datas: players_datas[0]});
-                }
+                utils_player.construct_player(player, function (player) {
+                    players_datas.push(player);
+                    socket.emit('player_init', {datas: player});
+                    if (numUsers == 2) {
+                        socket.broadcast.emit('match_init', {datas: players_datas[1]});
+                        socket.emit('match_init', {datas: players_datas[0]});
+                    }
             });
         });
     }
@@ -171,19 +174,35 @@ function launchSolve(socket)
     socket.emit('launch_solve');
 }
 
-/*function playerReadyForSolve(socket, id, userRdy)
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////        ***** FORGE STUFF *****         ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+function playerJoinForge(socket, id, addedUser)
 {
-    if (userRdy) return;
-    ++rdyUsers;
+    if (addedUser) return;
+    ++numUsers;
+    console.log("numUsers : "+numUsers);
     socket.userID = id;
-    socket.userReady = rdyUsers;
-    if (userRdy <= 2) {
-
+    socket.userNumber = numUsers;
+    var tabOwnedFaces = [];
+    if (numUsers == 1) {
+        db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
+            if (err) throw err;
+            utils_player.construct_player(player, function (playerConstruct) {
+                tabOwnedFaces = player._ownedFaces;
+                var playerStringify = JSON.stringify(playerConstruct);
+                //console.log("mon player stringify : "+playerStringify);
+                utils_player.construct_owned_faces(tabOwnedFaces, function (OwnedFaces) {
+                    var tabStringify = JSON.stringify(OwnedFaces);
+                    //console.log("tab owned faces 1 : ", tabStringify);
+                    socket.emit('player_forge_init', {player: playerStringify, ownedFaces: tabStringify});
+                });
+            });
+        });
     }
-
-    if (userRdy == 2) {
-        socket.broadcast.emit('player_ready_for_solve');
-        socket.emit('player_ready_for_solve');
-    }
-}*/
-
+}

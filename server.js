@@ -11,6 +11,8 @@ app.engine('html', require('ejs').renderFile);
 
 app.set('views', __dirname + '/views');
 
+require( './db' );
+
 /* ------------------------------------------------------------ OPENSHIFT CONFIGURATION ------------------------------------------------------------ */
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000,
@@ -24,26 +26,7 @@ app.use(function(err, req, res, next){
   res.status(500).send('Something bad happened!');
 });
 
-/* ------------------------------------------------------------ SOCKET ------------------------------------------------------------ */
-
-var server = http.createServer(app);
-var io = require('socket.io')(server);
-
-server.listen(port, function () {
-    console.log('Server listening at port %d', port);
-});
-
 /* ------------------------------------------------------------ ROUTES ------------------------------------------------------------ */
-
-var dbs = require( './db' );
-
-var sockets = require('./game_sockets');
-
-io.sockets.on('connection', function (socket) {
-    console.log("user connect");
-    var addedUser = false;
-    sockets.initGameSockets(io, socket, addedUser);
-});
 
 var routes = require( './routes/' );
 app.get('/', routes.index);
@@ -53,6 +36,23 @@ app.get('/pagecount', routes.pagecount);
 
 //app.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);
+
+/* ------------------------------------------------------------ SOCKET ------------------------------------------------------------ */
+
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
+server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+});
+
+var sockets = require('./game_sockets');
+
+io.sockets.on('connection', function (socket) {
+    console.log("user connect");
+    var addedUser = false;
+    sockets.initGameSockets(io, socket, addedUser);
+});
 
 /* ------------------------------------------------------------ ASSETS ------------------------------------------------------------ */
 
