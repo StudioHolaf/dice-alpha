@@ -5,6 +5,8 @@ $(document).ready(function(){
             items:1,
             loop:false,
             nav: true,
+            mouseDrag:false,
+            touchDrag: false,
             navText: ["<img src='/assets/img/arrow-left.png'>","<img src='/assets/img/arrow-right.png'>"]
         }
     );
@@ -142,5 +144,34 @@ socket.on('player_forge_init', function (datas) {
     arrayDeckObject = constructFacesFromJSON(DeckFaces);
     player.ownedFaces = constructFacesFromJSON(OwnedFacesDecode);
     console.log("PLAYER :",player);
+
+    console.log("player.getDiceOnDeck(0,0) = ",player.getDiceOnDeck(0,0));
+
+    rivets.binders['face-spell'] = function (el, value) {
+        el.style.backgroundImage = "url('" + value + "')";
+    };
+
+    rivets.bind($('.dice-item[dice-id="0"]'), player.getDiceOnDeck(0,0));
+    rivets.bind($('.dice-item[dice-id="1"]'), player.getDiceOnDeck(0,1));
+    rivets.bind($('.dice-item[dice-id="2"]'), player.getDiceOnDeck(0,2));
+    rivets.bind($('.dice-item[dice-id="3"]'), player.getDiceOnDeck(0,3));
+    rivets.bind($('.dice-item[dice-id="4"]'), player.getDiceOnDeck(0,4));
+
+    var i = 0;
+    arrayDifferentiel.forEach(function(face)
+    {
+        var availableFace = document.createElement("div");
+        availableFace.className = "available-face";
+        var spellSprite = document.createElement("div");
+        spellSprite.className = "face-spell";
+        spellSprite.setAttribute("rv-face-spell",i+"._sprite")
+        availableFace.appendChild(spellSprite);
+        //rivets.bind($('.dice-item[dice-id="0"]'), player.getDiceOnDeck(0,0));
+        $("#available-faces-container").append(availableFace);
+        i++;
+    });
+
+    rivets.bind($(".available-face"), arrayDifferentiel);
+
 
 });
