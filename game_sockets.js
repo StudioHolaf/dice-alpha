@@ -39,6 +39,7 @@ exports.initGameSockets = function (sio, socket, addedUser) {
 
     //forge
     socket.on('player_connection_forge', function(datas){playerJoinForge(socket, datas, addedUser)});
+    socket.on('player_deck_saved', function(datas){playerDeckSaved(socket, datas)});
 }
 
 function playerJoinGame(socket, id, addedUser)
@@ -205,4 +206,23 @@ function playerJoinForge(socket, id, addedUser)
             });
         });
     }
+}
+
+function playerDeckSaved(socket, datas)
+{
+    var deckDecode = JSON.parse(datas.deck);
+    var playerID = datas.player_id;
+    console.log("côté serveur : %o",deckDecode);
+    console.log("côté serveur id player : ",playerID);
+    //COMMENT RETROUVER LE BON JOUEUR ?!
+    //         db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
+    
+    db.collection("player").update(
+        { _id: parseInt(playerID) },
+        { $set:
+            {
+                _deck : deckDecode
+            }
+        }
+    )
 }

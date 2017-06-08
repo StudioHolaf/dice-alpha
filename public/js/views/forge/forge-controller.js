@@ -1,3 +1,8 @@
+var arrayDifferentiel = [];
+var arrayDiffObject = [];
+var player = [];
+var rv_differenciates;
+
 $(document).ready(function(){
     var dices_slider = $('.dices-slider.owl-carousel').owlCarousel(
         {
@@ -75,7 +80,6 @@ socket.on('ask_for_login', function () {
                 swal.showInputError("You need to write something!");
                 return false
             }
-            console.log("user id : ", inputValue);
             player_1_id = parseInt(inputValue);
             socket.emit('player_connection_forge', inputValue);
         });
@@ -83,57 +87,42 @@ socket.on('ask_for_login', function () {
 
 function getAllIDofDeck(player)
 {
-    console.log("dans getAllIDofDeck");
     var face_ids = [];
-    //player._deck.forEach(function (deck, deck_id) {
+    console.log("player %o",player);
         player._deck[0].forEach(function (dice, dice_id) {
-            dice.forEach(function (face, face_id) {
+            dice._faces.forEach(function (face, face_id) {
                 face_ids.push(face);
             });
         });
-    /*});*/
     return face_ids;
 }
 
 function getDifferentielArrays(DeckFaces, OwnedFaces)
 {
-    var differentielArray = OwnedFaces.slice(0);
-
-    console.log("DeckFaces : %o",DeckFaces);
-    console.log("OwnedFaces : %o",OwnedFaces);
+    var newDifferentielArray = OwnedFaces.slice(0);
 
     for (var i = 0; i < DeckFaces.length ; i++)
     {
-        for (var j = differentielArray.length-1; j >= 0; j--)
+        for (var j = newDifferentielArray.length-1; j >= 0; j--)
         {
-            if (differentielArray[j]._id == DeckFaces[i]._id)
+            if (newDifferentielArray[j]._id == DeckFaces[i]._id)
             {
-                differentielArray.splice(j, 1);
+                newDifferentielArray.splice(j, 1);
                 break;
             }
         }
     }
-    console.log("Tableau diff : %o", differentielArray);
-    return differentielArray;
+    return newDifferentielArray;
 }
-
 
 socket.on('player_forge_init', function (datas) {
 
     var DeckFaces = [];
-    var arrayDifferentiel = [];
-
-    var arrayDiffObject = [];
-    var arrayDeckObject = [];
     var arrayOwnedFacesObject = [];
-
-    var player = [];
-
     var playerDecode = JSON.parse(datas.player);
-    console.log("PLAYER :",playerDecode);
+
     player = Object.assign(new Player, playerDecode);
     player.deck = constructDeckFromJSON(player);
-    console.log("PLAYER :",player);
 
 
     var OwnedFacesDecode = JSON.parse(datas.ownedFaces);
@@ -141,11 +130,7 @@ socket.on('player_forge_init', function (datas) {
 
     arrayDifferentiel = getDifferentielArrays(DeckFaces, OwnedFacesDecode);
     arrayDiffObject = constructFacesFromJSON(arrayDifferentiel);
-    arrayDeckObject = constructFacesFromJSON(DeckFaces);
     player.ownedFaces = constructFacesFromJSON(OwnedFacesDecode);
-    console.log("PLAYER :",player);
-
-    console.log("player.getDiceOnDeck(0,0) = ",player.getDiceOnDeck(0,0));
 
     rivets.binders['face-spell'] = function (el, value) {
         el.style.backgroundImage = "url('" + value + "')";
@@ -158,20 +143,80 @@ socket.on('player_forge_init', function (datas) {
     rivets.bind($('.dice-item[dice-id="4"]'), player.getDiceOnDeck(0,4));
 
     var i = 0;
-    arrayDifferentiel.forEach(function(face)
+    console.log(arrayDiffObject);
+    rv_differenciates = rivets.bind($("#available-faces-container"), {faces:arrayDiffObject});
+
+    console.log("player : %o", player);
+});
+
+function swapFaces()
+{
+    if($(".dice-face.selected").length > 0)
     {
-        var availableFace = document.createElement("div");
-        availableFace.className = "available-face";
-        var spellSprite = document.createElement("div");
-        spellSprite.className = "face-spell";
-        spellSprite.setAttribute("rv-face-spell",i+"._sprite")
-        availableFace.appendChild(spellSprite);
-        //rivets.bind($('.dice-item[dice-id="0"]'), player.getDiceOnDeck(0,0));
-        $("#available-faces-container").append(availableFace);
-        i++;
+        if($(".available-face.selected").length > 0)
+        {
+            var face_number_available = parseInt($(".available-face.selected").attr("face_number"));
+            var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
+            var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
+
+            var tmp = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck);
+            if (typeof arrayDiffObject[face_number_available] != 'undefined' && arrayDiffObject[face_number_available] != null)
+                player.getDiceOnDeck(0, dice_number_deck).setFaceByPosition(face_number_deck, arrayDiffObject[face_number_available]);
+            if (typeof tmp != 'undefined' && tmp != null) {
+                arrayDiffObject[face_number_available] = tmp;
+            }
+            else
+                arrayDiffObject.splice(face_number_available,1);
+            $(".available-face.selected").removeClass("selected");
+            $(".dice-face.selected").removeClass("selected");
+        }
+    }
+}
+
+$("#available-faces-container").delegate(".available-face", "click", function () {
+
+    $(".available-face").removeClass("selected");
+    $(this).toggleClass("selected");
+
+    swapFaces();
+});
+
+$(".dice-face").click(function () {
+
+    $(".dice-face").removeClass("selected");
+    $(this).toggleClass("selected");
+    $(".delete-face").addClass("active");
+
+    swapFaces();
+});
+
+$(".delete-face").click(function () {
+
+    var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
+    var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
+
+    arrayDiffObject.push(player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck)); //je push dans le tableau diff la face avant de la détruire
+    player.getDiceOnDeck(0, dice_number_deck).setFaceByPosition(face_number_deck, null); //je lui change sa face par null
+
+    $(".available-face.selected").removeClass("selected");
+    $(".dice-face.selected").removeClass("selected");
+});
+
+$(".save-dice-button").click(function () {
+
+    var copyDeckPlayerJSON = JSON.stringify(player._deck);
+    var copyDeckPlayer = JSON.parse(copyDeckPlayerJSON);
+
+    copyDeckPlayer.forEach(function (deck) {
+        deck.forEach(function (dice) {
+            var tab_ids_faces = [];
+            dice._faces.forEach(function (face) {
+                tab_ids_faces.push(face._id);
+            });
+            dice._faces = tab_ids_faces;
+        });
     });
-
-    rivets.bind($(".available-face"), arrayDifferentiel);
-
-
+    //console.log("tab_ids_faces : %o", copyDeckPlayer);
+    var deck_encode = JSON.stringify(copyDeckPlayer);
+    socket.emit('player_deck_saved', {deck: deck_encode, player_id:player._id});
 });

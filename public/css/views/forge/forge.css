@@ -127,6 +127,7 @@ div.enluminures-skined-1:nth-child(1) {
     border-image-slice: 37;
     border-style: solid;
     border-radius: 0;
+
 }
 
 .top {
@@ -241,6 +242,16 @@ div.enluminures-skined-1:nth-child(1) {
     display: inline-block;
     margin: 0 4px;
     border: 2px solid #bea55b;
+    -webkit-transition: all 0.25s linear;
+    -moz-transition: all 0.25s linear;
+    -ms-transition: all 0.25s linear;
+    -o-transition: all 0.25s linear;
+    transition: all 0.25s linear;
+    transform: scale(1);
+}
+
+.available-face:hover {
+    transform: scale(1.05);
 }
 
 .dice-viewer-inner .dice-viewer-inner-shadow {
@@ -355,6 +366,21 @@ div.enluminures-skined-1:nth-child(1) {
     background-size: 220px;
 }
 
+.save-dice-button {
+    display: inline-block;
+    background: rgb(0, 0, 0);
+    border-bottom: 5px solid #000000;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 19px;
+    padding: 10px 45px;
+    line-height: 19px;
+    margin-top: 0;
+    cursor: pointer;
+    background-image: url(/assets/texture/dice-marble-black.png);
+    background-size: 220px;
+}
+
 .open-dice-button .inset-text {
     background-color: #FFFFFF;
     text-shadow: 0px 2px 3px rgba(97, 97, 97, 0.23);
@@ -433,8 +459,17 @@ div.dice-face-list {
     display: block;
     height: 140px;
     position: inherit;
-    transform: none;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.44);
+    -webkit-transition: all 0.25s linear;
+    -moz-transition: all 0.25s linear;
+    -ms-transition: all 0.25s linear;
+    -o-transition: all 0.25s linear;
+    transition: all 0.25s linear;
+    transform: scale(1);
+}
+
+.dice-open .dice-face:hover {
+    transform: scale(1.05);
 }
 
 .dice-open .front.dice-face {
@@ -485,4 +520,31 @@ div.dice-face-list {
     -o-transition: all 0.5s;
     transition: all 0.5s;
     transform: rotate(90deg);
+}
+
+.dice-face.selected {
+    box-shadow: 0px 0px 20px rgb(21, 166, 222), 0px 0px 5px rgb(21, 166, 222);
+}
+
+.available-face.selected {
+    box-shadow: 0px 0px 20px rgb(21, 166, 222), 0px 0px 5px rgb(21, 166, 222);
+}
+
+.delete-face {
+    width: 118px;
+    height: 118px;
+    max-width: 0;
+    float: left;
+    border: 0px dashed transparent;
+    -webkit-transition: all 0.5s linear;
+    -moz-transition: all 0.5s linear;
+    -ms-transition: all 0.5s linear;
+    -o-transition: all 0.5s linear;
+    transition: all 0.5s linear;
+}
+
+.delete-face.active {
+    max-width:118px;
+    border: 2px dashed #888;
+    margin: 0 4px;
 }

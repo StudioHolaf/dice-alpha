@@ -4,41 +4,11 @@
 
 class Dice {
 
-    constructor(id, skin, faces, idPM, body, castshadow, receiveshadow, geomety, material, visible, mass, inertia, scale) {
-        this._id = id;
+    constructor(skin, faces) {
         this._skin = skin;
         this._faces = faces;
-        this._physicalModel = new PhysicalModel(idPM, body, castshadow, receiveshadow, geomety, material, visible, mass, inertia, scale);
         this._turn_disabled = 0;
         this._nbReroll = 0;
-
-        if (id != null)
-        {
-            if ( skin == null && faces == null && idPM == null && body == null && castshadow == null && receiveshadow == null && geomety == null && material == null && visible == null && mass == null && inertia == null && scale == null)
-            {
-                /* SET EN BASE DE DONNEE */
-                this._skin = "";
-                this._faces = "";
-                this._idPM = "";
-                this._body = "";
-                this._castshadow = "";
-                this._receiveshadow = "";
-                this._geomety = "";
-                this._material = "";
-                this._visible = "";
-                this._mass = "";
-                this._inertia = "";
-                this._scale = ""
-            }
-        }
-    }
-
-    get id() {
-        return this._id;
-    }
-
-    set id(id) {
-        this._id = id;
     }
 
     get skin() {
@@ -57,16 +27,13 @@ class Dice {
         return this._faces[id];
     }
 
+    setFaceByPosition(id, face)
+    {
+        this._faces[id] = face;
+    }
+
     set faces(faces) {
         this._faces = faces;
-    }
-
-    get physicalModel() {
-        return this._physicalModel
-    }
-
-    set physicalModel(physicalmodel) {
-        this._physicalModel = physicalmodel;
     }
 
     get turnDisabled() {
@@ -108,17 +75,6 @@ class Dice {
         return false;
     }
 
-
-    /*
-     this._id = id;
-     this._skin = skin;
-     this._faces = faces;
-
-     this._physicalModel = new PhysicalModel(idPM, body, castshadow, receiveshadow, geomety, material, visible, mass, inertia, scale);
-     this._turn_disabled = 0;
-     this._nbReroll = 0;
-    */
-
     getDiceStateJSON()
     {
         var arrayJSON = {};
@@ -139,5 +95,4 @@ class Dice {
         }
         return (arrayJSON);
     }
-
 }

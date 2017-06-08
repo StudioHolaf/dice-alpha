@@ -9,7 +9,7 @@ function constructDeckFromJSON(player) {
         deck.forEach(function (dice) {
             var current_dice = Object.assign(new Dice(), dice);
             current_dice._faces = [];
-            dice.forEach(function (face) {
+            dice._faces.forEach(function (face) {
                 var current_face = Object.assign(new Face(), face);
                 current_face._spellOnMe = [];
                 current_face._spellOpponent = [];
@@ -70,7 +70,6 @@ function constructFacesFromJSON(DiffArray)
     {
         //console.log("DiffArrays : %o", DiffArray);
         var assignObject = Object.assign(new Face(), DiffArray[i]);
-        console.log("DiffArray : %o", assignObject);
         assignObject._spellOnMe = [];
         assignObject._spellOpponent = [];
 
@@ -115,8 +114,8 @@ function constructFacesFromJSON(DiffArray)
             assignObject._spellOpponent.push(current_spellOpponent);
         });
         DiffArrayObject.push(assignObject);
-        console.log("DiffArrayObject : %o", DiffArrayObject[i]);
     }
+    console.log("DiffArrayObject %o",DiffArrayObject);
     return DiffArrayObject;
 }
 

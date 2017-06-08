@@ -8,7 +8,7 @@ module.exports = {
         var face_ids = [];
         player._deck.forEach(function (deck, deck_id) {
             deck.forEach(function (dice, dice_id) {
-                dice.forEach(function (face, face_id) {
+                dice._faces.forEach(function (face, face_id) {
                     face_ids.push(parseInt(face));
                 });
             });
@@ -22,7 +22,7 @@ module.exports = {
             {
                 player._deck.forEach(function(deck){
                     deck.forEach(function (dice, dice_id) {
-                        utils_data.replace_in_array(dice, parseInt(face._id), face);
+                        utils_data.replace_in_array(dice._faces, parseInt(face._id), face);
                     });
                 });
                 nbFaces++;
