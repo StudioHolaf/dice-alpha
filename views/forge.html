@@ -95,7 +95,6 @@
                                 </div>
                             </div>
                             <div class="dice-open">
-                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                                 <div class="dice-open-exit"><img src="/assets/img/cross.png" alt=""></div>
                                 <div class="front dice-face" face_position="0">
                                     <div class="face-spell" rv-face-spell="_faces.0._sprite"></div>
@@ -115,6 +114,7 @@
                                 <div class="back dice-face"  face_position="5">
                                     <div class="face-spell" rv-face-spell="_faces.5._sprite"></div>
                                 </div>
+                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                             </div>
                         </div>
 
@@ -202,6 +202,7 @@
                                 <div class="back dice-face">
                                     <div class="face-spell" rv-face-spell="_faces.5._sprite" face_position="6"></div>
                                 </div>
+                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                             </div>
                         </div>
 
@@ -289,6 +290,7 @@
                                 <div class="back dice-face">
                                     <div class="face-spell" rv-face-spell="_faces.5._sprite" face_position="6"></div>
                                 </div>
+                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                             </div>
                         </div>
 
@@ -377,6 +379,7 @@
                                 <div class="back dice-face">
                                     <div class="face-spell" rv-face-spell="_faces.5._sprite" face_position="6"></div>
                                 </div>
+                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                             </div>
                         </div>
 
@@ -464,6 +467,7 @@
                                 <div class="back dice-face">
                                     <div class="face-spell" rv-face-spell="_faces.5._sprite" face-position="6"></div>
                                 </div>
+                                <div class="save-dice-button"><span class="inset-text">SAVE</span></div>
                             </div>
                         </div>
 
@@ -471,14 +475,28 @@
                 </div>
             </div>
 
-            <div id="forge-faces-available" class="enluminures-skined-1">
-                <div id="available-faces-container">
+            <div id="forge-faces-available">
+                <div id="available-faces-container" class="enluminures-skined-1">
                     <div class="available-face-generated">
                         <div class="available-face" rv-face_number="index" rv-each-face="faces">
                             <div class="face-spell" rv-face-spell="face._sprite"></div>
                         </div>
                     </div>
                     <div class="delete-face"></div>
+                </div>
+                <div class="face-informations-box enluminures-skined-1">
+                    <div id="face-sprite-container">
+                        <div id="face-sprite">
+                            <img src="" alt="" id="face-sprite-img">
+                        </div>
+                        <div id="face-name"></div>
+                    </div>
+                    <div id="face-informations">
+                        <div id="face-degats"><div class="legend">Dégats : </div><div class="content"></div></div>
+                        <div id="face-costs"><div class="legend">Costs : </div><div class="content"></div></div>
+                        <div id="face-description"><div class="legend">Description : </div><div class="content"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

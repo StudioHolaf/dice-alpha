@@ -201,6 +201,33 @@ $("#available-faces-container").delegate(".available-face", "click", function ()
     }
 });
 
+$("#available-faces-container").delegate(".available-face", "mouseenter", function () {
+    var face_number_available = parseInt($(this).attr("face_number"));
+    var face = arrayDiffObject[parseInt(face_number_available)];
+
+    console.log("looking at face = "+face_number_available);
+
+    $("#face-sprite-img").attr("src", face.sprite);
+    $("#face-name").html(face.name);
+    /*$("#face-degats").find(".content").html(face.get);
+    $("#face-costs").find(".content").html(face.getFaceCosts());
+    $("#face-description").find(".content").html(face.description);*/
+});
+
+$(".dice-face").mouseenter(function(){
+    var face_number_deck = parseInt($(this).attr("face_position"));
+    var dice_number_deck = parseInt($(this).closest(".dice-item").attr("dice-id"));
+    var face = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck);
+
+    console.log("looking at face = "+face_number_deck + " " + dice_number_deck);
+
+    $("#face-sprite-img").attr("src", face.sprite);
+    $("#face-name").html(face.name);
+    /*$("#face-degats").find(".content").html(face.get);
+     $("#face-costs").find(".content").html(face.getFaceCosts());
+     $("#face-description").find(".content").html(face.description);*/
+});
+
 $(".dice-face").click(function () {
 
     if($(this).hasClass("selected"))

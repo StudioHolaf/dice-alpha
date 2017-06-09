@@ -76,6 +76,14 @@ div.enluminures-skined-1:nth-child(1) {
     background-position: 93% 67%;
 }
 
+.face-informations-box {
+    height: 200px;
+}
+
+div#available-faces-container {
+    height: calc(100vh - 400px);
+    overflow-y: auto;
+}
 
 .dice-viewer {
     -webkit-perspective: 400px;
@@ -237,8 +245,8 @@ div.enluminures-skined-1:nth-child(1) {
 }
 
 .available-face {
-    width: 118px;
-    height: 118px;
+    width: 117px;
+    height: 117px;
     display: inline-block;
     margin: 0 4px;
     border: 2px solid #bea55b;
@@ -547,4 +555,65 @@ div.dice-face-list {
     max-width:118px;
     border: 2px dashed #888;
     margin: 0 4px;
+}
+
+div#face-sprite-container {
+    width: 30%;
+    float: left;
+    text-align: center;
+    border-right: 2px solid #cab36d;
+    padding-right: 25px;
+    height: 150px;
+}
+
+div#face-sprite {
+    max-width: 100px;
+    display: inline-block;
+}
+
+div#face-informations {
+    width: 70%;
+    float: left;
+    padding-left: 30px;
+    font-size: 20px;
+    height: 145px;
+    overflow-y: auto;
+}
+
+div#face-degats {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+div#face-costs {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+div#face-description {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+div#face-name {
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    font-size: 25px;
+    line-height: 25px;
 }
