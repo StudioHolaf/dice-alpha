@@ -159,14 +159,29 @@ function swapFaces()
             var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
             var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
 
-            var tmp = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck);
-            if (typeof arrayDiffObject[face_number_available] != 'undefined' && arrayDiffObject[face_number_available] != null)
-                player.getDiceOnDeck(0, dice_number_deck).setFaceByPosition(face_number_deck, arrayDiffObject[face_number_available]);
-            if (typeof tmp != 'undefined' && tmp != null) {
-                arrayDiffObject[face_number_available] = tmp;
+            var faceDeckCopy = JSON.parse(JSON.stringify(player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck)));
+            var faceAvailableCopy = JSON.parse(JSON.stringify(arrayDiffObject[face_number_available]));
+
+            if (typeof faceAvailableCopy != 'undefined' && faceAvailableCopy != null)
+            {
+                var deckFaceRef = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck); //on écrase sur le dès la nouvelle face
+                deckFaceRef._id = faceAvailableCopy._id;
+                deckFaceRef._name = faceAvailableCopy._name;
+                deckFaceRef._spellOnMe = faceAvailableCopy._spellOnMe;
+                deckFaceRef._spellOpponent = faceAvailableCopy._spellOpponent;
+                deckFaceRef._sprite = faceAvailableCopy._sprite;
+            }
+            if (typeof faceDeckCopy != 'undefined' && faceDeckCopy != null && faceDeckCopy._id != null) {
+                arrayDiffObject[face_number_available]._id = faceDeckCopy._id;
+                arrayDiffObject[face_number_available]._name = faceDeckCopy._name;
+                arrayDiffObject[face_number_available]._spellOnMe = faceDeckCopy._spellOnMe;
+                arrayDiffObject[face_number_available]._spellOpponent = faceDeckCopy._spellOpponent;
+                arrayDiffObject[face_number_available]._sprite = faceDeckCopy._sprite;
             }
             else
+            {
                 arrayDiffObject.splice(face_number_available,1);
+            }
             $(".available-face.selected").removeClass("selected");
             $(".dice-face.selected").removeClass("selected");
         }
@@ -175,19 +190,29 @@ function swapFaces()
 
 $("#available-faces-container").delegate(".available-face", "click", function () {
 
-    $(".available-face").removeClass("selected");
-    $(this).toggleClass("selected");
-
-    swapFaces();
+    if($(this).hasClass("selected"))
+    {
+        $(".available-face").removeClass("selected");
+    }
+    else {
+        $(".available-face").removeClass("selected");
+        $(this).addClass("selected");
+        swapFaces();
+    }
 });
 
 $(".dice-face").click(function () {
 
-    $(".dice-face").removeClass("selected");
-    $(this).toggleClass("selected");
-    $(".delete-face").addClass("active");
-
-    swapFaces();
+    if($(this).hasClass("selected"))
+    {
+        $(".dice-face").removeClass("selected");
+    }
+    else {
+        $(".dice-face").removeClass("selected");
+        $(this).addClass("selected");
+        $(".delete-face").addClass("active");
+        swapFaces();
+    }
 });
 
 $(".delete-face").click(function () {
@@ -195,8 +220,21 @@ $(".delete-face").click(function () {
     var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
     var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
 
-    arrayDiffObject.push(player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck)); //je push dans le tableau diff la face avant de la détruire
-    player.getDiceOnDeck(0, dice_number_deck).setFaceByPosition(face_number_deck, null); //je lui change sa face par null
+    var deckFaceRef = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck); //on écrase sur le dès la nouvelle face
+
+    var newFace = new Face();
+    newFace._id = deckFaceRef._id;
+    newFace._name = deckFaceRef._name;
+    newFace._spellOnMe = deckFaceRef._spellOnMe;
+    newFace._spellOpponent = deckFaceRef._spellOpponent;
+    newFace._sprite = deckFaceRef._sprite;
+    arrayDiffObject.push(newFace); //je push dans le tableau diff la face avant de la détruire
+
+    deckFaceRef._id = null;
+    deckFaceRef._name = null;
+    deckFaceRef._spellOnMe = null;
+    deckFaceRef._spellOpponent = null;
+    deckFaceRef._sprite = null;
 
     $(".available-face.selected").removeClass("selected");
     $(".dice-face.selected").removeClass("selected");
