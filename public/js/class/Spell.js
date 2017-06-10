@@ -141,6 +141,17 @@ class Spell
         result.mountain = (this._mountainEffects.mana ? this._mountainEffects.mana : 0);
         return result;
     }
+
+    getDgts () {
+        var result = [];
+        result.wind = (this._windEffects.degat ? this._windEffects.degat : 0);
+        result.fire = (this._fireEffects.degat ? this._fireEffects.degat : 0);
+        result.water = (this._waterEffects.degat ? this._waterEffects.degat : 0);
+        result.mountain = (this._mountainEffects.degat ? this._mountainEffects.degat : 0);
+        result.arcane = (this._arcaneEffects.degat ? this._arcaneEffects.degat : 0);
+        console.log("result : %o", result);
+        return result;
+    }
     
     getCosts() {
         var res = [];

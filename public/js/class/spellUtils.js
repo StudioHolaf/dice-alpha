@@ -28,6 +28,17 @@ function initTabMana() {
     return mana;
 }
 
+function initTabAll() {
+    var mana = [];
+    mana.wind = 0;
+    mana.fire = 0;
+    mana.water = 0;
+    mana.mountain = 0;
+    mana.arcane = 0;
+
+    return mana;
+}
+
 function initOffensiveElementTab()
 {
     var initialized_array = [];

@@ -209,9 +209,9 @@ $("#available-faces-container").delegate(".available-face", "mouseenter", functi
 
     $("#face-sprite-img").attr("src", face.sprite);
     $("#face-name").html(face.name);
-    /*$("#face-degats").find(".content").html(face.get);
-    $("#face-costs").find(".content").html(face.getFaceCosts());
-    $("#face-description").find(".content").html(face.description);*/
+    $("#face-degats").find(".content").html(face.getFaceDegatsHtml());
+    $("#face-costs").find(".content").html(face.getFaceManasHtml());
+    $("#face-description").find(".content").html(face.description);
 });
 
 $(".dice-face").mouseenter(function(){
@@ -223,9 +223,9 @@ $(".dice-face").mouseenter(function(){
 
     $("#face-sprite-img").attr("src", face.sprite);
     $("#face-name").html(face.name);
-    /*$("#face-degats").find(".content").html(face.get);
-     $("#face-costs").find(".content").html(face.getFaceCosts());
-     $("#face-description").find(".content").html(face.description);*/
+    $("#face-degats").find(".content").html(face.getFaceDegatsHtml());
+     $("#face-costs").find(".content").html(face.getFaceManasHtml());
+     $("#face-description").find(".content").html(face.description);
 });
 
 $(".dice-face").click(function () {
