@@ -36,14 +36,14 @@ var roomid = locationSplitted[locationSplitted.length - 1];
 var player_1_id;
 var timeDuration = 0;
 
-console.log("roomid ", roomid);
+//console.log("roomid ", roomid);
 
 var socket = io.connect();
 
 socket.emit('connection', roomid);
 
 socket.on('ask_for_login', function () {
-    console.log("ask_for_login in room " + roomid);
+    //console.log("ask_for_login in room " + roomid);
     swal({
             title: "Welcome to dice!",
             text: "Enter user id",
@@ -60,7 +60,7 @@ socket.on('ask_for_login', function () {
                 swal.showInputError("You need to write something!");
                 return false
             }
-            console.log("user id : ", inputValue);
+            //console.log("user id : ", inputValue);
             player_1_id = parseInt(inputValue);
             socket.emit('player_connection', inputValue);
         });
@@ -69,7 +69,7 @@ socket.on('ask_for_login', function () {
 var match1 = [];
 var player_1;
 socket.on('player_init', function (player_1_datas) {
-    console.log("player_init :", player_1_datas);
+    //console.log("player_init :", player_1_datas);
     player_1 = Object.assign(new Player, player_1_datas.datas);
     player_1._deck = constructDeckFromJSON(player_1);
     var player1View = rivets.bind($('#player-1-section'), player_1);
@@ -82,7 +82,7 @@ socket.on('player_init', function (player_1_datas) {
 
 
 socket.on('match_init', function (players_datas) {
-    console.log("match init datas : ", players_datas);
+    //console.log("match init datas : ", players_datas);
     var player_2 = Object.assign(new Player, players_datas.datas);
     player_2._deck = constructDeckFromJSON(player_2);
 
@@ -113,7 +113,7 @@ socket.on('match_init', function (players_datas) {
 });
 
 socket.on('everyone_ready_for_match', function (players_datas) {
-    console.log("players rolls %o", players_datas);
+    //console.log("players rolls %o", players_datas);
     var rolls = JSON.parse(players_datas.datas);
     autoRoll(rolls);
 });
@@ -125,7 +125,7 @@ socket.on('everyone_ready_for_next_reroll', function () {
 });
 
 socket.on('spectator_init', function (players_datas) {
-    console.log("spectator init datas : ", players_datas);
+    //console.log("spectator init datas : ", players_datas);
     var player_1 = Object.assign(new Player, players_datas.datas[0]);
     player_1._deck = constructDeckFromJSON(player_1);
     var player_2 = Object.assign(new Player, players_datas.datas[1]);
@@ -139,7 +139,7 @@ socket.on('spectator_init', function (players_datas) {
 });
 
 socket.on('disconnect', function () {
-    console.log('you have been disconnected : ' + player_1.id);
+    //console.log('you have been disconnected : ' + player_1.id);
 });
 
 function isStillReroll() {
@@ -173,7 +173,7 @@ function isPlayerHasReroll(player_id) {
 
 socket.on('update_timer', function(datas) {
     var timerParsed = JSON.parse(datas.timers);
-    console.log("update timer to ",timerParsed);
+    //console.log("update timer to ",timerParsed);
     if (timerParsed["player_"+match1.players[0].id] <= 0 || timerParsed["player_"+match1.players[0].id] == null)
         document.getElementById('time-count').innerHTML = '0';
     else
@@ -206,11 +206,9 @@ function initInterface() {
 }
 
 function callbackRefreshInterface() {
-    console.log("Refresh interface");
-    console.log("TEMPS DU JOUEUR : "+match1.players[0].tourTime);
+    //console.log("TEMPS DU JOUEUR : "+match1.players[0].tourTime);
     $(".dice-viewer").removeClass("disabled");
-    //$(".dice-viewer").addClass("spell-hidden");
-    
+
     var player_id = 1;
     match1.players.forEach(function (player) {
         var dice_id = 0;
@@ -266,7 +264,7 @@ function setDiceFace(player_number, dice_id, face_img, animationTime) {
 
 $("#roller-button").click(function () {
     prepareRollForSelectedDices();
-    console.log("Prepare roll : "+player_1.id);
+    //console.log("Prepare roll : "+player_1.id);
 });
 
 $("#solve-button").click(function () {
@@ -325,7 +323,7 @@ function prepareRollForSelectedDices() {
         type: 'success',
         layout: 'topRight',
         text: ("Your reroll is ready"),
-        timeout: 5000,
+        timeout: 2500,
         progressBar: true,
     }).show();
 }
@@ -347,7 +345,7 @@ function prepareRollAllDices() {
         type: 'success',
         layout: 'topRight',
         text: ("Your reroll is ready"),
-        timeout: 5000,
+        timeout: 2500,
         progressBar: true,
     }).show();
 }
@@ -362,25 +360,25 @@ socket.on('opponent_roll_ready', function (players_datas) {
         type: 'information',
         layout: 'topRight',
         text: ("Opponent roll is ready"),
-        timeout: 5000,
+        timeout: 2500,
         progressBar: true,
     }).show();
     socket.emit('opponent_roll_ready', players_datas);
 });
 
 socket.on('everyone_rolls_ready', function (players_datas) {
-    console.log("players rolls %o", players_datas);
+    //console.log("players rolls %o", players_datas);
     var rolls = JSON.parse(players_datas.datas);
     autoRoll(rolls);
 });
 
 socket.on('iam_ready', function (players_datas) {
-    console.log("players rolls %o", players_datas);
+    //console.log("players rolls %o", players_datas);
 });
 
 socket.on("user_left",function()
 {
-    console.log("user "+player_1.id+" left reload page");
+    //console.log("user "+player_1.id+" left reload page");
     location.reload();
 })
 
@@ -399,16 +397,6 @@ function autoRoll(rolls) {
         var rnd_res_bot1 = [0, 0, 0, 0, 0];
         tab_tirage_random = [rnd_res_j1, rnd_res_bot1];
     }
-
-    console.log("rolling dices");
-    new Noty({
-        type: 'success',
-        layout: 'topRight',
-        text: ("Launching the dices"),
-        timeout: 5000,
-        progressBar: true,
-    }).show();
-
     $(".dice-viewer").each(function () {
 
         var dice_id = $(this).attr("dice-id");
@@ -449,7 +437,6 @@ function autoRoll(rolls) {
             solve();
         },2000);
     }
-
 
     $(".dice-viewer").removeClass("selected");
     $(".dice-viewer").removeClass("spell-hidden");

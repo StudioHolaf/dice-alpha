@@ -19,7 +19,7 @@ function initPlayerTab()
 }
 
 function initTabMana() {
-    var mana = [];
+    var mana = {};
     mana.wind = 0;
     mana.fire = 0;
     mana.water = 0;
@@ -185,7 +185,7 @@ function concatEffectArray(tab1, tab2) //final tabJ? - currentFace
 {
     //CONCAT TOUS LES EFFECTS OFFENSIVE ET DEFENSIVE D'UN SPELL
 
-    var arr_tmp = [];
+    var arr_tmp = {};
     arr_tmp.offensive = initOffensiveTab();
     arr_tmp.defensive = initDefensiveTab();
     arr_tmp.neutral = initNeutralTab();
@@ -237,7 +237,7 @@ function isEnoughElementsCost(tab1, tab2) //tableau de coup - tableau de ma mana
 
 function additionnateElementsProperty(tab1, tab2) //manas, effect.getManas()
 {
-    var tab_res = [];
+    var tab_res = {};
 
     tab_res.wind = tab1.wind += tab2.wind;
     tab_res.fire = tab1.fire += tab2.fire;

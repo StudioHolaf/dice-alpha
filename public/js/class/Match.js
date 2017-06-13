@@ -43,8 +43,8 @@ class Match
                     dice.decreaseTurnDisabled(1);
             })
         });
-        console.log("Player 1 dices : %o ", this._players[0].deck[0]);
-        console.log("Player 2 dices : %o ", this._players[1].deck[0]);
+        //console.log("Player 1 dices : %o ", this._players[0].deck[0]);
+        //console.log("Player 2 dices : %o ", this._players[1].deck[0]);
 
     }
 
@@ -57,8 +57,8 @@ class Match
                 dice.reroll += player.reroll;
             })
         });
-        console.log("Player 1 dices : %o ", this._players[0].deck[0]);
-        console.log("Player 2 dices : %o ", this._players[1].deck[0]);
+        //console.log("Player 1 dices : %o ", this._players[0].deck[0]);
+        //console.log("Player 2 dices : %o ", this._players[1].deck[0]);
     }
 
 
@@ -76,7 +76,7 @@ class Match
     diceAnimation(player_id, dice_id, type, value, callback)
     {
         if(value != 0) {
-            console.log("Dice Animation - PLAYER ID " + player_id + " DICE ID " + dice_id + " value " + value);
+            //console.log("Dice Animation - PLAYER ID " + player_id + " DICE ID " + dice_id + " value " + value);
             var positionX = $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').offset().left + $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').width() / 2;
             var positionY = $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').offset().top + $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').height() / 2;
             $("#player-" + player_id + "-section .player-avatar").animateCss("shakeMini");
@@ -161,7 +161,7 @@ class Match
 
     applyNeutral(tab_player, callback)
     {
-        console.log("apply neutral");
+        //console.log("apply neutral");
         var classScope = this;
         var dice = 0;
         var toDeleteEffectIndexes = initNeutralTab();
@@ -200,7 +200,7 @@ class Match
                 toDeleteEffectIndexes["time"].push(indexTime);
             indexTime++;
         });
-        console.log("tab_player.neutral.disabledDice.length = "+tab_player.neutral.disabledDice.length);
+        //console.log("tab_player.neutral.disabledDice.length = "+tab_player.neutral.disabledDice.length);
         tab_player.neutral.disabledDice.forEach(function(effect) {
             if (effect.getType() == "disabledDice" && effect.turnCountDown == 0) {
                 rnd = Math.floor(Math.random() * 5) + 0;
@@ -214,12 +214,9 @@ class Match
             indexDisableDice++;
         });
 
-        var yolo = 1;
         //ANIMATIONS
-        var waitAnim = 0;
         if (totalReroll != 0)
         {
-            var waitAnim = 1500;
             if (totalReroll > 0)
             {
                 console.log("Player "+(tab_player.id+1)+" earn "+(totalReroll)+" reroll for the next round");
@@ -227,7 +224,7 @@ class Match
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" earn "+totalReroll+" reroll for the next round"),
-                    timeout: 5000,
+                    timeout: 2500,
                     progressBar: true,
                 }).show();
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "bonusReroll", totalReroll, callback);
@@ -239,7 +236,7 @@ class Match
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" lose "+totalReroll+" reroll for the next round"),
-                    timeout: 5000,
+                    timeout: 2500,
                     progressBar: true,
                 }).show();
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "dotReroll", totalReroll, callback);
@@ -247,26 +244,24 @@ class Match
         }
         else if (newTime > 0)
         {
-            var waitAnim = 1500;
             console.log("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !");
             new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !"),
-                timeout: 5000,
+                timeout: 2500,
                 progressBar: true,
             }).show();
             callback();
         }
         else if (totalDisabledDice > 0)
         {
-            var waitAnim = 1500;
             console.log("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !");
             new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !"),
-                timeout: 5000,
+                timeout: 2500,
                 progressBar: true,
             }).show();
             this.diceAnimation(tab_player.id+1, rnd, "diceDisabled", totalDisabledDice, callback);
@@ -286,7 +281,7 @@ class Match
     
     applyHeal(tab_player, callback)
     {
-        console.log("applyHeal");
+        //console.log("applyHeal");
         var classScope = this;
         var toDeleteEffectIndexes = [];
         var tmp_heal = 0;
@@ -318,7 +313,7 @@ class Match
                 type: 'error',
                 layout: 'topRight',
                 text: "Player "+(tab_player.id+1)+" heal himself by "+tmp_heal+"",
-                timeout: 5000,
+                timeout: 2500,
                 progressBar: true,
             }).show();
             //MAJ PV PLAYER
@@ -334,7 +329,7 @@ class Match
 
     applyAttackArcane(tab_player, callback)
     {
-        console.log("apply arcane");
+        //console.log("apply arcane");
         var classScope = this;
         var dgts = 0;
         var dgt_expo = 0;
@@ -384,7 +379,7 @@ class Match
                 type: 'error',
                 layout: 'topRight',
                 text: "Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1),
-                timeout: 5000,
+                timeout: 3500,
                 progressBar: true,
             }).show();
             classScope._players[tab_player.id].pv -= dgt_expo;
@@ -397,20 +392,20 @@ class Match
     }
     
     applyAttack(tab_player, elemFlag, callback) {
-        console.log("apply attack");
+        //console.log("apply attack");
         var classScope = this;
         var dgts = 0;
         var dgts_current = 0;
         var dgtToOtherPlayer = 0;
         var index = 0;
         var toDeleteEffectIndexes = initOffensiveElementTab();
-        var other_player_id  = (tab_player.id == 0 ? 1 : 0);
+        var other_player_id = (tab_player.id == 0 ? 1 : 0);
 
         /* Loop over the different offensive effects */
-        tab_player.offensive[elemFlag].degat.forEach(function(effect) {
+        tab_player.offensive[elemFlag].degat.forEach(function (effect) {
 
             /* START HANDLE DEGAT + STACK */
-            if(effect.degat > 0 && effect.turnCountDown == 0) {
+            if (effect.degat > 0 && effect.turnCountDown == 0) {
                 dgts_current = effect.degat;
                 console.log("Trying to inflict " + effect.degat + " degats of " + elemFlag + " to player " + (tab_player.id + 1));
                 if (tab_player.defensive[elemFlag].reflect.length > 0) {
@@ -421,12 +416,12 @@ class Match
                         if (tab_player.defensive[elemFlag].reflect[0].reflect < 1) {
                             tab_player.defensive[elemFlag].reflect.shift();
                             if (tab_player.defensive[elemFlag].reflect.length < 1) {
-                                console.log("reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1));
+                                //console.log("reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1));
                                 new Noty({
                                     type: 'warning',
                                     layout: 'topRight',
                                     text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
-                                    timeout: 5000,
+                                    timeout: 3500,
                                     progressBar: true,
                                 }).show();
                                 break;
@@ -442,12 +437,12 @@ class Match
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
                             if (tab_player.defensive[elemFlag].shield.length < 1) {
-                                console.log("Player " + (tab_player.id + 1) + " shielding " + dgtToOtherPlayer + " degats of " + elemFlag);
+                                //console.log("Player " + (tab_player.id + 1) + " shielding " + dgtToOtherPlayer + " degats of " + elemFlag);
                                 new Noty({
                                     type: 'warning',
                                     layout: 'topRight',
                                     text: "Player " + (tab_player.id + 1) + " shielding " + dgtToOtherPlayer + " degats of " + elemFlag,
-                                    timeout: 5000,
+                                    timeout: 3500,
                                     progressBar: true,
                                 }).show();
                                 break;
@@ -462,38 +457,37 @@ class Match
             /* END HANDLE DEGAT + STACK */
 
             /* START HANDLE MULTIPLICATOR */
-            if(effect.multiplicator > 0) {
-                
+            if (effect.multiplicator > 0) {
+
             }
             /* END HANDLE MULTIPLICATOR */
-            
+
             effect.nbTour -= 1;
-            if (effect.nbTour <= 0)
-            {
+            if (effect.nbTour <= 0) {
                 toDeleteEffectIndexes["degat"].push(index);
             }
             index++;
+
         });
 
 
         //MAJ PV OF PLAYER
         if (dgtToOtherPlayer > 0)
             classScope._players[other_player_id].pv -= dgtToOtherPlayer;
-        if(dgts > 0) {
+        if (dgts > 0) {
             classScope._players[tab_player.id].pv -= dgts;
-            console.log("Remove "+dgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
+            //console.log("Remove "+dgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
             new Noty({
                 type: 'error',
                 layout: 'topRight',
-                text: "Player " + "Remove "+dgts+" PV of "+elemFlag+" to player "+(tab_player.id+1),
-                timeout: 5000,
+                text: "Player " + "Remove " + dgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
+                timeout: 3500,
                 progressBar: true,
             }).show();
         }
-        this.playerAnimation(dgts,dgtToOtherPlayer,tab_player.id+1,other_player_id+1,elemFlag,callback);
+        this.playerAnimation(dgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
         //DELETE SPELL AFTER USING THEM
-        for (var key in toDeleteEffectIndexes)
-        {
+        for (var key in toDeleteEffectIndexes) {
             classScope._history.push(tab_player.offensive[elemFlag][key]);
             tab_player.offensive[elemFlag][key] = deleteUsedEffect(toDeleteEffectIndexes[key], tab_player.offensive[elemFlag][key]);
         }
@@ -539,8 +533,10 @@ class Match
 
         }
 
-        console.log("Mana J1 : %o",manaJ1 );
-        console.log("Mana J2 : %o",manaJ2 );
+
+
+        var launchJ1 = [];
+        var launchJ2 = [];
 
         for (var diceIndex = 0; diceIndex < 5; diceIndex++) {
 
@@ -555,32 +551,41 @@ class Match
             {
                 if (isEnoughElementsCost(current_faceJ1.getFaceCosts(), manaJ1)) { //si on peut payez la face du sort
                     manaJ1 = this.consummateMana(current_faceJ1.getFaceCosts(), manaJ1); //on fait la soustraction et met Ã  jour le nombre de mana
-                    console.log("launch J1: "+diceJ1.getFaceByPosition((res_j1[diceIndex])).name); //on regarde ce qu'on lance !
+                    //console.log("launch J1: "+diceJ1.getFaceByPosition((res_j1[diceIndex])).name); //on regarde ce qu'on lance !
+                    launchJ1.push(diceJ1.getFaceByPosition((res_j1[diceIndex])).name);
                     this._final_tab.j1 = concatEffectArray(this._final_tab.j1, current_faceJ1.totalSpellOnMe(0, diceIndex)); //tous les sorts de type "SpellOnMe"
                     this._final_tab.j2 = concatEffectArray(this._final_tab.j2, current_faceJ1.totalSpellOpponent(1, diceIndex)); //tous les sorts de type "SpellOpponent"
                 }
+                else
+                {
+                    launchJ1.push(null);
+                }
             }
-
             //JOUEUR 2
             if(diceJ2.isActive() && res_j1[diceIndex] >= 0)
             {
                 if (isEnoughElementsCost(current_faceJ2.getFaceCosts(), manaJ2)) {
                     manaJ2 = this.consummateMana(current_faceJ2.getFaceCosts(), manaJ2);
-                    console.log("launch J2: "+diceJ2.getFaceByPosition((res_j2[diceIndex])).name); //on regarde ce qu'on lance !
+                    launchJ2.push(diceJ2.getFaceByPosition((res_j2[diceIndex])).name); //on regarde ce qu'on lance !
                     this._final_tab.j2 = concatEffectArray(this._final_tab.j2, current_faceJ2.totalSpellOnMe(1, diceIndex));
                     this._final_tab.j1 = concatEffectArray(this._final_tab.j1, current_faceJ2.totalSpellOpponent(0, diceIndex));
                 }
+                else
+                {
+                    launchJ2.push(null);
+                }
             }
         }
-
         //ORDRE D'EXECUTION DES ELEMENTS : SOIN - VENT - FIRE - WATER - MOUNTAIN - ARCANE - NEUTRAL
 
         this.clearValues();
 
         var scope = this;
-        console.log("tab Final : %o",this._final_tab );
+        console.log("Final Tab : %o",[this._final_tab]);
+        console.table({"J1": manaJ1,"J2": manaJ2});
             scope.applyHeal(scope._final_tab.j1, function () {
-                    scope.applyHeal(scope._final_tab.j2, function () {
+                console.table({"J1 sort": launchJ1, "J2 sort": launchJ2});
+                scope.applyHeal(scope._final_tab.j2, function () {
                         scope.applyAttack(scope._final_tab.j1, "wind", function () {
                             scope.applyAttack(scope._final_tab.j2, "wind", function () {
                                 scope.applyAttack(scope._final_tab.j1, "fire", function () {
