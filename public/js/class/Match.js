@@ -431,24 +431,26 @@ class Match
                 }
                 /* Loop over the different shield effects */
                 if (tab_player.defensive[elemFlag].shield.length > 0) {
+                    var dgtShielding = 0;
                     while (tab_player.defensive[elemFlag].shield[0].shield > 0 && dgts_current > 0) {
+                        dgtShielding++;
                         dgts--;
                         tab_player.defensive[elemFlag].shield[0].decreaseShield();
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
                             if (tab_player.defensive[elemFlag].shield.length < 1) {
-                                //console.log("Player " + (tab_player.id + 1) + " shielding " + dgtToOtherPlayer + " degats of " + elemFlag);
-                                new Noty({
-                                    type: 'warning',
-                                    layout: 'topRight',
-                                    text: "Player " + (tab_player.id + 1) + " shielding " + dgtToOtherPlayer + " degats of " + elemFlag,
-                                    timeout: 3500,
-                                    progressBar: true,
-                                }).show();
                                 break;
                             }
                         }
                     }
+                    console.log("Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag);
+                    new Noty({
+                        type: 'warning',
+                        layout: 'topRight',
+                        text: "Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag,
+                        timeout: 3500,
+                        progressBar: true,
+                    }).show();
                 }
                 dgts += dgts_current;
             }
@@ -464,9 +466,9 @@ class Match
 
             effect.nbTour -= 1;
             if (effect.nbTour <= 0) {
-                toDeleteEffectIndexes["degat"].push(index);
+                toDeleteEffectIndexes["degat"].push(dgtShielding);
             }
-            index++;
+            dgtShielding++;
 
         });
 

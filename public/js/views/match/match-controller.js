@@ -4,7 +4,6 @@ var rollSend = false;
 var flag_end_turn = false;
 var nbTotalTurn = 1;
 
-
 // Stage
 var level = new Stage(4000, "bg1", 1000, 800);
 
@@ -122,6 +121,8 @@ socket.on('everyone_ready_for_next_reroll', function () {
     rollSend = false;
     if (isPlayerHasReroll(0) == false)
          prepareRollForSelectedDices();
+    $("#roller-button").removeClass("btn-lock");
+    $("#ready-button").removeClass("btn-lock");
 });
 
 socket.on('spectator_init', function (players_datas) {
@@ -208,7 +209,7 @@ function initInterface() {
 function callbackRefreshInterface() {
     //console.log("TEMPS DU JOUEUR : "+match1.players[0].tourTime);
     $(".dice-viewer").removeClass("disabled");
-
+    $("#end-turn-button").removeClass("btn-lock");
     var player_id = 1;
     match1.players.forEach(function (player) {
         var dice_id = 0;
@@ -225,13 +226,21 @@ function callbackRefreshInterface() {
         if (flag_end_turn == false) {
             socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
             prepareRollAllDices();
+            $("#roller-button").removeClass("btn-lock");
+            $("#ready-button").removeClass("btn-lock");
+            $("#end-turn-button").addClass("btn-lock");
         }
     },10000);
 }
 
 $("#end-turn-button").click(function () {
-    flag_end_turn = true;
-    swalDisplayTotalTurn();
+    if(!$(this).hasClass("btn-lock"))
+    {
+        console.log("btn lock not");
+        flag_end_turn = true;
+        swalDisplayTotalTurn();
+        $("#end-turn-button").addClass("btn-lock");
+    }
 });
 
 function swalDisplayTotalTurn ()
@@ -263,8 +272,8 @@ function setDiceFace(player_number, dice_id, face_img, animationTime) {
 }
 
 $("#roller-button").click(function () {
-    prepareRollForSelectedDices();
-    //console.log("Prepare roll : "+player_1.id);
+    if(!$(this).hasClass("btn-lock"))
+        prepareRollForSelectedDices();
 });
 
 $("#solve-button").click(function () {
@@ -272,28 +281,31 @@ $("#solve-button").click(function () {
 });
 
 $("#ready-button").click(function () {
-    new swal ({
-            title: "Êtes-vous sur de confirmer vos dès ?",
-            type: "success",
-            showCancelButton: true,
-            confirmButtonColor: "#3F8F4E",
-            confirmButtonText: "Ouep !",
-            closeOnConfirm: true
-        },
-        function () {
-            $("#player-1-roller .dice-viewer").each(function () {
+    if(!$(this).hasClass("btn-lock"))
+    {
+        new swal ({
+                title: "Êtes-vous sur de confirmer vos dès ?",
+                type: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#3F8F4E",
+                confirmButtonText: "Ouep !",
+                closeOnConfirm: true
+            },
+            function () {
+                $("#player-1-roller .dice-viewer").each(function () {
 
-                var dice_id = $(this).attr("dice-id");
-                var player_id = $(this).parent().parent().attr("player-id");
-                var player = match1.players[player_id - 1];
-                var dice = player.getDiceOnDeck(0, dice_id);
+                    var dice_id = $(this).attr("dice-id");
+                    var player_id = $(this).parent().parent().attr("player-id");
+                    var player = match1.players[player_id - 1];
+                    var dice = player.getDiceOnDeck(0, dice_id);
 
-                dice.reroll = 0;
-                if (!rollSend)
-                    prepareRollForSelectedDices();
-            });
-        })
-, 1000;
+                    dice.reroll = 0;
+                    if (!rollSend)
+                        prepareRollForSelectedDices();
+                });
+            })
+    , 1000;
+    }
 });
 
 
@@ -432,6 +444,8 @@ function autoRoll(rolls) {
     }
     else
     {
+        $("#roller-button").addClass("btn-lock");
+        $("#ready-button").addClass("btn-lock");
         setTimeout(function()
         {
             solve();

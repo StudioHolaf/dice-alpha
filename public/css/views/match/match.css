@@ -624,6 +624,16 @@ div.action-button:hover:after {
     bottom: -31px;
 }
 
+div.action-button.btn-lock {
+    box-shadow: 0 0 30px red;
+    top: 5px;
+}
+
+div.action-button.btn-lock:after {
+    height: 3px;
+    bottom: -31px;
+}
+
 span.inset-text {
     background-color: #565656;
     color: transparent;
