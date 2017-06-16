@@ -83,8 +83,7 @@ class Match
             if (type == "diceDisabled") {
                 $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').animateCss("flip");
                 $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').addClass("disabled");
-                $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-spell').css("background-image", "none");
-                ;
+                //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-spell').css("background-image", "none");
             }
             launchParticles("#game-canvas", positionX, positionY, 30, type, value, function () {
                 if (typeof callback === "function");
@@ -203,6 +202,7 @@ class Match
         //console.log("tab_player.neutral.disabledDice.length = "+tab_player.neutral.disabledDice.length);
         tab_player.neutral.disabledDice.forEach(function(effect) {
             if (effect.getType() == "disabledDice" && effect.turnCountDown == 0) {
+                //socket.emit('ask_for_random_dice');
                 rnd = Math.floor(Math.random() * 5) + 0;
                 dice = classScope._players[tab_player.id].getDiceOnDeck(0, rnd);
                 dice.turnDisabled = effect.disabledDice;
@@ -305,7 +305,6 @@ class Match
             effect.decreaseTurnCountDown();
         });
 
-        //ANIMATIONS
         if (tmp_heal > 0)
         {
             console.log("Healing "+tmp_heal+" to player "+(tab_player.id+1));
@@ -316,11 +315,8 @@ class Match
                 timeout: 2500,
                 progressBar: true,
             }).show();
-            //MAJ PV PLAYER
-
             classScope._players[tab_player.id].pv += tmp_heal;
         }
-
         this.healAnimation(tab_player.id+1, launcherDicePosition, "heal", tmp_heal, callback);
         //DELETE EFFECT
         classScope._history.push(tab_player.neutral.heal);
@@ -394,7 +390,7 @@ class Match
     applyAttack(tab_player, elemFlag, callback) {
         //console.log("apply attack");
         var classScope = this;
-        var dgts = 0;
+        var totalDgts = 0;
         var dgts_current = 0;
         var dgtToOtherPlayer = 0;
         var index = 0;
@@ -415,29 +411,31 @@ class Match
                         tab_player.defensive[elemFlag].reflect[0].decreaseReflect();
                         if (tab_player.defensive[elemFlag].reflect[0].reflect < 1) {
                             tab_player.defensive[elemFlag].reflect.shift();
+                            console.log("reflect supprimmer !");
                             if (tab_player.defensive[elemFlag].reflect.length < 1) {
                                 //console.log("reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1));
-                                new Noty({
-                                    type: 'warning',
-                                    layout: 'topRight',
-                                    text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
-                                    timeout: 3500,
-                                    progressBar: true,
-                                }).show();
                                 break;
                             }
                         }
                     }
+                    new Noty({
+                        type: 'warning',
+                        layout: 'topRight',
+                        text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
+                        timeout: 3500,
+                        progressBar: true,
+                    }).show();
                 }
                 /* Loop over the different shield effects */
                 if (tab_player.defensive[elemFlag].shield.length > 0) {
                     var dgtShielding = 0;
                     while (tab_player.defensive[elemFlag].shield[0].shield > 0 && dgts_current > 0) {
                         dgtShielding++;
-                        dgts--;
+                        totalDgts--;
                         tab_player.defensive[elemFlag].shield[0].decreaseShield();
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
+                            console.log("bouclier retirer !");
                             if (tab_player.defensive[elemFlag].shield.length < 1) {
                                 break;
                             }
@@ -452,7 +450,7 @@ class Match
                         progressBar: true,
                     }).show();
                 }
-                dgts += dgts_current;
+                totalDgts += dgts_current;
             }
             effect.decreaseTurnCountDown();
 
@@ -469,25 +467,24 @@ class Match
                 toDeleteEffectIndexes["degat"].push(dgtShielding);
             }
             dgtShielding++;
-
         });
 
 
         //MAJ PV OF PLAYER
         if (dgtToOtherPlayer > 0)
             classScope._players[other_player_id].pv -= dgtToOtherPlayer;
-        if (dgts > 0) {
-            classScope._players[tab_player.id].pv -= dgts;
-            //console.log("Remove "+dgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
+        if (totalDgts > 0) {
+            classScope._players[tab_player.id].pv -= totalDgts;
+            //console.log("Remove "+totalDgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
             new Noty({
                 type: 'error',
                 layout: 'topRight',
-                text: "Player " + "Remove " + dgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
+                text: "Player " + "Remove " + totalDgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
                 timeout: 3500,
                 progressBar: true,
             }).show();
         }
-        this.playerAnimation(dgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
+        this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
         //DELETE SPELL AFTER USING THEM
         for (var key in toDeleteEffectIndexes) {
             classScope._history.push(tab_player.offensive[elemFlag][key]);

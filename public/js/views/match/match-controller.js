@@ -182,7 +182,6 @@ socket.on('update_timer', function(datas) {
     document.getElementById('time-total').innerHTML = timeDuration;
     if(timerParsed["player_"+match1.players[0].id] == 0)
     {
-        //disable roll button
         if(!rollSend)
             prepareRollForSelectedDices();
     }
@@ -216,6 +215,7 @@ function callbackRefreshInterface() {
         player.deck[0].forEach(function (dice) {
             if (!dice.isActive()) {
                 $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').addClass("disabled");
+                console.log("rajout de la class Disabled");
             }
             dice_id++;
         })
@@ -245,7 +245,6 @@ $("#end-turn-button").click(function () {
 
 function swalDisplayTotalTurn ()
 {
-    $(".dice-viewer").removeClass("disabled");
     $(".dice-viewer").addClass("spell-hidden");
     nbTotalTurn += 1;
     new swal ({
@@ -422,13 +421,13 @@ function autoRoll(rolls) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
-                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
+                    //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name); //Hover
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
-                    $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
+                    //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
                     //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
@@ -451,7 +450,6 @@ function autoRoll(rolls) {
             solve();
         },2000);
     }
-
     $(".dice-viewer").removeClass("selected");
     $(".dice-viewer").removeClass("spell-hidden");
 }
