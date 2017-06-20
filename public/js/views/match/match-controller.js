@@ -3,6 +3,7 @@ var tab_tirage_random = [];
 var rollSend = false;
 var flag_end_turn = false;
 var nbTotalTurn = 1;
+var rolls = []; //Tirage des 2 joueurs.
 
 // Stage
 var level = new Stage(4000, "bg1", 1000, 800);
@@ -28,6 +29,11 @@ rivets.binders['player-avatar'] = function (el, value) {
 rivets.binders['face-spell'] = function (el, value) {
     el.style.backgroundImage = "url('" + value + "')";
 };
+
+rivets.binders['player-reroll'] = function (el, value) {
+    var nbReroll = match1.players[0].reroll;
+    el.style.width =  "reroll :" + nbReroll;
+}
 
 var locationGetted = window.location.pathname;
 var locationSplitted = locationGetted.split("/");
@@ -113,7 +119,7 @@ socket.on('match_init', function (players_datas) {
 
 socket.on('everyone_ready_for_match', function (players_datas) {
     //console.log("players rolls %o", players_datas);
-    var rolls = JSON.parse(players_datas.datas);
+    rolls = JSON.parse(players_datas.datas);
     autoRoll(rolls);
 });
 
@@ -127,9 +133,9 @@ socket.on('everyone_ready_for_next_reroll', function () {
 
 socket.on('spectator_init', function (players_datas) {
     //console.log("spectator init datas : ", players_datas);
-    var player_1 = Object.assign(new Player, players_datas.datas[0]);
+    var player_1 = Object.assign(new Player, players_datas.player1);
     player_1._deck = constructDeckFromJSON(player_1);
-    var player_2 = Object.assign(new Player, players_datas.datas[1]);
+    var player_2 = Object.assign(new Player, players_datas.player2);
     player_2._deck = constructDeckFromJSON(player_2);
 
     match1 = new Match(5000, player_1, player_2, level);
@@ -255,7 +261,6 @@ function swalDisplayTotalTurn ()
         closeOnConfirm: true
     }, function () {
         socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
-        nbTotalTurn++;
         prepareRollAllDices();
     });
 }
@@ -315,6 +320,28 @@ $("#player-1-roller .dice-viewer").click(function () {
 
     if (dice.reroll > 0 && dice.isActive())
         $(this).toggleClass("selected");
+});
+
+$(".dice-viewer").mouseenter(function () {
+    var dice_id = parseInt($(this).attr("dice-id"));
+    var player_id = parseInt($(this).parent().parent().attr("player-id"));
+    var dice = match1.players[player_id - 1].getDiceOnDeck(0, dice_id);
+    var roll_val = parseInt($(this).attr("roll-val"));
+    var face = dice.getFaceByPosition(roll_val);
+
+
+    $('#name-hover').html(face.name);
+    $('#description-hover').html(face.description);
+    $('#spellOnMe-hover').html(face.getFaceDegatsHtml());
+    $('#spellOnOpponent-hover').html(face.getFaceManasHtml());
+
+
+    /* -------------- REROLL INFO -------------- */
+
+    console.log("reroll : ", dice.reroll);
+    $('#player-reroll').html(dice.reroll);
+
+
 });
 
 function prepareRollForSelectedDices() {
@@ -379,7 +406,7 @@ socket.on('opponent_roll_ready', function (players_datas) {
 
 socket.on('everyone_rolls_ready', function (players_datas) {
     //console.log("players rolls %o", players_datas);
-    var rolls = JSON.parse(players_datas.datas);
+    rolls = JSON.parse(players_datas.datas);
     autoRoll(rolls);
 });
 
@@ -421,15 +448,14 @@ function autoRoll(rolls) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
-                    //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name); //Hover
-                    //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
+                    //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
+
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
-                    //setDiceFace(player_id, dice_id, player.getDiceOnDeck(0, dice_id).getFaceByPosition(tab_tirage_random[(player_id - 1)][dice_id]).sprite, 700);
                 }
             }
         }
