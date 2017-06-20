@@ -477,6 +477,7 @@ class Match
             effect.nbTour -= 1;
             if (effect.nbTour <= 0) {
                 toDeleteEffectIndexes["degat"].push(dgtShielding);
+                //console.log("sort supprimer");
             }
             dgtShielding++;
         });
@@ -543,8 +544,6 @@ class Match
             }
 
         }
-
-
 
         var launchJ1 = [];
         var launchJ2 = [];

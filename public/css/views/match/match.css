@@ -300,6 +300,34 @@ div#player-1-section .player-HUD {
     background-clip: text;
 }
 
+#reroll-left {
+    position: absolute;
+    left: 0;
+    width: calc(50% - 80px);
+    top: 17px;
+    font-size: 26px;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
+#player-reroll {
+    position: absolute;
+    left: 0;
+    width: calc(50% - 80px);
+    top: 65px;
+    font-size: 26px;
+    background-color: #565656;
+    color: transparent;
+    text-shadow: 0px 2px 3px rgba(255,255,255,0.5);
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+}
+
 .player-gold {
     position: absolute;
     right: 0;
@@ -722,8 +750,47 @@ div#match-data-container:after {
     box-shadow: 1px 13px 22px #000000;
 }
 
+div#match-hover-container {
+    position: fixed;
+    bottom: 0px;
+    right: 0%;
+    z-index: 99;
+    width: 450px;
+    color: #392419;
+    font-size: 22px;
+    background-size: 900px;
+    background-position: 50%;
+    border-width: 29px;
+    border-image: url(/assets/img/button-pattern-5.png);
+    border-image-repeat: repeat;
+    border-image-slice: 61;
+    border-style: solid;
+    background-image: url(/assets/texture/marble-texture-1.jpg);
+    box-shadow: 1px 10px 22px rgba(0, 0, 0, 0.42);
+}
+
+div#match-hover-container:after {
+    position: absolute;
+    bottom: -36px;
+    width: calc(100% + 58px);
+    content: "";
+    height: 7px;
+    left: -29px;
+    background: #bbbbbb;
+    box-shadow: 1px 13px 22px #000000;
+}
+
 div#timer {
     text-align: center;
+}
+
+div#hover {
+    text-align: center;
+    line-height: 22px;
+    font-size: 20px;
+    height: 140px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 div#time-count, div#time-total {
@@ -882,6 +949,15 @@ div#player-1-section .player-avatar-front {
     height: 8px;
     z-index: 0;
     border-radius: 0 0 10px 0;
+}
+div#spellOnMe-hover img {
+    width: 35px;
+    display: inline-block;
+}
+
+div#spellOnOpponent-hover img {
+    width: 35px;
+    display: inline-block;
 }
 
 div#player-1-section .player-PV-front {

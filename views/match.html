@@ -33,7 +33,16 @@
                 <span class="inset-text">/</span>
                 <div id="time-total"></div>
             </div>
+        </div>
 
+        <div id="match-hover-container">
+            <div id="hover">
+                <div id="name-hover"></div>
+                <div id="description-hover"></div>
+                <div id="sprite-hover"></div>
+                <div id="spellOnMe-hover"></div>
+                <div id="spellOnOpponent-hover"></div>
+            </div>
         </div>
 
         <div id="player-1-section" class="player-section animated fadeInUp" player-id="1">
@@ -44,7 +53,9 @@
                 </div>
                 <div class="player-informations">
                     <div class="player-name">{_pseudo}</div>
-                    <div class="player-hero">{_hero}</div>
+                    <!--<div class="player-hero">{_hero}</div>-->
+                    <span id="reroll-left">Reroll restant : </span>
+                    <div id="player-reroll"></div>
                     <div class="player-gold">{_gold}</div>
                 </div>
                 <div class="player-PV">
@@ -143,7 +154,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="face-name"></div>
+                        <!-- <div class="face-name"></div> -->
                     </div>
                     <div class="dice-viewer spell-hidden" dice-id="1" roll-val="2">
                         <div class="dice-viewer-inner">
@@ -168,7 +179,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="face-name"></div>
+                        <!-- <div class="face-name"></div> -->
                     </div>
                     <div class="dice-viewer spell-hidden" dice-id="2" roll-val="3">
                         <div class="dice-viewer-inner">
@@ -193,7 +204,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="face-name"></div>
+                        <!-- <div class="face-name"></div>-->
                     </div>
                     <div class="dice-viewer spell-hidden" dice-id="3" roll-val="4">
                         <div class="dice-viewer-inner">
@@ -218,7 +229,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="face-name"></div>
+                       <!-- <div class="face-name"></div>-->
                     </div>
                     <div class="dice-viewer spell-hidden" dice-id="4" roll-val="5">
                         <div class="dice-viewer-inner">
@@ -243,7 +254,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="face-name"></div>
+                       <!--  <div class="face-name"></div>-->
                     </div>
                 </div>
             </div>
