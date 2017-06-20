@@ -32,6 +32,18 @@ class Match
     set stage(stage)
     {this._stage = stage;}
 
+    emptyUserByPosition(id)
+    {
+        this._players[id]._avatar = "";
+        this._players[id]._pv = 0;
+        this._players[id]._pvMax = 0;
+        this._players[id]._ultime = 0;
+        this._players[id]._ultimeMax = 0;
+        this._players[id]._name = "";
+        this._players[id]._gold = 0;
+        this._players[id]._hero = "";
+    }
+
     clearValues()
     {
         this._players.forEach(function(player)

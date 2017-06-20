@@ -3,6 +3,18 @@ var tab_tirage_random = [];
 var rollSend = false;
 var flag_end_turn = false;
 var nbTotalTurn = 1;
+var player1View;
+var player1Dice1;
+var player1Dice2;
+var player1Dice3;
+var player1Dice4;
+var player1Dice5;
+var player2View;
+var player2Dice1;
+var player2Dice2;
+var player2Dice3;
+var player2Dice4;
+var player2Dice5;
 
 // Stage
 var level = new Stage(4000, "bg1", 1000, 800);
@@ -61,7 +73,9 @@ socket.on('ask_for_login', function () {
             }
             //console.log("user id : ", inputValue);
             player_1_id = parseInt(inputValue);
-            socket.emit('player_connection', inputValue);
+            //var room_id;
+            console.log("Room id : %o",room_id);
+            socket.emit('player_connection', {user_id:inputValue, room_id : room_id});
         });
 })
 
@@ -88,12 +102,12 @@ socket.on('match_init', function (players_datas) {
     match1 = new Match(5000, player_1, player_2, level);
     match1.clearValues();
     match1.reincrementValues();
-    var player2View = rivets.bind($('#player-2-section'), match1.players[1]);
-    var player2Dice1 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="0"]'), player_2.getDiceOnDeck(0,0));
-    var player2Dice2 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="1"]'), player_2.getDiceOnDeck(0,1));
-    var player2Dice3 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="2"]'), player_2.getDiceOnDeck(0,2));
-    var player2Dice4 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="3"]'), player_2.getDiceOnDeck(0,3));
-    var player2Dice5 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="4"]'), player_2.getDiceOnDeck(0,4));
+    player2View = rivets.bind($('#player-2-section'), match1.players[1]);
+    player2Dice1 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="0"]'), player_2.getDiceOnDeck(0,0));
+    player2Dice2 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="1"]'), player_2.getDiceOnDeck(0,1));
+    player2Dice3 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="2"]'), player_2.getDiceOnDeck(0,2));
+    player2Dice4 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="3"]'), player_2.getDiceOnDeck(0,3));
+    player2Dice5 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="4"]'), player_2.getDiceOnDeck(0,4));
     setTimeout(function(){
         new swal ({
                 title: "Êtes-vous prêt ?",
@@ -127,16 +141,30 @@ socket.on('everyone_ready_for_next_reroll', function () {
 
 socket.on('spectator_init', function (players_datas) {
     //console.log("spectator init datas : ", players_datas);
-    var player_1 = Object.assign(new Player, players_datas.datas[0]);
+    var player_1 = Object.assign(new Player, players_datas.player1);
     player_1._deck = constructDeckFromJSON(player_1);
-    var player_2 = Object.assign(new Player, players_datas.datas[1]);
+    var player_2 = Object.assign(new Player, players_datas.player2);
     player_2._deck = constructDeckFromJSON(player_2);
 
     match1 = new Match(5000, player_1, player_2, level);
     match1.clearValues();
     match1.reincrementValues();
-    var player2View = rivets.bind($('#player-1-section'), match1.players[0]);
-    var player2View = rivets.bind($('#player-2-section'), match1.players[1]);
+    player1View = rivets.bind($('#player-1-section'), match1.players[0]);
+    player2View = rivets.bind($('#player-2-section'), match1.players[1]);
+
+    var player1View = rivets.bind($('#player-1-section'), player_1);
+    var player1Dice1 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="0"]'), player_1.getDiceOnDeck(0,0));
+    var player1Dice2 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="1"]'), player_1.getDiceOnDeck(0,1));
+    var player1Dice3 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="2"]'), player_1.getDiceOnDeck(0,2));
+    var player1Dice4 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="3"]'), player_1.getDiceOnDeck(0,3));
+    var player1Dice5 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="4"]'), player_1.getDiceOnDeck(0,4));
+    
+    player2View = rivets.bind($('#player-2-section'), match1.players[1]);
+    player2Dice1 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="0"]'), player_2.getDiceOnDeck(0,0));
+    player2Dice2 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="1"]'), player_2.getDiceOnDeck(0,1));
+    player2Dice3 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="2"]'), player_2.getDiceOnDeck(0,2));
+    player2Dice4 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="3"]'), player_2.getDiceOnDeck(0,3));
+    player2Dice5 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="4"]'), player_2.getDiceOnDeck(0,4));
 });
 
 socket.on('disconnect', function () {
@@ -389,8 +417,10 @@ socket.on('iam_ready', function (players_datas) {
 
 socket.on("user_left",function()
 {
+    match1.emptyUserByPosition(1);
+    player2View.unbind();
     //console.log("user "+player_1.id+" left reload page");
-    location.reload();
+    //location.reload();
 })
 
 function solve() {

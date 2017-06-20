@@ -30,10 +30,10 @@ exports.match = function (req, res) {
     }
     if (db) {
 
-        res.render('match.html');
+        res.render('match.html',{room_id : req.params.roomid});
 
     } else {
-        res.render('match.html');
+        res.render('match.html',{room_id : req.params.roomid});
     }
 }
 
