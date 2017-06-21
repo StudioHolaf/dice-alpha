@@ -221,7 +221,7 @@ function callbackRefreshInterface() {
         player.deck[0].forEach(function (dice) {
             if (!dice.isActive()) {
                 $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').addClass("disabled");
-                console.log("rajout de la class Disabled");
+                //console.log("rajout de la class Disabled");
             }
             dice_id++;
         })
@@ -242,7 +242,7 @@ function callbackRefreshInterface() {
 $("#end-turn-button").click(function () {
     if(!$(this).hasClass("btn-lock"))
     {
-        console.log("btn lock not");
+        //console.log("btn lock not");
         flag_end_turn = true;
         swalDisplayTotalTurn();
         $("#end-turn-button").addClass("btn-lock");
@@ -338,7 +338,7 @@ $(".dice-viewer").mouseenter(function () {
 
     /* -------------- REROLL INFO -------------- */
 
-    console.log("reroll : ", dice.reroll);
+    //console.log("reroll : ", dice.reroll);
     $('#player-reroll').html(dice.reroll);
 
 

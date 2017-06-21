@@ -120,8 +120,8 @@ class Face {
                 textReturned += '<img src="/assets/img/fc_mountain_mana.png">';
             }
         }
-        console.log("manas : %o",costs);
-        console.log("textReturned = %o",textReturned);
+        //console.log("manas : %o",costs);
+        //console.log("textReturned = %o",textReturned);
        return textReturned;
     }
     getFaceDegatsHtml() {
@@ -145,8 +145,8 @@ class Face {
         if (degats.arcane != 0) {
             textReturned += '<img src="/assets/img/fc_arcane.png">'+ "X2^<sup>"+ degats.arcane+"</sup>";
         }
-        console.log("degats : %o",degats);
-        console.log("textReturned = %o",textReturned);
+        //console.log("degats : %o",degats);
+        //console.log("textReturned = %o",textReturned);
         return textReturned;
     }
 
