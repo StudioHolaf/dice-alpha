@@ -236,50 +236,50 @@ class Match
             if (totalReroll > 0)
             {
                 console.log("Player "+(tab_player.id+1)+" earn "+(totalReroll)+" reroll for the next round");
-                new Noty({
+                /*new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" earn "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();
+                }).show();*/
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "bonusReroll", totalReroll, callback);
             }
             if (totalReroll < 0)
             {
                 console.log("Player "+(tab_player.id+1)+" lose "+(totalReroll)+" reroll for the next round");
-                new Noty({
+                /*new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" lose "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();
+                }).show();*/
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "dotReroll", totalReroll, callback);
             }
         }
         else if (newTime > 0)
         {
             console.log("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !");
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             callback();
         }
         else if (totalDisabledDice > 0)
         {
             console.log("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !");
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             this.diceAnimation(tab_player.id+1, rnd, "diceDisabled", totalDisabledDice, callback);
         }
         else
@@ -319,13 +319,13 @@ class Match
         if (tmp_heal > 0)
         {
             console.log("Healing "+tmp_heal+" to player "+(tab_player.id+1));
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player "+(tab_player.id+1)+" heal himself by "+tmp_heal+"",
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             classScope._players[tab_player.id].pv += tmp_heal;
         }
         this.healAnimation(tab_player.id+1, launcherDicePosition, "heal", tmp_heal, callback);
@@ -361,33 +361,46 @@ class Match
         //ON APPLIQUE 1 DGT ET RETIRE 1 DE SHIELD - mais y'a pas de shield à l'arcane :/ wtf
         for (var h = 0; h < elements.length; h++)
         {
-            if (tab_player.defensive[elements[h]].length > 0)
+            if (tab_player.defensive[elements[h]].shield.length > 0)
              {
-                 while (tab_player.defensive[elements[h]][0].shield > 0 && dgt_expo > 0)
+                 while (tab_player.defensive[elements[h]].shield[0].shield > 0 && dgt_expo > 0)
                     {
                         dgt_expo--;
-                     tab_player.defensive[elements[h]][0].decreaseShield();
-                     if(tab_player.defensive[elements[h]][0].shield < 1)
+                     tab_player.defensive[elements[h]].shield[0].decreaseShield();
+                     if(tab_player.defensive[elements[h]].shield[0].shield < 1)
                      {
-                         tab_player.defensive[elements[h]].shift();
-                         if(tab_player.defensive[elements[h]].length < 1)
-                         break;
+                         tab_player.defensive[elements[h]].shield.shift();
+                         if(tab_player.defensive[elements[h]].shield.length < 1)
+                            break;
                      }
                  }
              }
+             for(var i = tab_player.defensive[elements[h]].shield.length -1; i > -1; i--)
+             {
+
+                 var currentShield = tab_player.defensive[elements[h]].shield[i];
+                 currentShield.decreaseTurn();
+                if (currentShield.nbTour <= 0)
+                {
+                    tab_player.defensive[elements[h]].shield.splice(i);
+                }
+                 currentShield.decreaseTurnCountDown();
+            }
+
         }
+
 
         //MAJ PV PLAYER
         if(dgt_expo > 0)
         {
             console.log("Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1));
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             classScope._players[tab_player.id].pv -= dgt_expo;
 
         }
@@ -411,6 +424,7 @@ class Match
                     /* Loop over the different reflect effects */
                     while (tab_player.defensive[elemFlag].reflect[0].reflect > 0 && dgts_current > 0) {
                         dgtToOtherPlayer++;
+                        totalDgts--;
                         tab_player.defensive[elemFlag].reflect[0].decreaseReflect();
                         if (tab_player.defensive[elemFlag].reflect[0].reflect < 1) {
                             tab_player.defensive[elemFlag].reflect.shift();
@@ -420,13 +434,13 @@ class Match
                             }
                         }
                     }
-                    new Noty({
+                    /*new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
                         timeout: 3500,
                         progressBar: true,
-                    }).show();
+                    }).show();*/
                 }
                 /* Loop over the different shield effects */
                 if (tab_player.defensive[elemFlag].shield.length > 0) {
@@ -437,20 +451,19 @@ class Match
                         tab_player.defensive[elemFlag].shield[0].decreaseShield();
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
-                            console.log("bouclier retirer !");
                             if (tab_player.defensive[elemFlag].shield.length < 1) {
                                 break;
                             }
                         }
                     }
                     console.log("Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag);
-                    new Noty({
+                    /*new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag,
                         timeout: 3500,
                         progressBar: true,
-                    }).show();
+                    }).show();*/
                 }
                 totalDgts += dgts_current;
             }
@@ -471,15 +484,15 @@ class Match
             classScope._players[other_player_id].pv -= dgtToOtherPlayer;
         if (totalDgts > 0) {
             classScope._players[tab_player.id].pv -= totalDgts;
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player " + "Remove " + totalDgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();
+            }).show();*/
         }
-        for (var indexShield = tab_player.defensive[elemFlag].shield.length - 1; indexShield >= 0;indexShield--) {
+        /*for (var indexShield = tab_player.defensive[elemFlag].shield.length - 1; indexShield >= 0;indexShield--) {
             var effectShield = tab_player.defensive[elemFlag].shield;
             if (effectShield.nbTour <= 0) {
                 tab_player.offensive[elemFlag].degat.splice(indexShield);
@@ -492,7 +505,7 @@ class Match
                 tab_player.offensive[elemFlag].degat.splice(indexReflect);
                 classScope._history.push(tab_player.offensive[elemFlag]["reflect"]);
             }
-        }
+        }*/
         this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
     }
 
