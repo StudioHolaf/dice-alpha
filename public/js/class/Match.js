@@ -172,13 +172,8 @@ class Match
 
     applyNeutral(tab_player, callback)
     {
-        //console.log("apply neutral");
         var classScope = this;
         var dice = 0;
-        var toDeleteEffectIndexes = initNeutralTab();
-        var indexReroll = 0;
-        var indexTime = 0;
-        var indexDisableDice = 0;
         var totalReroll = 0;
         var newTime = 0;
         var totalDisabledDice = 0;
@@ -186,7 +181,10 @@ class Match
         var launcherDicePosition = 0;
         var rnd = 0;
         classScope._players[tab_player.id].reroll = 3;
-        tab_player.neutral.reroll.forEach(function(effect) {
+
+
+        for (var indexReroll = tab_player.neutral.reroll.length - 1; indexReroll >= 0;indexReroll--) {
+            var effect = tab_player.neutral.reroll[indexReroll];
             if (effect.getType() == "reroll" && effect.turnCountDown == 0) {
                 classScope._players[tab_player.id].changeRerollBy(effect.reroll);
                 totalReroll += effect.reroll;
@@ -194,12 +192,15 @@ class Match
                 launcherDicePosition = effect.diceIndex;
             }
             effect.decreaseTurn();
-            if (effect.nbTour <= 0)
-                toDeleteEffectIndexes["reroll"].push(indexReroll);
-            indexReroll++;
+            if (effect.nbTour <= 0 && effect.turnCountDown == 0)
+            {
+                tab_player.neutral.reroll.splice(indexReroll);
+                classScope._history.push(tab_player.neutral["reroll"]);
+            }
             effect.decreaseTurnCountDown();
-        });
-        tab_player.neutral.time.forEach(function(effect) {
+        }
+        for (var indexTime = tab_player.neutral.time.length - 1; indexTime >= 0;indexTime--) {
+            var effect = tab_player.neutral.time[indexTime];
             if (effect.getType() == "time" && effect.turnCountDown == 0) {
                 classScope._players[tab_player.id].changeTimeBy(effect.time);
                 newTime += effect.time;
@@ -208,11 +209,13 @@ class Match
             }
             effect.decreaseTurn();
             if (effect.nbTour <= 0 && effect.turnCountDown == 0)
-                toDeleteEffectIndexes["time"].push(indexTime);
-            indexTime++;
-        });
-        //console.log("tab_player.neutral.disabledDice.length = "+tab_player.neutral.disabledDice.length);
-        tab_player.neutral.disabledDice.forEach(function(effect) {
+            {
+                tab_player.neutral.reroll.splice(indexTime);
+                classScope._history.push(tab_player.neutral["time"]);
+            }
+        }
+        for (var indexDisabledDice = tab_player.neutral.disabledDice.length - 1; indexDisabledDice >= 0;indexDisabledDice--) {
+            var effect = tab_player.neutral.disabledDice[indexDisabledDice];
             if (effect.getType() == "disabledDice" && effect.turnCountDown == 0) {
                 //socket.emit('ask_for_random_dice');
                 rnd = Math.floor(Math.random() * 5) + 0;
@@ -222,10 +225,11 @@ class Match
             }
             effect.decreaseTurn();
             if (effect.nbTour <= 0 && effect.turnCountDown == 0)
-                toDeleteEffectIndexes["disabledDice"].push(indexDisableDice);
-            indexDisableDice++;
-        });
-
+            {
+                tab_player.neutral.disabledDice.splice(indexDisabledDice);
+                classScope._history.push(tab_player.neutral["disabledDice"]);
+            }
+        }
         //ANIMATIONS
         if (totalReroll != 0)
         {
@@ -283,23 +287,16 @@ class Match
             if (typeof callback === "function");
             callback();
         }
-        //this.playerAnimation(dgt_expo,0,tab_player.id+1,other_player_id+1,"arcane",callback);
-        for (var key in toDeleteEffectIndexes)
-        {
-            classScope._history.push(tab_player.neutral[key]);
-            tab_player.neutral[key] = deleteUsedEffect(toDeleteEffectIndexes[key], tab_player.neutral[key]);
-        }
     }
     
     applyHeal(tab_player, callback)
     {
-        //console.log("applyHeal");
         var classScope = this;
-        var toDeleteEffectIndexes = [];
         var tmp_heal = 0;
-        var index = 0;
         var launcherDicePosition = 0;
-        tab_player.neutral.heal.forEach(function(effect) {
+
+        for (var indexHeal = tab_player.neutral.heal.length - 1; indexHeal >= 0;indexHeal--) {
+            var effect = tab_player.neutral.heal[indexHeal];
             if (effect.heal > 0 && effect.turnCountDown == 0)
             {
                 launcherDicePosition = effect.heal.diceIndex;
@@ -312,10 +309,12 @@ class Match
             }
             effect.nbTour -= 1;
             if (effect.nbTour <= 0)
-                toDeleteEffectIndexes.push(index);
-            index++;
+            {
+                tab_player.neutral.heal.splice(indexHeal);
+                classScope._history.push(tab_player.neutral["arcane"]);
+            }
             effect.decreaseTurnCountDown();
-        });
+        }
 
         if (tmp_heal > 0)
         {
@@ -330,54 +329,66 @@ class Match
             classScope._players[tab_player.id].pv += tmp_heal;
         }
         this.healAnimation(tab_player.id+1, launcherDicePosition, "heal", tmp_heal, callback);
-        //DELETE EFFECT
-        classScope._history.push(tab_player.neutral.heal);
-        tab_player.neutral.heal = deleteUsedEffect(toDeleteEffectIndexes, tab_player.neutral.heal);
     }
 
     applyAttackArcane(tab_player, callback)
     {
-        //console.log("apply arcane");
         var classScope = this;
         var dgts = 0;
         var dgt_expo = 0;
-        var index = 0;
-        var toDeleteEffectIndexes = initOffensiveElementTab();
         var total_dgt = 0;
         var elements = ["wind", "fire", "water", "mountain"];
         var other_player_id  = (tab_player.id == 0 ? 1 : 0);
 
+
         //PARCOURT LES DGTS UNE PREMIERE FOIS
-        tab_player.offensive.arcane.degat.forEach(function(effect) {
+        for (var indexArcane = tab_player.offensive.arcane.degat.length - 1; indexArcane >= 0;indexArcane--) {
+            var effect = tab_player.offensive.arcane.degat[indexArcane];
             dgts = effect.degat;
             effect.nbTour -= 1;
+
             if (effect.nbTour <= 0 && effect.turnCountDown == 0)
-                toDeleteEffectIndexes["degat"].push(index);
-            index++;
+            {
+                tab_player.offensive.arcane.degat.splice(indexArcane);
+                classScope._history.push(tab_player.offensive["arcane"]);
+            }
             total_dgt += dgts;
             effect.decreaseTurnCountDown();
-        });
+        }
         if (total_dgt > 0)
             dgt_expo = Math.pow(2, total_dgt); //GROS C'EST LA PUISSANCE
 
-        //ON APPLIQUE 1 DGT ET RETIRE 1 DE SHIELD
+        //ON APPLIQUE 1 DGT ET RETIRE 1 DE SHIELD - mais y'a pas de shield à l'arcane :/ wtf
         for (var h = 0; h < elements.length; h++)
         {
-            if (tab_player.defensive[elements[h]].length > 0)
+            if (tab_player.defensive[elements[h]].shield.length > 0)
              {
-                 while (tab_player.defensive[elements[h]][0].shield > 0 && dgt_expo > 0)
+                 while (tab_player.defensive[elements[h]].shield[0].shield > 0 && dgt_expo > 0)
                     {
                         dgt_expo--;
-                     tab_player.defensive[elements[h]][0].decreaseShield();
-                     if(tab_player.defensive[elements[h]][0].shield < 1)
+                     tab_player.defensive[elements[h]].shield[0].decreaseShield();
+                     if(tab_player.defensive[elements[h]].shield[0].shield < 1)
                      {
-                         tab_player.defensive[elements[h]].shift();
-                         if(tab_player.defensive[elements[h]].length < 1)
-                         break;
+                         tab_player.defensive[elements[h]].shield.shift();
+                         if(tab_player.defensive[elements[h]].shield.length < 1)
+                            break;
                      }
                  }
              }
+             for(var i = tab_player.defensive[elements[h]].shield.length -1; i > -1; i--)
+             {
+
+                 var currentShield = tab_player.defensive[elements[h]].shield[i];
+                 currentShield.decreaseTurn();
+                if (currentShield.nbTour <= 0)
+                {
+                    tab_player.defensive[elements[h]].shield.splice(i);
+                }
+                 currentShield.decreaseTurnCountDown();
+            }
+
         }
+
 
         //MAJ PV PLAYER
         if(dgt_expo > 0)
@@ -394,25 +405,18 @@ class Match
 
         }
         this.playerAnimation(dgt_expo,0,tab_player.id+1,other_player_id+1,"arcane",callback);
-        //DELETE SPELL OF ARCANE
-        classScope._history.push(tab_player.offensive.arcane.degat);
-        tab_player.offensive.arcane.degat = deleteUsedEffect(toDeleteEffectIndexes.degat, tab_player.offensive.arcane.degat);
     }
     
     applyAttack(tab_player, elemFlag, callback) {
-        //console.log("apply attack");
         var classScope = this;
         var totalDgts = 0;
         var dgts_current = 0;
         var dgtToOtherPlayer = 0;
-        var index = 0;
-        var toDeleteEffectIndexes = initOffensiveElementTab();
         var other_player_id = (tab_player.id == 0 ? 1 : 0);
 
         /* Loop over the different offensive effects */
-        tab_player.offensive[elemFlag].degat.forEach(function (effect) {
-
-            /* START HANDLE DEGAT + STACK */
+        for (var indexAttack = tab_player.offensive[elemFlag].degat.length - 1; indexAttack >= 0;indexAttack--) {
+            var effect = tab_player.offensive[elemFlag].degat[indexAttack];
             if (effect.degat > 0 && effect.turnCountDown == 0) {
                 dgts_current = effect.degat;
                 console.log("Trying to inflict " + effect.degat + " degats of " + elemFlag + " to player " + (tab_player.id + 1));
@@ -420,12 +424,12 @@ class Match
                     /* Loop over the different reflect effects */
                     while (tab_player.defensive[elemFlag].reflect[0].reflect > 0 && dgts_current > 0) {
                         dgtToOtherPlayer++;
+                        totalDgts--;
                         tab_player.defensive[elemFlag].reflect[0].decreaseReflect();
                         if (tab_player.defensive[elemFlag].reflect[0].reflect < 1) {
                             tab_player.defensive[elemFlag].reflect.shift();
                             console.log("reflect supprimmer !");
                             if (tab_player.defensive[elemFlag].reflect.length < 1) {
-                                //console.log("reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1));
                                 break;
                             }
                         }
@@ -447,7 +451,6 @@ class Match
                         tab_player.defensive[elemFlag].shield[0].decreaseShield();
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
-                            console.log("bouclier retirer !");
                             if (tab_player.defensive[elemFlag].shield.length < 1) {
                                 break;
                             }
@@ -466,28 +469,22 @@ class Match
             }
             effect.decreaseTurnCountDown();
 
-            /* END HANDLE DEGAT + STACK */
-
-            /* START HANDLE MULTIPLICATOR */
             if (effect.multiplicator > 0) {
 
             }
-            /* END HANDLE MULTIPLICATOR */
-
             effect.nbTour -= 1;
             if (effect.nbTour <= 0) {
-                toDeleteEffectIndexes["degat"].push(dgtShielding);
-                //console.log("sort supprimer");
+                tab_player.offensive[elemFlag].degat.splice(indexAttack);
+                classScope._history.push(tab_player.offensive[elemFlag]["degats"]);
             }
-            dgtShielding++;
-        });
-
+        }
 
         //MAJ PV OF PLAYER
         if (dgtToOtherPlayer > 0)
             classScope._players[other_player_id].pv -= dgtToOtherPlayer;
         if (totalDgts > 0) {
             classScope._players[tab_player.id].pv -= totalDgts;
+            /*new Noty({
             //console.log("Remove "+totalDgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
             /*new Noty({
                 type: 'error',
@@ -497,12 +494,21 @@ class Match
                 progressBar: true,
             }).show();*/
         }
-        this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
-        //DELETE SPELL AFTER USING THEM
-        for (var key in toDeleteEffectIndexes) {
-            classScope._history.push(tab_player.offensive[elemFlag][key]);
-            tab_player.offensive[elemFlag][key] = deleteUsedEffect(toDeleteEffectIndexes[key], tab_player.offensive[elemFlag][key]);
+        /*for (var indexShield = tab_player.defensive[elemFlag].shield.length - 1; indexShield >= 0;indexShield--) {
+            var effectShield = tab_player.defensive[elemFlag].shield;
+            if (effectShield.nbTour <= 0) {
+                tab_player.offensive[elemFlag].degat.splice(indexShield);
+                classScope._history.push(tab_player.offensive[elemFlag]["shield"]);
+            }
         }
+        for (var indexReflect = tab_player.defensive[elemFlag].shield.length - 1; indexReflect >= 0;indexReflect--) {
+            var effectReflect = tab_player.defensive[elemFlag].shield;
+            if (effectReflect.nbTour <= 0) {
+                tab_player.offensive[elemFlag].degat.splice(indexReflect);
+                classScope._history.push(tab_player.offensive[elemFlag]["reflect"]);
+            }
+        }*/
+        this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
     }
 
     consummateMana(tab1, tab2) //SOUSTRACTION DE MANA POUR PAYER LE SORT

@@ -205,7 +205,7 @@ $("#available-faces-container").delegate(".available-face", "mouseenter", functi
     var face_number_available = parseInt($(this).attr("face_number"));
     var face = arrayDiffObject[parseInt(face_number_available)];
 
-    console.log("looking at face = "+face_number_available);
+    //console.log("looking at face = "+face_number_available);
 
     $("#face-sprite-img").attr("src", face.sprite);
     $("#face-name").html(face.name);
@@ -219,7 +219,7 @@ $(".dice-face").mouseenter(function(){
     var dice_number_deck = parseInt($(this).closest(".dice-item").attr("dice-id"));
     var face = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck);
 
-    console.log("looking at face = "+face_number_deck + " " + dice_number_deck);
+    //("looking at face = "+face_number_deck + " " + dice_number_deck);
 
     $("#face-sprite-img").attr("src", face.sprite);
     $("#face-name").html(face.name);
