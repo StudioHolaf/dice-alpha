@@ -967,3 +967,40 @@ div#player-1-section .player-PV-front {
 div#player-1-section .player-ultime-front {
     top: -4px;
 }
+
+/*  ANIMATION */
+
+#animations-handler {
+    position: fixed;
+    pointer-events: none;
+    top:0;
+    left: 0;
+    width:100%;
+    height: 100%;
+    z-index: 999999;
+}
+
+.character {
+    color: white;
+    font-size: 40px;
+    position: absolute;
+    text-shadow:0 0 3px rgba(0,0,0,0.7);
+    left:0;
+    top: 0;
+    bottom: 0;
+    right:0;
+    text-align: center;
+    line-height: .475;
+    font-family: Oswald, monospace;
+}
+
+.arcane-symbol {
+    background-image : url(/assets/img/arcane-spell-bold.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+}

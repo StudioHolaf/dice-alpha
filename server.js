@@ -63,5 +63,6 @@ app.use('/vendors', Express.static(__dirname + '/node_modules/animejs//'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/sweetalert/dist/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/rivets/dist/'));
 app.use('/vendors', Express.static(__dirname + '/node_modules/owl.carousel/dist/'));
+app.use('/vendors', Express.static(__dirname + '/node_modules/mo-js/build/'));
 
 module.exports = app ;

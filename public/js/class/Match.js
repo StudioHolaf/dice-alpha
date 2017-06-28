@@ -97,7 +97,7 @@ class Match
                 $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').addClass("disabled");
                 //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-spell').css("background-image", "none");
             }
-            launchParticles("#game-canvas", positionX, positionY, 30, type, value, function () {
+            launchParticles( positionX, positionY, type, value, function () {
                 if (typeof callback === "function");
                 callback();
             });
@@ -115,7 +115,7 @@ class Match
             var positionX = $('#player-' + player_id + '-section .player-avatar').offset().left +  $('#player-' + player_id + '-section .player-avatar').width() / 2;
             var positionY =  $('#player-' + player_id + '-section .player-avatar').offset().top +  $('#player-' + player_id + '-section .player-avatar').height() / 2;
             $("#player-" + player_id + "-section .player-avatar").animateCss("shakeMini");
-            launchParticles("#game-canvas", positionX, positionY, 30, type, value, function () {
+            launchParticles( positionX, positionY, type, value, function () {
                 if (typeof callback === "function");
                 callback();
             });
@@ -131,22 +131,22 @@ class Match
     {
         //ANIMATION
         if (dgtsToOtherPlayer > 0 && dgtsToMe > 0) { //QD TU RECOIS DES DGT ET REFLECT UNE PARTIE MAIS T'EN PREND QD MEME
-            var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").width() / 2);
-            var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").height() / 2);
+            var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
+            var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
             $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
-            launchParticles("#game-canvas", positionX, positionY, 30, type, -dgtsToMe, function(){});
-            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").width() / 2);
-            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").height() / 2);
+            launchParticles( positionX, positionY, type, -dgtsToMe, function(){});
+            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
+            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
             $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
-            launchParticles("#game-canvas", positionX, positionY, 30, type, -dgtsToOtherPlayer, function () {
+            launchParticles( positionX, positionY, type, -dgtsToOtherPlayer, function () {
                 if (typeof callback === "function");
                 callback();
             });
         }
         if (dgtsToOtherPlayer > 0 && dgtsToMe <= 0) { // TU REFLECT TOUT
-            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").width() / 2);
-            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").height() / 2);
-            launchParticles("#game-canvas", positionX, positionY, 30, type, -dgtsToOtherPlayer, function () {
+            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
+            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
+            launchParticles( positionX, positionY, type, -dgtsToOtherPlayer, function () {
                 if (typeof callback === "function");
                 callback();
             });
@@ -154,9 +154,9 @@ class Match
         }
 
         if (dgtsToOtherPlayer <= 0 && dgtsToMe > 0) { //QD TU RECOIS DES DEGATS SANS EN INFLIGER
-            var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").width() / 2);
-            var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").height() / 2);
-            launchParticles("#game-canvas", positionX, positionY, 30, type, -dgtsToMe, function () {
+            var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
+            var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
+            launchParticles( positionX, positionY, type, -dgtsToMe, function () {
                 if (typeof callback === "function");
                 callback();
             });
@@ -232,50 +232,50 @@ class Match
             if (totalReroll > 0)
             {
                 console.log("Player "+(tab_player.id+1)+" earn "+(totalReroll)+" reroll for the next round");
-                new Noty({
+                /*new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" earn "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();
+                }).show();*/
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "bonusReroll", totalReroll, callback);
             }
             if (totalReroll < 0)
             {
                 console.log("Player "+(tab_player.id+1)+" lose "+(totalReroll)+" reroll for the next round");
-                new Noty({
+                /*new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" lose "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();
+                }).show();*/
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "dotReroll", totalReroll, callback);
             }
         }
         else if (newTime > 0)
         {
             console.log("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !");
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             callback();
         }
         else if (totalDisabledDice > 0)
         {
             console.log("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !");
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             this.diceAnimation(tab_player.id+1, rnd, "diceDisabled", totalDisabledDice, callback);
         }
         else
@@ -320,13 +320,13 @@ class Match
         if (tmp_heal > 0)
         {
             console.log("Healing "+tmp_heal+" to player "+(tab_player.id+1));
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player "+(tab_player.id+1)+" heal himself by "+tmp_heal+"",
                 timeout: 2500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             classScope._players[tab_player.id].pv += tmp_heal;
         }
         this.healAnimation(tab_player.id+1, launcherDicePosition, "heal", tmp_heal, callback);
@@ -383,13 +383,13 @@ class Match
         if(dgt_expo > 0)
         {
             console.log("Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1));
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();
+            }).show();*/
             classScope._players[tab_player.id].pv -= dgt_expo;
 
         }
@@ -430,13 +430,13 @@ class Match
                             }
                         }
                     }
-                    new Noty({
+                    /*new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
                         timeout: 3500,
                         progressBar: true,
-                    }).show();
+                    }).show();*/
                 }
                 /* Loop over the different shield effects */
                 if (tab_player.defensive[elemFlag].shield.length > 0) {
@@ -454,13 +454,13 @@ class Match
                         }
                     }
                     console.log("Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag);
-                    new Noty({
+                    /*new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag,
                         timeout: 3500,
                         progressBar: true,
-                    }).show();
+                    }).show();*/
                 }
                 totalDgts += dgts_current;
             }
@@ -489,13 +489,13 @@ class Match
         if (totalDgts > 0) {
             classScope._players[tab_player.id].pv -= totalDgts;
             //console.log("Remove "+totalDgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
-            new Noty({
+            /*new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player " + "Remove " + totalDgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();
+            }).show();*/
         }
         this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
         //DELETE SPELL AFTER USING THEM
