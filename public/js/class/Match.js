@@ -12,6 +12,7 @@ class Match
         this._stage = new Stage(stage);
         this._final_tab = this.initFinalTab();
         this._history = this.initFinalTab();
+        this._nbRerollGlobal = 3;
     }
 
     get id()
@@ -180,7 +181,7 @@ class Match
         var launcherPlayer = 0;
         var launcherDicePosition = 0;
         var rnd = 0;
-        classScope._players[tab_player.id].reroll = 3;
+        classScope._players[tab_player.id].reroll = this._nbRerollGlobal;
 
 
         for (var indexReroll = tab_player.neutral.reroll.length - 1; indexReroll >= 0;indexReroll--) {
@@ -359,6 +360,21 @@ class Match
             dgt_expo = Math.pow(2, total_dgt); //GROS C'EST LA PUISSANCE
 
         //ON APPLIQUE 1 DGT ET RETIRE 1 DE SHIELD - mais y'a pas de shield à l'arcane :/ wtf
+
+        for (var k = 0; k < elements.length; k++)
+        {
+            for(var m = tab_player.defensive[elements[k]].reflect.length -1; m > -1; m--)
+            {
+                var currentReflect = tab_player.defensive[elements[k]].reflect[m];
+                currentReflect.decreaseTurn();
+                if (currentReflect.nbTour <= 0)
+                {
+                    tab_player.defensive[elements[k]].reflect.splice(m);
+                }
+                currentReflect.decreaseTurnCountDown();
+            }
+        }
+
         for (var h = 0; h < elements.length; h++)
         {
             if (tab_player.defensive[elements[h]].shield.length > 0)
@@ -388,7 +404,6 @@ class Match
             }
 
         }
-
 
         //MAJ PV PLAYER
         if(dgt_expo > 0)
