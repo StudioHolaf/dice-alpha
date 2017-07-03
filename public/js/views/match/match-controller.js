@@ -477,18 +477,32 @@ function autoRoll(rolls) {
             if (rolls["player_" + player.id][dice_id] >= 0) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
+                    var previous_roll_val = parseInt($('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val"));
+                    if(previous_roll_val == rolls["player_" + player.id][dice_id])
+                    {
+                        $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').animateCss("wobble-mini");
+                        console.log("Same face : "+previous_roll_val);
+                    }
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
+                    var previous_roll_val = parseInt($('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val"));
+                    if(previous_roll_val == rolls["player_" + player.id][dice_id])
+                    {
+                        $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').animateCss("wobble-mini");
+                        console.log("Same face : "+previous_roll_val);
+                    }
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
                 }
             }
         }
+
+
     });
     match1.players[0].decreaseAllDiceReroll();
     match1.players[1].decreaseAllDiceReroll();
