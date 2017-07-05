@@ -375,6 +375,7 @@ $(".dice-viewer").mouseenter(function () {
 function prepareRollForSelectedDices() {
     rollSend = true;
     var rnd_j1 = [-1, -1, -1, -1, -1];
+    $("#player-1-roller .dice-viewer").removeClass("to-roll");
     $("#player-1-roller .dice-viewer.selected").each(function () {
         var dice_id = $(this).attr("dice-id");
         var dice = match1.players[0].getDiceOnDeck(0, dice_id);
@@ -383,8 +384,10 @@ function prepareRollForSelectedDices() {
         if (dice.reroll > 0 && dice.isActive()) {
             rnd_j1[dice_id] = rnd;
         }
+        $(this).addClass("to-roll");
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
+    $("#player-1-section").addClass("roll-ready");
     /*new Noty({
         type: 'success',
         layout: 'topRight',
@@ -407,6 +410,7 @@ function prepareRollAllDices() {
         }
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
+    $("#player-1-section").addClass("roll-ready");
     /*new Noty({
         type: 'success',
         layout: 'topRight',
@@ -430,6 +434,7 @@ socket.on('opponent_roll_ready', function (players_datas) {
         progressBar: true,
     }).show();*/
     socket.emit('opponent_roll_ready', players_datas);
+    $("#player-2-section").addClass("roll-ready");
 });
 
 socket.on('everyone_rolls_ready', function (players_datas) {
@@ -460,6 +465,10 @@ function solve() {
 }
 
 function autoRoll(rolls) {
+    $("#player-1-section").removeClass("roll-ready");
+    $("#player-2-section").removeClass("roll-ready");
+    $("#player-1-roller .dice-viewer").removeClass("to-roll");
+    $(".dice-viewer").removeClass("disabled");
     if (tab_tirage_random.length <= 0) {
         var rnd_res_j1 = [0, 0, 0, 0, 0];
         var rnd_res_bot1 = [0, 0, 0, 0, 0];

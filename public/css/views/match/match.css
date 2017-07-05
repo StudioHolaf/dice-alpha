@@ -1038,3 +1038,128 @@ div#player-1-section .player-ultime-front {
 .wobble-mini {
     animation-name: wobble-mini;
 }
+
+
+/* ----------------------------------- FLAGS ----------------------------------- */
+
+.dice-flags {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.flag-item {
+    width: 20px;
+    height: 12px;
+    background: red;
+    position: absolute;
+    bottom: -25px;
+    z-index: -1;
+    left: 5px;
+    opacity: 0;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+.flag-item:after {
+    content:"";
+    position: absolute;
+    top: -20px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-left: 10px solid red;
+    border-top: 8px solid transparent;
+    border-right: 10px solid red;
+}
+
+.dice-viewer.to-roll .flag-item.to-roll-flag {
+    opacity: 1;
+    bottom: 0;
+}
+
+.flag-item.to-roll-flag {
+    background: #3e9bf3;
+}
+
+.flag-item.to-roll-flag:after {
+    border-left-color: #3e9bf3;
+    border-right-color: #3e9bf3;
+}
+
+.dice-viewer.disabled .flag-item.disabled-flag {
+    opacity: 1;
+    bottom: 0;
+}
+
+.flag-item.disabled-flag {
+    left: 28px;
+    background: #ff5252;
+}
+
+.flag-item.disabled-flag:after {
+    border-left-color: #ff5252;
+    border-right-color: #ff5252;
+}
+
+.player-flags .flag-item {
+    opacity: 1;
+    right: 0;
+    left: inherit;
+}
+
+.player-flags {
+    position: absolute;
+    right: -20px;
+    top: -63px;
+    z-index: -3;
+    width: 100px;
+    overflow: hidden;
+    height: 34px;
+}
+
+#player-1-section .player-flags .flag-item {
+    bottom: -32px;
+    top: initial;
+}
+
+#player-1-section.roll-ready .player-flags .flag-item {
+    top: initial;
+    bottom: 0;
+}
+
+#player-2-section .player-flags {
+    top: initial;
+    bottom: -69px;
+}
+
+#player-2-section .player-flags .flag-item {
+    top: -32px;
+    bottom: initial;
+}
+
+#player-2-section.roll-ready .player-flags .flag-item {
+    top: 0;
+    bottom: initial;
+}
+
+#player-2-section .player-flags .flag-item:after {
+    top: 12px;
+    border-bottom: 8px solid transparent;
+}
+
+.reroll-ready-flag.flag-item {
+    background: #3e9bf3;
+}
+
+.reroll-ready-flag.flag-item:after {
+    border-left-color: #3e9bf3;
+    border-right-color: #3e9bf3;
+}
+
+#player-2-section .player-flags .reroll-ready-flag.flag-item:after {
+    border-top: 8px solid #3e9bf3;
+}
+
