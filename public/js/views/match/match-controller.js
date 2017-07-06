@@ -68,7 +68,8 @@ socket.on('ask_for_login', function () {
             showCancelButton: true,
             closeOnConfirm: true,
             animation: "slide-from-top",
-            inputPlaceholder: "User id"
+            inputPlaceholder: "User id",
+            allowOutsideClick: false
         },
         function (inputValue) {
             if (inputValue === false) return false;
@@ -105,7 +106,7 @@ socket.on('match_init', function (players_datas) {
     var player_2 = Object.assign(new Player, players_datas.datas);
     player_2._deck = constructDeckFromJSON(player_2);
 
-    match1 = new Match(5000, player_1, player_2, level);
+    match1 = new Match(5000, roomid, player_1, player_2, level);
     match1.clearValues();
     match1.reincrementValues();
     player2View = rivets.bind($('#player-2-section'), match1.players[1]);
@@ -118,16 +119,19 @@ socket.on('match_init', function (players_datas) {
         new swal ({
                 title: "Êtes-vous prêt ?",
                 type: "success",
-                showCancelButton: true,
                 confirmButtonColor: "#3F8F4E",
                 confirmButtonText: "Un peu mon neveu !",
-                closeOnConfirm: true
+                closeOnConfirm: true,
+                allowOutsideClick: false
             },
             function () {
+                //swal("Great!", "GL & HF", "success");
                 socket.emit('player_ready_for_match', {playerTime : match1.players[0].tourTime});
                 timeDuration = match1.players[0].tourTime;
             });
     },1000);
+    //192.168.1.51:8000/match/2
+
 
 });
 
@@ -164,7 +168,7 @@ socket.on('spectator_init', function (players_datas) {
     var player1Dice3 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="2"]'), player_1.getDiceOnDeck(0,2));
     var player1Dice4 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="3"]'), player_1.getDiceOnDeck(0,3));
     var player1Dice5 = rivets.bind($('#player-1-roller .dice-viewer[dice-id="4"]'), player_1.getDiceOnDeck(0,4));
-    
+
     player2View = rivets.bind($('#player-2-section'), match1.players[1]);
     player2Dice1 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="0"]'), player_2.getDiceOnDeck(0,0));
     player2Dice2 = rivets.bind($('#player-2-roller .dice-viewer[dice-id="1"]'), player_2.getDiceOnDeck(0,1));
@@ -174,6 +178,7 @@ socket.on('spectator_init', function (players_datas) {
 });
 
 socket.on('disconnect', function () {
+
     //console.log('you have been disconnected : ' + player_1.id);
 });
 
@@ -286,8 +291,10 @@ function swalDisplayTotalTurn ()
         type: "success",
         confirmButtonColor: "#3F8F4E",
         confirmButtonText: "Oui je le suis",
-        closeOnConfirm: true
+        closeOnConfirm: false,
+        allowOutsideClick: false
     }, function () {
+        swal("Great!", "Keep Going !", "success");
         socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
         prepareRollAllDices();
     });
@@ -321,7 +328,8 @@ $("#ready-button").click(function () {
                 showCancelButton: true,
                 confirmButtonColor: "#3F8F4E",
                 confirmButtonText: "Ouep !",
-                closeOnConfirm: true
+                closeOnConfirm: true,
+                allowOutsideClick: false
             },
             function () {
                 $("#player-1-roller .dice-viewer").each(function () {
@@ -366,7 +374,6 @@ $(".dice-viewer").mouseenter(function () {
 
     /* -------------- REROLL INFO -------------- */
 
-    //console.log("reroll : ", dice.reroll);
     $('#player-reroll').html(dice.reroll);
 
 
@@ -387,7 +394,7 @@ function prepareRollForSelectedDices() {
     socket.emit('my_roll_ready', {roll: rnd_j1});
     /*new Noty({
         type: 'success',
-        layout: 'topRight',
+        layout: 'topRight',f
         text: ("Your reroll is ready"),
         timeout: 2500,
         progressBar: true,
@@ -414,6 +421,12 @@ function prepareRollAllDices() {
         timeout: 2500,
         progressBar: true,
     }).show();*/
+}
+
+function callback_end_match()
+{
+    socket.emit("player_leave_match");
+
 }
 
 
@@ -446,15 +459,23 @@ socket.on("user_left",function()
 {
     match1.emptyUserByPosition(1);
     player2View.unbind();
-    //console.log("user "+player_1.id+" left reload page");
-    //location.reload();
+    new swal ({
+        title: "Your opponent has leave the match",
+        type: "success",
+        confirmButtonColor: "#3F8F4E",
+        confirmButtonText: "Back to the main menu",
+        closeOnConfirm: false,
+        allowOutsideClick: false
+    }, function () {
+        window.location.href = '/';
+    });
 })
 
 function solve() {
     rollSend = false;
     $(".dice-viewer").removeClass("selected");
     if (tab_tirage_random.length > 0) {
-        match1.solve(tab_tirage_random, callbackRefreshInterface);
+        match1.solve(tab_tirage_random, callbackRefreshInterface, callback_end_match);
         tab_tirage_random = [];
     }
 }
