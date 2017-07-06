@@ -86,6 +86,7 @@ const bonusRerollSwirl5 = new mojs.ShapeSwirl({
 });
 
 const bonusRerollSmallCircle = new mojs.Shape({
+  parent: el,
   left: 0, top: 0,
   scale:      { 0: 1 },
   fill:       '#DF2540',

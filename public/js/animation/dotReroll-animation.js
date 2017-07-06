@@ -108,9 +108,6 @@ function launchDotRerollAnimation(playerX, playerY, data) {
   var deltaX_data = (Math.random()*220) - 110;
   var deltaY_data = (Math.random()*100) - 40;
   
-  word_char4.tune({ x: {[playerX]:playerX+deltaX_data}, y: {[playerY]:playerY+deltaY_data} })
-    .replay();
-  
   dotRerollSwirl1
     .tune({ x: playerX, y: { [playerY]: playerY-150 } })
     .generate()

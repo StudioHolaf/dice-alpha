@@ -382,6 +382,7 @@ $(".dice-viewer").mouseenter(function () {
 function prepareRollForSelectedDices() {
     rollSend = true;
     var rnd_j1 = [-1, -1, -1, -1, -1];
+    $("#player-1-roller .dice-viewer").removeClass("to-roll");
     $("#player-1-roller .dice-viewer.selected").each(function () {
         var dice_id = $(this).attr("dice-id");
         var dice = match1.players[0].getDiceOnDeck(0, dice_id);
@@ -390,8 +391,10 @@ function prepareRollForSelectedDices() {
         if (dice.reroll > 0 && dice.isActive()) {
             rnd_j1[dice_id] = rnd;
         }
+        $(this).addClass("to-roll");
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
+    $("#player-1-section").addClass("roll-ready");
     /*new Noty({
         type: 'success',
         layout: 'topRight',f
@@ -414,6 +417,7 @@ function prepareRollAllDices() {
         }
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
+    $("#player-1-section").addClass("roll-ready");
     /*new Noty({
         type: 'success',
         layout: 'topRight',
@@ -443,6 +447,7 @@ socket.on('opponent_roll_ready', function (players_datas) {
         progressBar: true,
     }).show();*/
     socket.emit('opponent_roll_ready', players_datas);
+    $("#player-2-section").addClass("roll-ready");
 });
 
 socket.on('everyone_rolls_ready', function (players_datas) {
@@ -481,6 +486,10 @@ function solve() {
 }
 
 function autoRoll(rolls) {
+    $("#player-1-section").removeClass("roll-ready");
+    $("#player-2-section").removeClass("roll-ready");
+    $("#player-1-roller .dice-viewer").removeClass("to-roll");
+    $(".dice-viewer").removeClass("disabled");
     if (tab_tirage_random.length <= 0) {
         var rnd_res_j1 = [0, 0, 0, 0, 0];
         var rnd_res_bot1 = [0, 0, 0, 0, 0];
@@ -498,18 +507,32 @@ function autoRoll(rolls) {
             if (rolls["player_" + player.id][dice_id] >= 0) {
                 if ((player_id - 1) == 0) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
+                    var previous_roll_val = parseInt($('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val"));
+                    if(previous_roll_val == rolls["player_" + player.id][dice_id])
+                    {
+                        $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').animateCss("wobble-mini");
+                        console.log("Same face : "+previous_roll_val);
+                    }
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
                 }
                 if ((player_id - 1) == 1) {
                     tab_tirage_random[(player_id - 1)][dice_id] = rolls["player_" + player.id][dice_id];
+                    var previous_roll_val = parseInt($('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val"));
+                    if(previous_roll_val == rolls["player_" + player.id][dice_id])
+                    {
+                        $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').animateCss("wobble-mini");
+                        console.log("Same face : "+previous_roll_val);
+                    }
                     $('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"]').attr("roll-val",rolls["player_" + player.id][dice_id]);
                     //$('#player-' + player_id + '-roller .dice-viewer[dice-id="' + dice_id + '"] .face-name').html(dice.getFaceByPosition(rolls["player_" + player.id][dice_id]).name);
 
                 }
             }
         }
+
+
     });
     match1.players[0].decreaseAllDiceReroll();
     match1.players[1].decreaseAllDiceReroll();
