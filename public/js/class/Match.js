@@ -539,54 +539,17 @@ class Match
         if (this._players[0]._pv <= 0 && this._players[1]._pv > 0) //victoire Adversaire
         {
             this._isRunning = false;
-            callback_end_match();
-            console.log("Defeat, your opponent has won !");
-            new swal ({
-                title: "Defeat, your opponent has won !",
-                type: "success",
-                confirmButtonColor: "#3F8F4E",
-                confirmButtonText: "Good Game",
-                closeOnConfirm: false,
-                allowOutsideClick: false
-            }, function () {
-                //swal("Maybe Next Time", "Keep Going !", "success");
-                window.location.href = '/';
-            });
+            callback_end_match("Defeat");
         }
         if (this._players[0]._pv > 0 && this._players[1]._pv <= 0) //victoire 2 twa
         {
             this._isRunning = false;
-            callback_end_match();
-            console.log("Victory, wow, such impress");
-            new swal ({
-                title: "Victory, wow, such impress",
-                type: "success",
-                confirmButtonColor: "#3F8F4E",
-                confirmButtonText: "Good Game",
-                closeOnConfirm: false,
-                allowOutsideClick: false
-            }, function () {
-                //swal("Try a other ?", "Keep Going !", "success");
-                window.location.href = '/';
-            });
+            callback_end_match("Victory");
         }
         if (this._players[0]._pv <= 0 && this._players[1]._pv <= 0)
         {
             this._isRunning = false;
-            callback_end_match();
-            console.log("Draw, seriously guys ?! A Draw ?!!");
-            new swal ({
-                title: "Draw, seriously guys ?! A Draw ?!!",
-                type: "success",
-                confirmButtonColor: "#3F8F4E",
-                confirmButtonText: "Good Game",
-                closeOnConfirm: false,
-                allowOutsideClick: false
-            }, function () {
-                //swal("Try a other ?", "Keep Going !", "success");
-                // TODO SUPPRIMER CORRECTEMENT LA ROOM
-                window.location.href = '/';
-            });
+            callback_end_match("Draw");
         }
     }
 

@@ -147,11 +147,14 @@ function spectatorJoinGame(socket)
     console.log("Spectator enter");
 }
 
-function playerDisconnect(socket)
+function playerDisconnect(socket) //datas avec url dedans sinon pas possible autrement
 {
     console.log("player-disconnect");
+    //console.log("url : "+ socket.request.url); ///socket.io/?EIO=3&transport=polling&t=LqSRbrg
+    var referer = socket.request.headers.referer;
+    console.log("referer : ", referer);
     var roomid = socket.room_id;
-    if (!socket.userID)
+    if (!socket.userID || !socket.room_id)
         return;
     else
         {
@@ -170,6 +173,8 @@ function playerDisconnect(socket)
                 rooms[roomid].numUser--;
                 if (rooms[roomid].numUser <= 0)
                 {
+                    if (rooms[socket.room_id].tourTime)
+                        clearTimeout(rooms[socket.room_id].tourTime);
                     delete rooms[roomid];
                 }
             }
@@ -286,8 +291,6 @@ function playerDeckSaved(socket, datas)
     var playerID = datas.player_id;
     console.log("côté serveur : %o",deckDecode);
     console.log("côté serveur id player : ",playerID);
-    //COMMENT RETROUVER LE BON JOUEUR ?!
-    //         db.collection("player").findOne({_id: parseInt(id)}, function (err, player) {
     
     db.collection("player").update(
         { _id: parseInt(playerID) },
@@ -295,6 +298,14 @@ function playerDeckSaved(socket, datas)
             {
                 _deck : deckDecode
             }
+        },
+        {},
+        function (err)
+        {
+            if (err)
+                socket.emit("something_went_wrong");
+            else
+            socket.emit("deck_successfully_saved");
         }
     )
 }

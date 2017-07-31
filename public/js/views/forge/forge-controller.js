@@ -171,7 +171,7 @@ function swapFaces()
                 deckFaceRef._spellOpponent = faceAvailableCopy._spellOpponent;
                 deckFaceRef._sprite = faceAvailableCopy._sprite;
             }
-            if (typeof faceDeckCopy != 'undefined' && faceDeckCopy != null && faceDeckCopy._id != null) {
+            if (typeof faceDeckCopy != 'undefined' && faceDeckCopy != null && faceDeckCopy._id != null && faceDeckCopy._id != 9999) {
                 arrayDiffObject[face_number_available]._id = faceDeckCopy._id;
                 arrayDiffObject[face_number_available]._name = faceDeckCopy._name;
                 arrayDiffObject[face_number_available]._spellOnMe = faceDeckCopy._spellOnMe;
@@ -244,44 +244,92 @@ $(".dice-face").click(function () {
 
 $(".delete-face").click(function () {
 
-    var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
-    var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
+    if($(".dice-face.selected").length > 0) {
+        var face_number_deck = parseInt($(".dice-face.selected").attr("face_position"));
+        var dice_number_deck = parseInt($(".dice-face.selected").closest(".dice-item").attr("dice-id"));
 
-    var deckFaceRef = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck); //on écrase sur le dès la nouvelle face
+        var deckFaceRef = player.getDiceOnDeck(0, dice_number_deck).getFaceByPosition(face_number_deck); //on écrase sur le dès la nouvelle face
 
-    var newFace = new Face();
-    newFace._id = deckFaceRef._id;
-    newFace._name = deckFaceRef._name;
-    newFace._spellOnMe = deckFaceRef._spellOnMe;
-    newFace._spellOpponent = deckFaceRef._spellOpponent;
-    newFace._sprite = deckFaceRef._sprite;
-    arrayDiffObject.push(newFace); //je push dans le tableau diff la face avant de la détruire
+        var newFace = new Face();
+        if (deckFaceRef._id != 9999) {
+            newFace._id = deckFaceRef._id;
+            newFace._name = deckFaceRef._name;
+            newFace._spellOnMe = deckFaceRef._spellOnMe;
+            newFace._spellOpponent = deckFaceRef._spellOpponent;
+            newFace._sprite = deckFaceRef._sprite;
+            arrayDiffObject.push(newFace); //je push dans le tableau diff la face avant de la détruire
+        }
 
-    deckFaceRef._id = null;
-    deckFaceRef._name = null;
-    deckFaceRef._spellOnMe = null;
-    deckFaceRef._spellOpponent = null;
-    deckFaceRef._sprite = null;
+        deckFaceRef._id = 9999;
+        deckFaceRef._name = "Blanche";
+        deckFaceRef._spellOnMe = [];
+        deckFaceRef._spellOpponent = [];
+        deckFaceRef._sprite = "";
 
-    $(".available-face.selected").removeClass("selected");
-    $(".dice-face.selected").removeClass("selected");
+        $(".available-face.selected").removeClass("selected");
+        $(".dice-face.selected").removeClass("selected");
+    }
 });
 
 $(".save-dice-button").click(function () {
 
     var copyDeckPlayerJSON = JSON.stringify(player._deck);
     var copyDeckPlayer = JSON.parse(copyDeckPlayerJSON);
+    var isValid = true;
+    console.log("test : ", document.location.pathname);
 
     copyDeckPlayer.forEach(function (deck) {
         deck.forEach(function (dice) {
             var tab_ids_faces = [];
             dice._faces.forEach(function (face) {
+                if (face._id == 9999)
+                    isValid = false;
                 tab_ids_faces.push(face._id);
             });
             dice._faces = tab_ids_faces;
+            nbFaces = dice._faces.length;
+            console.log("nbFaces : ", nbFaces);
         });
     });
-    //console.log("tab_ids_faces : %o", copyDeckPlayer);
     var deck_encode = JSON.stringify(copyDeckPlayer);
-    socket.emit('player_deck_saved', {deck: deck_encode, player_id:player._id});
+    if (isValid == true)
+    {
+        socket.emit('player_deck_saved', {deck: deck_encode, player_id:player._id});
+        socket.on("deck_successfully_saved", function () {
+            new swal ({
+                title: "Votre dé a été sauvegarder",
+                type: "success",
+                confirmButtonColor: "#3F8F4E",
+                confirmButtonText: "Génial !",
+                closeOnConfirm: true,
+                allowOutsideClick: false
+            })
+        })
+    }
+    else
+    {
+        new swal ({
+            title: "Votre dé n'est pas complet",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3F8F4E",
+            confirmButtonText: "Sauvegarder quand même",
+            cancelButtonText: "Editer mon dé",
+            closeOnConfirm: false,
+            allowOutsideClick: false
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    new swal ({
+                        title: "Votre dé a été sauvegarder",
+                        type: "success",
+                        confirmButtonColor: "#3F8F4E",
+                        confirmButtonText: "Génial !",
+                    })
+                    socket.emit('player_deck_saved', {deck: deck_encode, player_id:player._id})
+                }
+            }
+        )
+    }
+
 });

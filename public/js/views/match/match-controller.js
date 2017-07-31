@@ -16,6 +16,12 @@ var player2Dice3;
 var player2Dice4;
 var player2Dice5;
 var rolls = []; //Tirage des 2 joueurs.
+var locationGetted = window.location.pathname;
+var locationSplitted = locationGetted.split("/");
+var roomid = locationSplitted[locationSplitted.length - 1];
+var player_1_id;
+var timeDuration = 0;
+var socket = io.connect();
 
 // Stage
 var level = new Stage(4000, "bg1", 1000, 800);
@@ -47,20 +53,9 @@ rivets.binders['player-reroll'] = function (el, value) {
     el.style.width =  "reroll :" + nbReroll;
 }
 
-var locationGetted = window.location.pathname;
-var locationSplitted = locationGetted.split("/");
-var roomid = locationSplitted[locationSplitted.length - 1];
-var player_1_id;
-var timeDuration = 0;
-
-//console.log("roomid ", roomid);
-
-var socket = io.connect();
-
 socket.emit('connection', roomid);
 
 socket.on('ask_for_login', function () {
-    //console.log("ask_for_login in room " + roomid);
     swal({
             title: "Welcome to dice!",
             text: "Enter user id",
@@ -78,9 +73,7 @@ socket.on('ask_for_login', function () {
                 swal.showInputError("You need to write something!");
                 return false
             }
-            //console.log("user id : ", inputValue);
             player_1_id = parseInt(inputValue);
-            //var room_id;
             console.log("Room id : %o",room_id);
             socket.emit('player_connection', {user_id:inputValue, room_id : room_id});
         });
@@ -89,7 +82,6 @@ socket.on('ask_for_login', function () {
 var match1 = [];
 var player_1;
 socket.on('player_init', function (player_1_datas) {
-    //console.log("player_init :", player_1_datas);
     player_1 = Object.assign(new Player, player_1_datas.datas);
     player_1._deck = constructDeckFromJSON(player_1);
     var player1View = rivets.bind($('#player-1-section'), player_1);
@@ -125,14 +117,10 @@ socket.on('match_init', function (players_datas) {
                 allowOutsideClick: false
             },
             function () {
-                //swal("Great!", "GL & HF", "success");
                 socket.emit('player_ready_for_match', {playerTime : match1.players[0].tourTime});
                 timeDuration = match1.players[0].tourTime;
             });
     },1000);
-    //192.168.1.51:8000/match/2
-
-
 });
 
 socket.on('everyone_ready_for_match', function (players_datas) {
@@ -291,10 +279,9 @@ function swalDisplayTotalTurn ()
         type: "success",
         confirmButtonColor: "#3F8F4E",
         confirmButtonText: "Oui je le suis",
-        closeOnConfirm: false,
+        closeOnConfirm: true,
         allowOutsideClick: false
     }, function () {
-        swal("Great!", "Keep Going !", "success");
         socket.emit('player_ready_for_next_reroll', {playerTime: match1.players[0].tourTime});
         prepareRollAllDices();
     });
@@ -427,10 +414,50 @@ function prepareRollAllDices() {
     }).show();*/
 }
 
-function callback_end_match()
+function callback_end_match(status)
 {
-    socket.emit("player_leave_match");
-
+    if (status == "Victory")
+    {
+        new swal ({
+            title: "Victory, wow, such impress",
+            type: "success",
+            confirmButtonColor: "#3F8F4E",
+            confirmButtonText: "Good Game",
+            closeOnConfirm: false,
+            allowOutsideClick: false
+        }, function () {
+            window.location.href = '/';
+        });
+    }
+    if (status == "Defeat")
+    {
+        console.log("Defeat, your opponent has won !");
+        new swal ({
+            title: "Defeat, your opponent has won !",
+            type: "success",
+            confirmButtonColor: "#3F8F4E",
+            confirmButtonText: "Good Game",
+            closeOnConfirm: false,
+            allowOutsideClick: false
+        }, function () {
+            window.location.href = '/';
+        });
+    }
+    if (status == "Draw")
+    {
+        console.log("Draw, seriously guys ?! A Draw ?!!");
+        new swal ({
+            title: "Draw, seriously guys ?! A Draw ?!!",
+            type: "success",
+            confirmButtonColor: "#3F8F4E",
+            confirmButtonText: "Good Game",
+            closeOnConfirm: false,
+            allowOutsideClick: false
+        }, function () {
+            window.location.href = '/';
+        });
+    }
+    //socket.emit("player_leave_match");
 }
 
 
@@ -464,16 +491,19 @@ socket.on("user_left",function()
 {
     match1.emptyUserByPosition(1);
     player2View.unbind();
-    new swal ({
-        title: "Your opponent has leave the match",
-        type: "success",
-        confirmButtonColor: "#3F8F4E",
-        confirmButtonText: "Back to the main menu",
-        closeOnConfirm: false,
-        allowOutsideClick: false
-    }, function () {
-        window.location.href = '/';
-    });
+    if (match1._isRunning == true)
+    {
+        new swal ({
+            title: "Your opponent has leave the match",
+            type: "success",
+            confirmButtonColor: "#3F8F4E",
+            confirmButtonText: "Back to the main menu",
+            closeOnConfirm: false,
+            allowOutsideClick: false
+        }, function () {
+            window.location.href = '/';
+        });
+    }
 })
 
 function solve() {
