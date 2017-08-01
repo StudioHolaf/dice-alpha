@@ -382,13 +382,13 @@ function prepareRollForSelectedDices() {
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
     $("#player-1-section").addClass("roll-ready");
-    /*new Noty({
+    new Noty({
         type: 'success',
-        layout: 'topRight',f
+        layout: 'topRight',
         text: ("Your reroll is ready"),
         timeout: 2500,
         progressBar: true,
-    }).show();*/
+    }).show();
 }
 
 function prepareRollAllDices() {
@@ -405,13 +405,13 @@ function prepareRollAllDices() {
     });
     socket.emit('my_roll_ready', {roll: rnd_j1});
     $("#player-1-section").addClass("roll-ready");
-    /*new Noty({
+    new Noty({
         type: 'success',
         layout: 'topRight',
         text: ("Your reroll is ready"),
         timeout: 2500,
         progressBar: true,
-    }).show();*/
+    }).show();
 }
 
 function callback_end_match(status)
@@ -466,13 +466,13 @@ socket.on('launch_solve', function () {
 });
 
 socket.on('opponent_roll_ready', function (players_datas) {
-    /*new Noty({
+    new Noty({
         type: 'information',
         layout: 'topRight',
         text: ("Opponent roll is ready"),
         timeout: 2500,
         progressBar: true,
-    }).show();*/
+    }).show();
     socket.emit('opponent_roll_ready', players_datas);
     $("#player-2-section").addClass("roll-ready");
 });

@@ -245,50 +245,50 @@ class Match
             if (totalReroll > 0)
             {
                 console.log("Player "+(tab_player.id+1)+" earn "+(totalReroll)+" reroll for the next round");
-                /*new Noty({
+                new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" earn "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();*/
+                }).show();
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "bonusReroll", totalReroll, callback);
             }
             if (totalReroll < 0)
             {
                 console.log("Player "+(tab_player.id+1)+" lose "+(totalReroll)+" reroll for the next round");
-                /*new Noty({
+                new Noty({
                     type: 'error',
                     layout: 'topRight',
                     text: ("Player "+(tab_player.id+1)+" lose "+totalReroll+" reroll for the next round"),
                     timeout: 2500,
                     progressBar: true,
-                }).show();*/
+                }).show();
                 this.diceAnimation(tab_player.id+1, launcherDicePosition, "dotReroll", totalReroll, callback);
             }
         }
         else if (newTime > 0)
         {
             console.log("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !");
-            /*new Noty({
+            new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" change time to "+newTime+" be careful !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();*/
+            }).show();
             callback();
         }
         else if (totalDisabledDice > 0)
         {
             console.log("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !");
-            /*new Noty({
+            new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: ("Player "+(tab_player.id+1)+" lose(s) "+totalDisabledDice+" dice(s) !"),
                 timeout: 2500,
                 progressBar: true,
-            }).show();*/
+            }).show();
             this.diceAnimation(tab_player.id+1, rnd, "diceDisabled", totalDisabledDice, callback);
         }
         else
@@ -297,7 +297,7 @@ class Match
             callback();
         }
     }
-    
+
     applyHeal(tab_player, callback)
     {
         var classScope = this;
@@ -328,13 +328,13 @@ class Match
         if (tmp_heal > 0)
         {
             console.log("Healing "+tmp_heal+" to player "+(tab_player.id+1));
-            /*new Noty({
+            new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player "+(tab_player.id+1)+" heal himself by "+tmp_heal+"",
                 timeout: 2500,
                 progressBar: true,
-            }).show();*/
+            }).show();
             classScope._players[tab_player.id].pv += tmp_heal;
         }
         this.healAnimation(tab_player.id+1, launcherDicePosition, "heal", tmp_heal, callback);
@@ -419,13 +419,13 @@ class Match
         if(dgt_expo > 0)
         {
             console.log("Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1));
-            /*new Noty({
+            new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Inflicting "+dgt_expo+" degats of arcane to player "+(tab_player.id+1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();*/
+            }).show();
             classScope._players[tab_player.id].pv -= dgt_expo;
 
         }
@@ -447,7 +447,7 @@ class Match
         }
 
     }
-    
+
     applyAttack(tab_player, elemFlag, callback) {
         var classScope = this;
         var totalDgts = 0;
@@ -475,13 +475,13 @@ class Match
                             }
                         }
                     }
-                    /*new Noty({
+                    new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "reflecting " + dgtToOtherPlayer + " degats of " + elemFlag + " to player " + (other_player_id + 1),
                         timeout: 3500,
                         progressBar: true,
-                    }).show();*/
+                    }).show();
                 }
                 var is_shield_applied = false;
                 /* Loop over the different shield effects */
@@ -500,13 +500,13 @@ class Match
                         }
                     }
                     console.log("Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag);
-                    /*new Noty({
+                    new Noty({
                         type: 'warning',
                         layout: 'topRight',
                         text: "Player " + (tab_player.id + 1) + " shielding " + dgtShielding + " degats of " + elemFlag,
                         timeout: 3500,
                         progressBar: true,
-                    }).show();*/
+                    }).show();
                 }
                 totalDgts += dgts_current;
             }
@@ -527,15 +527,13 @@ class Match
             classScope._players[other_player_id].pv -= dgtToOtherPlayer;
         if (totalDgts > 0) {
             classScope._players[tab_player.id].pv -= totalDgts;
-            /*new Noty({
-            //console.log("Remove "+totalDgts+" PV of "+elemFlag+" to player "+(tab_player.id+1));
-            /*new Noty({
+            new Noty({
                 type: 'error',
                 layout: 'topRight',
                 text: "Player " + "Remove " + totalDgts + " PV of " + elemFlag + " to player " + (tab_player.id + 1),
                 timeout: 3500,
                 progressBar: true,
-            }).show();*/
+            }).show();
         }
         /*for (var indexShield = tab_player.defensive[elemFlag].shield.length - 1; indexShield >= 0;indexShield--) {
             var effectShield = tab_player.defensive[elemFlag].shield;
