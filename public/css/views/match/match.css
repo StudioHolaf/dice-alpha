@@ -786,9 +786,9 @@ div#timer {
 
 div#hover {
     text-align: center;
-    line-height: 22px;
-    font-size: 20px;
-    height: 140px;
+    line-height: 20px;
+    font-size: 18px;
+    height: 89px;
     overflow-y: auto;
     overflow-x: hidden;
 }

@@ -21,6 +21,7 @@ const arcaneLineBurst = new mojs.Burst({
 
 var arcaneShape = new mojs.Shape({
   parent: el,
+  className: 'arcane-symbol',
   left: 0, top: 0,
   shape:        'circle',
   scale:         { 0 : 1.1 },
@@ -29,19 +30,15 @@ var arcaneShape = new mojs.Shape({
   fill: 'none',
   easing:        'cubic.out',
   repeat:        0,
-  opacity:0.9,
-  isForce3d:    true
+  isForce3d:    true,
+  isShowEnd : false,
+  isShowStart : true,
+  zIndex: -1
 }).then({
-   opacity:0,
-  easing: 'quad.out',
-  duration: 1000,
-  delay:1000
+  duration: 200,
+  delay:1500,
+  scale:0
 });
-
-const arcaneSymbol = document.createElement('div');
-arcaneSymbol.classList.add( 'arcane-symbol' );
-arcaneShape.el.appendChild( arcaneSymbol );
-
 
 const arcaneBurstFilled = new mojs.Burst({
   parent: el,
