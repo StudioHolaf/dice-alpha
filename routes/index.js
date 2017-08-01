@@ -44,7 +44,6 @@ exports.forge = function (req, res) {
         initDb(function(err){});
     }
     if (db) {
-
         res.render('forge.html');
 
     } else {

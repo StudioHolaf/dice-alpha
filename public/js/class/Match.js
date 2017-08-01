@@ -5,7 +5,7 @@
 class Match
 {
 
-    constructor(id, player1, player2, stage)
+    constructor(id, roomID, player1, player2, stage)
     {
         this._id = id;
         this._players = [player1, player2];
@@ -13,6 +13,8 @@ class Match
         this._final_tab = this.initFinalTab();
         this._history = this.initFinalTab();
         this._nbRerollGlobal = 3;
+        this._isRunning = true;
+        this._roomID = roomID;
     }
 
     get id()
@@ -56,9 +58,6 @@ class Match
                     dice.decreaseTurnDisabled(1);
             })
         });
-        //console.log("Player 1 dices : %o ", this._players[0].deck[0]);
-        //console.log("Player 2 dices : %o ", this._players[1].deck[0]);
-
     }
 
     reincrementValues()
@@ -70,8 +69,6 @@ class Match
                 dice.reroll += player.reroll;
             })
         });
-        //console.log("Player 1 dices : %o ", this._players[0].deck[0]);
-        //console.log("Player 2 dices : %o ", this._players[1].deck[0]);
     }
 
 
@@ -103,7 +100,7 @@ class Match
                 callback();
             });
         }
-        if(value == 0)
+        if (value == 0)
         {
             if (typeof callback === "function");
                 callback();
@@ -584,7 +581,26 @@ class Match
         return tab2;
     }
 
-    solve(tab_res,callback) {
+    isAWinner(callback_end_match)
+    {
+        if (this._players[0]._pv <= 0 && this._players[1]._pv > 0) //victoire Adversaire
+        {
+            this._isRunning = false;
+            callback_end_match("Defeat");
+        }
+        if (this._players[0]._pv > 0 && this._players[1]._pv <= 0) //victoire 2 twa
+        {
+            this._isRunning = false;
+            callback_end_match("Victory");
+        }
+        if (this._players[0]._pv <= 0 && this._players[1]._pv <= 0)
+        {
+            this._isRunning = false;
+            callback_end_match("Draw");
+        }
+    }
+
+    solve(tab_res,callback, callback_end_match) {
         var res_j1 = tab_res[0]; //face qui sont sortis J1
         var res_j2 = tab_res[1]; //face qui sont sortis J2
 
@@ -666,28 +682,48 @@ class Match
                 scope.applyHeal(scope._final_tab.j2, function () {
                         scope.applyAttack(scope._final_tab.j1, "wind", function () {
                             scope.applyAttack(scope._final_tab.j2, "wind", function () {
-                                scope.applyAttack(scope._final_tab.j1, "fire", function () {
-                                    scope.applyAttack(scope._final_tab.j2, "fire", function () {
-                                        scope.applyAttack(scope._final_tab.j1, "water", function () {
-                                            scope.applyAttack(scope._final_tab.j2, "water", function () {
-                                                scope.applyAttack(scope._final_tab.j1, "mountain", function () {
-                                                    scope.applyAttack(scope._final_tab.j2, "mountain", function () {
-                                                        scope.applyAttackArcane(scope._final_tab.j1, function () {
-                                                            scope.applyAttackArcane(scope._final_tab.j2, function () {
-                                                                scope.applyNeutral(scope._final_tab.j1, function () {
-                                                                    scope.applyNeutral(scope._final_tab.j2, function () {
-                                                                        scope.reincrementValues();
-                                                                        callback();
-                                                                    });
+                                scope.isAWinner(callback_end_match);
+                                if (scope._isRunning == true)
+                                {
+                                    scope.applyAttack(scope._final_tab.j1, "fire", function () {
+                                        scope.applyAttack(scope._final_tab.j2, "fire", function () {
+                                            scope.isAWinner(callback_end_match);
+                                            if (scope._isRunning == true)
+                                            {
+                                                scope.applyAttack(scope._final_tab.j1, "water", function () {
+                                                    scope.applyAttack(scope._final_tab.j2, "water", function () {
+                                                        scope.isAWinner(callback_end_match);
+                                                        if (scope._isRunning == true)
+                                                        {
+                                                            scope.applyAttack(scope._final_tab.j1, "mountain", function () {
+                                                                scope.applyAttack(scope._final_tab.j2, "mountain", function () {
+                                                                    scope.isAWinner(callback_end_match);
+                                                                    if (scope._isRunning == true)
+                                                                    {
+                                                                        scope.applyAttackArcane(scope._final_tab.j1, function () {
+                                                                            scope.applyAttackArcane(scope._final_tab.j2, function () {
+                                                                                scope.isAWinner(callback_end_match);
+                                                                                if (scope._isRunning == true)
+                                                                                {
+                                                                                    scope.applyNeutral(scope._final_tab.j1, function () {
+                                                                                        scope.applyNeutral(scope._final_tab.j2, function () {
+                                                                                            scope.reincrementValues();
+                                                                                            callback();
+                                                                                        });
+                                                                                    });
+                                                                                }
+                                                                            });
+                                                                        });
+                                                                    }
                                                                 });
                                                             });
-                                                        });
+                                                        }
                                                     });
                                                 });
-                                            });
+                                            }
                                         });
                                     });
-                                });
+                                }
                             });
                         });
                     });
