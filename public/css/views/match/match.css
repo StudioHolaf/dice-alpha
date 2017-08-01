@@ -1005,6 +1005,65 @@ div#player-1-section .player-ultime-front {
     position: absolute;
 }
 
+.arcaneShield-symbol {
+    background-image : url(/assets/img/fc_arcane_shield.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.windShield-symbol {
+    background-image : url(/assets/img/fc_wind_shield.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.fireShield-symbol {
+    background-image : url(/assets/img/fc_fire_shield.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+
+.waterShield-symbol {
+    background-image : url(/assets/img/fc_water_shield.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+.mountainShield-symbol {
+    background-image : url(/assets/img/fc_mountain_shield.png);
+    width:100%;
+    height:100%;
+    background-size: contain;
+    background-position:50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    z-index: -1;
+}
+
 @keyframes wobble-mini {
     from {
         transform: none;

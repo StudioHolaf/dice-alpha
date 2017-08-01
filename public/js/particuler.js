@@ -26,6 +26,17 @@ function launchParticles(positionX, positionY, particlesType, datas, callback)
     if (particlesType == "heal")
         launchHealAnimation(positionX, positionY, datas);
 
+    if(particlesType == "wind_shield")
+        launchWindShieldAnimation(positionX, positionY, datas);
+    if(particlesType == "fire_shield")
+        launchFireShieldAnimation(positionX, positionY, datas);
+    if(particlesType == "water_shield")
+        launchWaterShieldAnimation(positionX, positionY, datas);
+    if(particlesType == "mountain_shield")
+        launchMountainShieldAnimation(positionX, positionY, datas);
+    if(particlesType == "arcane_shield")
+        launchArcaneShieldAnimation(positionX, positionY, datas);
+
     setTimeout(function()
     {
         callback();

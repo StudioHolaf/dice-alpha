@@ -128,40 +128,51 @@ class Match
         }
     }
 
-    playerAnimation(dgtsToMe, dgtsToOtherPlayer, currentPlayerId, otherPlayerId, type, callback)
+    playerAnimation(dgtsToMe, dgtsToOtherPlayer, currentPlayerId, otherPlayerId, element, type, callback)
     {
         //ANIMATION
-        if (dgtsToOtherPlayer > 0 && dgtsToMe > 0) { //QD TU RECOIS DES DGT ET REFLECT UNE PARTIE MAIS T'EN PREND QD MEME
-            var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
-            var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
-            $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
-            launchParticles( positionX, positionY, type, -dgtsToMe, function(){});
-            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
-            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
-            $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
-            launchParticles( positionX, positionY, type, -dgtsToOtherPlayer, function () {
-                if (typeof callback === "function");
-                callback();
-            });
-        }
-        if (dgtsToOtherPlayer > 0 && dgtsToMe <= 0) { // TU REFLECT TOUT
-            var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
-            var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
-            launchParticles( positionX, positionY, type, -dgtsToOtherPlayer, function () {
-                if (typeof callback === "function");
-                callback();
-            });
-            $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
-        }
+        if(type == "attack") {
+            if (dgtsToOtherPlayer > 0 && dgtsToMe > -1) { //QD TU RECOIS DES DGT ET REFLECT UNE PARTIE MAIS T'EN PREND QD MEME
+                var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
+                var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
+                $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
+                launchParticles(positionX, positionY, element, -dgtsToMe, function () {
+                });
+                var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
+                var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
+                $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
+                launchParticles(positionX, positionY, element, -dgtsToOtherPlayer, function () {
+                    if (typeof callback === "function");
+                    callback();
+                });
+            }
+            if (dgtsToOtherPlayer > 0 && dgtsToMe <= -1) { // TU REFLECT TOUT
+                var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
+                var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
+                launchParticles(positionX, positionY, element, -dgtsToOtherPlayer, function () {
+                    if (typeof callback === "function");
+                    callback();
+                });
+                $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
+            }
 
-        if (dgtsToOtherPlayer <= 0 && dgtsToMe > 0) { //QD TU RECOIS DES DEGATS SANS EN INFLIGER
+            if (dgtsToOtherPlayer <= 0 && dgtsToMe > -1) { //QD TU RECOIS DES DEGATS SANS EN INFLIGER
+                var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
+                var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
+                launchParticles(positionX, positionY, element, -dgtsToMe, function () {
+                    if (typeof callback === "function");
+                    callback();
+                });
+                $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
+            }
+        }
+        else if(type = "shield")
+        {
             var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
             var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
-            launchParticles( positionX, positionY, type, -dgtsToMe, function () {
-                if (typeof callback === "function");
+            launchParticles(positionX, positionY, element+"_shield", -dgtsToMe, function () {
                 callback();
             });
-            $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
         }
 
         if(dgtsToOtherPlayer <= 0 && dgtsToMe <= 0)
@@ -375,6 +386,7 @@ class Match
             }
         }
 
+        var is_shield_applied = false;
         for (var h = 0; h < elements.length; h++)
         {
             if (tab_player.defensive[elements[h]].shield.length > 0)
@@ -382,6 +394,7 @@ class Match
                  while (tab_player.defensive[elements[h]].shield[0].shield > 0 && dgt_expo > 0)
                     {
                         dgt_expo--;
+                        is_shield_applied = true;
                      tab_player.defensive[elements[h]].shield[0].decreaseShield();
                      if(tab_player.defensive[elements[h]].shield[0].shield < 1)
                      {
@@ -419,7 +432,23 @@ class Match
             classScope._players[tab_player.id].pv -= dgt_expo;
 
         }
-        this.playerAnimation(dgt_expo,0,tab_player.id+1,other_player_id+1,"arcane",callback);
+        //this.playerAnimation(dgt_expo,0,tab_player.id+1,other_player_id+1,"arcane",callback);
+        if(is_shield_applied)
+        {
+            this.playerAnimation(dgt_expo, 0, tab_player.id + 1, other_player_id + 1, "arcane", "shield", function(){});
+            var scope = this;
+            setTimeout(function()
+            {
+                scope.playerAnimation(dgt_expo, 0, tab_player.id + 1, other_player_id + 1, "arcane", "attack", callback);
+            },600)
+        }
+        else
+        {
+            if(dgt_expo == 0)
+                dgt_expo = -1;
+            this.playerAnimation(dgt_expo, 0, tab_player.id + 1, other_player_id + 1, "arcane", "attack", callback);
+        }
+
     }
     
     applyAttack(tab_player, elemFlag, callback) {
@@ -457,12 +486,14 @@ class Match
                         progressBar: true,
                     }).show();*/
                 }
+                var is_shield_applied = false;
                 /* Loop over the different shield effects */
                 if (tab_player.defensive[elemFlag].shield.length > 0) {
                     var dgtShielding = 0;
                     while (tab_player.defensive[elemFlag].shield[0].shield > 0 && dgts_current > 0) {
                         dgtShielding++;
                         totalDgts--;
+                        is_shield_applied = true;
                         tab_player.defensive[elemFlag].shield[0].decreaseShield();
                         if (tab_player.defensive[elemFlag].shield[0].shield < 1) {
                             tab_player.defensive[elemFlag].shield.shift();
@@ -523,7 +554,23 @@ class Match
                 classScope._history.push(tab_player.offensive[elemFlag]["reflect"]);
             }
         }*/
-        this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, callback);
+
+
+        if(is_shield_applied)
+        {
+            this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, "shield", function(){});
+            var scope = this;
+            setTimeout(function()
+            {
+                scope.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, "attack", callback);
+            },600)
+        }
+        else
+        {
+            if(totalDgts == 0)
+                totalDgts = -1;
+            this.playerAnimation(totalDgts, dgtToOtherPlayer, tab_player.id + 1, other_player_id + 1, elemFlag, "attack", callback);
+        }
     }
 
     consummateMana(tab1, tab2) //SOUSTRACTION DE MANA POUR PAYER LE SORT
