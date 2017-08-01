@@ -18,7 +18,8 @@
     "owl.carousel": "^2.2.0",
     "rivets": "^0.9.6",
     "socket.io": "^2.0.1",
-    "sweetalert": "^1.1.3"
+    "sweetalert": "^1.1.3",
+    "uniqid": "^4.1.1"
   },
   "engine": {
     "node": "*",

@@ -1,8 +1,9 @@
 var io;
-var rooms = [];
+var rooms = {};
 var utils_player = require( './utils_player' );
 var utils_data = require( './utils_data' );
 var utils_server = require( './utils_server' );
+var uniqid = require('uniqid');
 
 /**
  * This function is called by index.js to initialize a new game instance.
@@ -29,9 +30,13 @@ exports.initGameSockets = function (sio, socket, addedUser) {
     //forge
     socket.on('player_connection_forge', function(datas){playerJoinForge(socket, datas, addedUser)});
     socket.on('player_deck_saved', function(datas){playerDeckSaved(socket, datas)});
+
+    //Main menu
+    socket.on('player_display_rooms', function(){playerDisplayRooms(socket)});
+
 }
 
-function initRoom()
+function initRoom(id)
 {
     var room = [];
     var tourTime = setTimeout(function(){},100000);
@@ -41,6 +46,7 @@ function initRoom()
     room.timerPlayers = {};
     room.tourTime = tourTime;
     room.numUser = 0;
+    room.id = id;
 
     return room;
 }
@@ -83,7 +89,7 @@ function playerJoinGame(socket, datas, addedUser)
     socket.join(datas.room_id);
 
     if (!rooms[datas.room_id])
-        rooms[datas.room_id] = initRoom();
+        rooms[datas.room_id] = initRoom(datas.room_id);
 
     rooms[datas.room_id].numUser++;
 
@@ -263,7 +269,6 @@ function launchSolve(socket)
 ////////////////////////        ***** FORGE STUFF *****         ////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 function playerJoinForge(socket, id, addedUser)
 {
@@ -308,4 +313,45 @@ function playerDeckSaved(socket, datas)
             socket.emit("deck_successfully_saved");
         }
     )
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////        ***** MAIN MENU STUFF *****         ////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+function playerDisplayRooms(socket)
+{
+    var rooms_datas = formatRoomForRoomSearch();
+    console.log("sending rooms = %o",rooms_datas);
+    var encodeRooms = JSON.stringify(rooms_datas);
+    socket.emit('available_rooms', {datas:encodeRooms, id:uniqid()});
+}
+
+function formatRoomForRoomSearch()
+{
+    var jsonRooms = [];
+    for(var roomkey in rooms)
+    {
+        let room = rooms[roomkey];
+        var jsonRoom = {};
+        jsonRoom.id = room.id;
+        if(room.players_datas[0]) {
+            jsonRoom["player1"] = room.players_datas[0]._pseudo;
+        }
+        if(room.players_datas[1]) {
+            jsonRoom["player2"] = room.players_datas[1]._pseudo;
+            jsonRoom.link = "/match/"+room.id;
+            jsonRoom.linkName = "Join as spectator";
+        }
+        else {
+            jsonRoom.link = "/match/"+room.id;
+            jsonRoom.linkName = "Join as player";
+        }
+        jsonRooms.push(jsonRoom);
+    };
+
+    return jsonRooms;
 }

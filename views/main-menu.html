@@ -13,6 +13,26 @@
 
 <body>
 
+<div id="popup-room">
+    <div class="popup-inner enluminures-skined-1">
+        <h2><span class="inset-text">Rooms</span></h2>
+        <div id="rooms-list">
+            <div class="rooms-list-titles">
+                <div class="rooms-list-col1"><span class="inset-text">Player 1</span></div>
+                <div class="rooms-list-col2"><span class="inset-text">Player 2</span></div>
+                <div class="rooms-list-col3"><span class="inset-text">Actions</span></div>
+            </div>
+            <div class="rooms-list-item" rv-each-room="rooms">
+                <div class="rooms-list-col1"><span class="player-1 inset-text">{room.player1}</span></div>
+                <div class="rooms-list-col2"><span class="player-2 inset-text">{room.player2}</span></div>
+                <div class="rooms-list-col3"><a href="" rv-href="room.link" class="room-link inset-text">{room.linkName}</a></div>
+            </div>
+        </div>
+        <a id="new-room-button" class="room-link" rv-href="id">New room</a>
+        <div class="popup-exit"><img src="/assets/img/cross.png" alt=""></div>
+    </div>
+</div>
+
 <div id="main">
     <div class="container">
         <div class="row">
@@ -23,7 +43,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="main-menu-container">
-                    <a class="main-menu-item" href="/match/1">
+                    <a class="main-menu-item" id="popup-room-opener" href="#popup-room" >
                         <div class="main-menu-button"><span class="inset-text">Start a match</span></div>
                     </a>
                     <a class="main-menu-item" href="/forge">
