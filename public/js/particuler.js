@@ -4,6 +4,8 @@
 
 function launchParticles(positionX, positionY, particlesType, datas, callback)
 {
+    //const animLogs =  console.context('Animation');
+    console.log("Launching spell : "+particlesType);
 
     if(particlesType == "wind")
         launchWindAnimation(positionX, positionY, datas);

@@ -127,8 +127,10 @@ class Match
 
     playerAnimation(dgtsToMe, dgtsToOtherPlayer, currentPlayerId, otherPlayerId, element, type, callback)
     {
+        var callback_called = false;
         //ANIMATION
         if(type == "attack") {
+            console.log("Applying attack --> [dgtsToOtherPlayer : "+dgtsToOtherPlayer)
             if (dgtsToOtherPlayer > 0 && dgtsToMe > -1) { //QD TU RECOIS DES DGT ET REFLECT UNE PARTIE MAIS T'EN PREND QD MEME
                 var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
                 var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
@@ -139,16 +141,20 @@ class Match
                 var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
                 $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
                 launchParticles(positionX, positionY, element, -dgtsToOtherPlayer, function () {
-                    if (typeof callback === "function");
-                    callback();
+                    if (typeof callback === "function" && !callback_called) {
+                        callback_called = true;
+                        callback();
+                    }
                 });
             }
             if (dgtsToOtherPlayer > 0 && dgtsToMe <= -1) { // TU REFLECT TOUT
                 var positionX = $("#player-" + otherPlayerId + "-section .player-avatar").offset().left + ($("#player-" + otherPlayerId + "-section .player-avatar").outerWidth() / 2);
                 var positionY = $("#player-" + otherPlayerId + "-section .player-avatar").offset().top + ($("#player-" + otherPlayerId + "-section .player-avatar").outerHeight() / 2);
                 launchParticles(positionX, positionY, element, -dgtsToOtherPlayer, function () {
-                    if (typeof callback === "function");
-                    callback();
+                    if (typeof callback === "function" && !callback_called) {
+                        callback_called = true;
+                        callback();
+                    }
                 });
                 $("#player-" + otherPlayerId + "-section .player-avatar").animateCss("shakeMini");
             }
@@ -157,8 +163,10 @@ class Match
                 var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
                 var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
                 launchParticles(positionX, positionY, element, -dgtsToMe, function () {
-                    if (typeof callback === "function");
-                    callback();
+                    if (typeof callback === "function" && !callback_called) {
+                        callback_called = true;
+                        callback();
+                    }
                 });
                 $("#player-" + currentPlayerId + "-section .player-avatar").animateCss("shakeMini");
             }
@@ -168,14 +176,19 @@ class Match
             var positionX = $("#player-" + currentPlayerId + "-section .player-avatar").offset().left + ($("#player-" + currentPlayerId + "-section .player-avatar").outerWidth() / 2);
             var positionY = $("#player-" + currentPlayerId + "-section .player-avatar").offset().top + ($("#player-" + currentPlayerId + "-section .player-avatar").outerHeight() / 2);
             launchParticles(positionX, positionY, element+"_shield", -dgtsToMe, function () {
-                callback();
+                if (typeof callback === "function" && !callback_called) {
+                    callback_called = true;
+                    callback();
+                }
             });
         }
 
         if(dgtsToOtherPlayer <= 0 && dgtsToMe <= 0)
         {
-            if (typeof callback === "function");
-            callback();
+            if (typeof callback === "function" && !callback_called) {
+                callback_called = true;
+                callback();
+            }
         }
     }
 

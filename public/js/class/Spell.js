@@ -149,7 +149,7 @@ class Spell
         result.water = (this._waterEffects.degat ? this._waterEffects.degat : 0);
         result.mountain = (this._mountainEffects.degat ? this._mountainEffects.degat : 0);
         result.arcane = (this._arcaneEffects.degat ? this._arcaneEffects.degat : 0);
-        console.log("result : %o", result);
+        //console.log("result : %o", result);
         return result;
     }
     
